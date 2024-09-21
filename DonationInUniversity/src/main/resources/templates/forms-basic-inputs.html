@@ -5,7 +5,7 @@
   class="light-style layout-menu-fixed layout-compact"
   dir="ltr"
   data-theme="theme-default"
-  data-assets-path="./static/assets"
+  data-assets-path="../assets/"
   data-template="vertical-menu-template-free"
   data-style="light">
   <head>
@@ -14,7 +14,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Demo : Dashboard - Analytics | sneat - Bootstrap Dashboard PRO</title>
+    <title>Demo : Basic Inputs - Forms | sneat - Bootstrap Dashboard PRO</title>
 
     <meta name="description" content="" />
 
@@ -37,7 +37,6 @@
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
 
@@ -118,14 +117,14 @@
 
           <ul class="menu-inner py-1">
             <!-- Dashboards -->
-            <li class="menu-item active open">
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-home-smile"></i>
                 <div class="text-truncate" data-i18n="Dashboards">Dashboards</div>
                 <span class="badge rounded-pill bg-danger ms-auto">5</span>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item active">
+                <li class="menu-item">
                   <a href="index.html" class="menu-link">
                     <div class="text-truncate" data-i18n="Analytics">Analytics</div>
                   </a>
@@ -506,13 +505,13 @@
             <!-- Forms & Tables -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Forms &amp; Tables</span></li>
             <!-- Forms -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-detail"></i>
                 <div class="text-truncate" data-i18n="Form Elements">Form Elements</div>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="forms-basic-inputs.html" class="menu-link">
                     <div class="text-truncate" data-i18n="Basic Inputs">Basic Inputs</div>
                   </a>
@@ -704,557 +703,496 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-                <div class="col-xxl-8 mb-6 order-0">
+              <div class="row g-6">
+                <div class="col-md-6">
                   <div class="card">
-                    <div class="d-flex align-items-start row">
-                      <div class="col-sm-7">
-                        <div class="card-body">
-                          <h5 class="card-title text-primary mb-3">Congratulations John! 🎉</h5>
-                          <p class="mb-6">
-                            You have done 72% more sales today.<br />Check your new badge in your profile.
-                          </p>
-
-                          <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
-                        </div>
-                      </div>
-                      <div class="col-sm-5 text-center text-sm-left">
-                        <div class="card-body pb-0 px-0 px-md-6">
-                          <img
-                            src="../assets/img/illustrations/man-with-laptop.png"
-                            height="175"
-                            class="scaleX-n1-rtl"
-                            alt="View Badge User" />
+                    <h5 class="card-header">Default</h5>
+                    <div class="card-body">
+                      <div>
+                        <label for="defaultFormControlInput" class="form-label">Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="defaultFormControlInput"
+                          placeholder="John Doe"
+                          aria-describedby="defaultFormControlHelp" />
+                        <div id="defaultFormControlHelp" class="form-text">
+                          We'll never share your details with anyone else.
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-4 col-md-4 order-1">
-                  <div class="row">
-                    <div class="col-lg-6 col-md-12 col-6 mb-6">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img
-                                src="../assets/img/icons/unicons/chart-success.png"
-                                alt="chart success"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt3"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Profit</p>
-                          <h4 class="card-title mb-3">$12,628</h4>
-                          <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-6 mb-6">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img
-                                src="../assets/img/icons/unicons/wallet-info.png"
-                                alt="wallet info"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt6"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Sales</p>
-                          <h4 class="card-title mb-3">$4,679</h4>
-                          <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- Total Revenue -->
-                <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6">
+                <div class="col-md-6">
                   <div class="card">
-                    <div class="row row-bordered g-0">
-                      <div class="col-lg-8">
-                        <div class="card-header d-flex align-items-center justify-content-between">
-                          <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Total Revenue</h5>
-                          </div>
-                          <div class="dropdown">
-                            <button
-                              class="btn p-0"
-                              type="button"
-                              id="totalRevenue"
-                              data-bs-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false">
-                              <i class="bx bx-dots-vertical-rounded bx-lg text-muted"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalRevenue">
-                              <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                              <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div id="totalRevenueChart" class="px-3"></div>
-                      </div>
-                      <div class="col-lg-4 d-flex align-items-center">
-                        <div class="card-body px-xl-9">
-                          <div class="text-center mb-6">
-                            <div class="btn-group">
-                              <button type="button" class="btn btn-outline-primary">
-                                <script>
-                                  document.write(new Date().getFullYear() - 1);
-                                </script>
-                              </button>
-                              <button
-                                type="button"
-                                class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <span class="visually-hidden">Toggle Dropdown</span>
-                              </button>
-                              <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="javascript:void(0);">2021</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">2020</a></li>
-                                <li><a class="dropdown-item" href="javascript:void(0);">2019</a></li>
-                              </ul>
-                            </div>
-                          </div>
-
-                          <div id="growthChart"></div>
-                          <div class="text-center fw-medium my-6">62% Company Growth</div>
-
-                          <div class="d-flex gap-3 justify-content-between">
-                            <div class="d-flex">
-                              <div class="avatar me-2">
-                                <span class="avatar-initial rounded-2 bg-label-primary"
-                                  ><i class="bx bx-dollar bx-lg text-primary"></i
-                                ></span>
-                              </div>
-                              <div class="d-flex flex-column">
-                                <small>
-                                  <script>
-                                    document.write(new Date().getFullYear() - 1);
-                                  </script>
-                                </small>
-                                <h6 class="mb-0">$32.5k</h6>
-                              </div>
-                            </div>
-                            <div class="d-flex">
-                              <div class="avatar me-2">
-                                <span class="avatar-initial rounded-2 bg-label-info"
-                                  ><i class="bx bx-wallet bx-lg text-info"></i
-                                ></span>
-                              </div>
-                              <div class="d-flex flex-column">
-                                <small>
-                                  <script>
-                                    document.write(new Date().getFullYear() - 2);
-                                  </script>
-                                </small>
-                                <h6 class="mb-0">$41.2k</h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--/ Total Revenue -->
-                <div class="col-12 col-md-8 col-lg-12 col-xxl-4 order-3 order-md-2">
-                  <div class="row">
-                    <div class="col-6 mb-6">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img src="../assets/img/icons/unicons/paypal.png" alt="paypal" class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt4"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Payments</p>
-                          <h4 class="card-title mb-3">$2,456</h4>
-                          <small class="text-danger fw-medium"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6 mb-6">
-                      <div class="card h-100">
-                        <div class="card-body">
-                          <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                            <div class="avatar flex-shrink-0">
-                              <img src="../assets/img/icons/unicons/cc-primary.png" alt="Credit Card" class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                              <button
-                                class="btn p-0"
-                                type="button"
-                                id="cardOpt1"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="bx bx-dots-vertical-rounded text-muted"></i>
-                              </button>
-                              <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mb-1">Transactions</p>
-                          <h4 class="card-title mb-3">$14,857</h4>
-                          <small class="text-success fw-medium"><i class="bx bx-up-arrow-alt"></i> +28.14%</small>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12 mb-6">
-                      <div class="card">
-                        <div class="card-body">
-                          <div class="d-flex justify-content-between align-items-center flex-sm-row flex-column gap-10">
-                            <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                              <div class="card-title mb-6">
-                                <h5 class="text-nowrap mb-1">Profile Report</h5>
-                                <span class="badge bg-label-warning">YEAR 2022</span>
-                              </div>
-                              <div class="mt-sm-auto">
-                                <span class="text-success text-nowrap fw-medium"
-                                  ><i class="bx bx-up-arrow-alt"></i> 68.2%</span
-                                >
-                                <h4 class="mb-0">$84,686k</h4>
-                              </div>
-                            </div>
-                            <div id="profileReportChart"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <!-- Order Statistics -->
-                <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
-                  <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between">
-                      <div class="card-title mb-0">
-                        <h5 class="mb-1 me-2">Order Statistics</h5>
-                        <p class="card-subtitle">42.82k Total Sales</p>
-                      </div>
-                      <div class="dropdown">
-                        <button
-                          class="btn text-muted p-0"
-                          type="button"
-                          id="orederStatistics"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false">
-                          <i class="bx bx-dots-vertical-rounded bx-lg"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                          <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                        </div>
-                      </div>
-                    </div>
+                    <h5 class="card-header">Float label</h5>
                     <div class="card-body">
-                      <div class="d-flex justify-content-between align-items-center mb-6">
-                        <div class="d-flex flex-column align-items-center gap-1">
-                          <h3 class="mb-1">8,258</h3>
-                          <small>Total Orders</small>
+                      <div class="form-floating">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="floatingInput"
+                          placeholder="John Doe"
+                          aria-describedby="floatingInputHelp" />
+                        <label for="floatingInput">Name</label>
+                        <div id="floatingInputHelp" class="form-text">
+                          We'll never share your details with anyone else.
                         </div>
-                        <div id="orderStatisticsChart"></div>
                       </div>
-                      <ul class="p-0 m-0">
-                        <li class="d-flex align-items-center mb-5">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"
-                              ><i class="bx bx-mobile-alt"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Electronic</h6>
-                              <small>Mobile, Earbuds, TV</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">82.5k</h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-5">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-success"><i class="bx bx-closet"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Fashion</h6>
-                              <small>T-shirt, Jeans, Shoes</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">23.8k</h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-5">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-info"><i class="bx bx-home-alt"></i></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Decor</h6>
-                              <small>Fine Art, Dining</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">849k</h6>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-secondary"
-                              ><i class="bx bx-football"></i
-                            ></span>
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Sports</h6>
-                              <small>Football, Cricket Kit</small>
-                            </div>
-                            <div class="user-progress">
-                              <h6 class="mb-0">99</h6>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
                     </div>
                   </div>
                 </div>
-                <!--/ Order Statistics -->
 
-                <!-- Expense Overview -->
-                <div class="col-md-6 col-lg-4 order-1 mb-6">
-                  <div class="card h-100">
-                    <div class="card-header nav-align-top">
-                      <ul class="nav nav-pills" role="tablist">
-                        <li class="nav-item">
-                          <button
-                            type="button"
-                            class="nav-link active"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#navs-tabs-line-card-income"
-                            aria-controls="navs-tabs-line-card-income"
-                            aria-selected="true">
-                            Income
-                          </button>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab">Expenses</button>
-                        </li>
-                        <li class="nav-item">
-                          <button type="button" class="nav-link" role="tab">Profit</button>
-                        </li>
-                      </ul>
-                    </div>
+                <!-- Form controls -->
+                <div class="col-md-6">
+                  <div class="card">
+                    <h5 class="card-header">Form Controls</h5>
                     <div class="card-body">
-                      <div class="tab-content p-0">
-                        <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
-                          <div class="d-flex mb-6">
-                            <div class="avatar flex-shrink-0 me-3">
-                              <img src="../assets/img/icons/unicons/wallet.png" alt="User" />
-                            </div>
-                            <div>
-                              <p class="mb-0">Total Balance</p>
-                              <div class="d-flex align-items-center">
-                                <h6 class="mb-0 me-1">$459.10</h6>
-                                <small class="text-success fw-medium">
-                                  <i class="bx bx-chevron-up bx-lg"></i>
-                                  42.9%
-                                </small>
-                              </div>
-                            </div>
-                          </div>
-                          <div id="incomeChart"></div>
-                          <div class="d-flex align-items-center justify-content-center mt-6 gap-3">
-                            <div class="flex-shrink-0">
-                              <div id="expensesOfWeek"></div>
-                            </div>
-                            <div>
-                              <h6 class="mb-0">Income this week</h6>
-                              <small>$39k less than last week</small>
-                            </div>
-                          </div>
-                        </div>
+                      <div class="mb-4">
+                        <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="exampleFormControlInput1"
+                          placeholder="name@example.com" />
+                      </div>
+                      <div class="mb-4">
+                        <label for="exampleFormControlReadOnlyInput1" class="form-label">Read only</label>
+                        <input
+                          class="form-control"
+                          type="text"
+                          id="exampleFormControlReadOnlyInput1"
+                          placeholder="Readonly input here..."
+                          readonly />
+                      </div>
+                      <div class="mb-4">
+                        <label for="exampleFormControlReadOnlyInputPlain1" class="form-label">Read plain</label>
+                        <input
+                          type="text"
+                          readonly
+                          class="form-control-plaintext"
+                          id="exampleFormControlReadOnlyInputPlain1"
+                          value="email@example.com" />
+                      </div>
+                      <div class="mb-4">
+                        <label for="exampleFormControlSelect1" class="form-label">Example select</label>
+                        <select class="form-select" id="exampleFormControlSelect1" aria-label="Default select example">
+                          <option selected>Open this select menu</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                      <div class="mb-4">
+                        <label for="exampleDataList" class="form-label">Datalist example</label>
+                        <input
+                          class="form-control"
+                          list="datalistOptions"
+                          id="exampleDataList"
+                          placeholder="Type to search..." />
+                        <datalist id="datalistOptions">
+                          <option value="San Francisco"></option>
+                          <option value="New York"></option>
+                          <option value="Seattle"></option>
+                          <option value="Los Angeles"></option>
+                          <option value="Chicago"></option>
+                        </datalist>
+                      </div>
+                      <div class="mb-4">
+                        <label for="exampleFormControlSelect2" class="form-label">Example multiple select</label>
+                        <select
+                          multiple
+                          class="form-select"
+                          id="exampleFormControlSelect2"
+                          aria-label="Multiple select example">
+                          <option selected>Open this select menu</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!--/ Expense Overview -->
 
-                <!-- Transactions -->
-                <div class="col-md-6 col-lg-4 order-2 mb-6">
-                  <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="card-title m-0 me-2">Transactions</h5>
-                      <div class="dropdown">
-                        <button
-                          class="btn text-muted p-0"
-                          type="button"
-                          id="transactionID"
-                          data-bs-toggle="dropdown"
-                          aria-haspopup="true"
-                          aria-expanded="false">
-                          <i class="bx bx-dots-vertical-rounded bx-lg"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                          <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                          <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                        </div>
+                <!-- Input Sizing -->
+                <div class="col-md-6">
+                  <div class="card">
+                    <h5 class="card-header">Input Sizing & Shape</h5>
+                    <div class="card-body">
+                      <small class="text-light fw-medium">Input text</small>
+
+                      <div class="mt-2 mb-4">
+                        <label for="largeInput" class="form-label">Large input</label>
+                        <input
+                          id="largeInput"
+                          class="form-control form-control-lg"
+                          type="text"
+                          placeholder=".form-control-lg" />
+                      </div>
+                      <div class="mb-4">
+                        <label for="defaultInput" class="form-label">Default input</label>
+                        <input id="defaultInput" class="form-control" type="text" placeholder="Default input" />
+                      </div>
+                      <div>
+                        <label for="smallInput" class="form-label">Small input</label>
+                        <input
+                          id="smallInput"
+                          class="form-control form-control-sm"
+                          type="text"
+                          placeholder=".form-control-sm" />
                       </div>
                     </div>
-                    <div class="card-body pt-4">
-                      <ul class="p-0 m-0">
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/paypal.png" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Paypal</small>
-                              <h6 class="fw-normal mb-0">Send money</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+82.6</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/wallet.png" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Wallet</small>
-                              <h6 class="fw-normal mb-0">Mac'D</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+270.69</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/chart.png" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Transfer</small>
-                              <h6 class="fw-normal mb-0">Refund</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+637.91</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/cc-primary.png" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Credit Card</small>
-                              <h6 class="fw-normal mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">-838.71</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center mb-6">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/wallet.png" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Wallet</small>
-                              <h6 class="fw-normal mb-0">Starbucks</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">+203.33</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <img src="../assets/img/icons/unicons/cc-warning.png" alt="User" class="rounded" />
-                          </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <small class="d-block">Mastercard</small>
-                              <h6 class="fw-normal mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-2">
-                              <h6 class="fw-normal mb-0">-92.45</h6>
-                              <span class="text-muted">USD</span>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
+                    <hr class="m-0" />
+                    <div class="card-body">
+                      <small class="text-light fw-medium">Input select</small>
+                      <div class="mt-2 mb-4">
+                        <label for="largeSelect" class="form-label">Large select</label>
+                        <select id="largeSelect" class="form-select form-select-lg">
+                          <option>Large select</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                      <div class="mb-4">
+                        <label for="defaultSelect" class="form-label">Default select</label>
+                        <select id="defaultSelect" class="form-select">
+                          <option>Default select</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label for="smallSelect" class="form-label">Small select</label>
+                        <select id="smallSelect" class="form-select form-select-sm">
+                          <option>Small select</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <!--/ Transactions -->
+
+                <!-- Default Checkboxes and radios & Default checkboxes and radios -->
+                <div class="col-xl-6">
+                  <div class="card mb-6">
+                    <h5 class="card-header">Checkboxes and Radios</h5>
+                    <!-- Checkboxes and Radios -->
+                    <div class="card-body">
+                      <div class="row gy-6">
+                        <div class="col-md">
+                          <small class="text-light fw-medium">Checkboxes</small>
+                          <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />
+                            <label class="form-check-label" for="defaultCheck1"> Unchecked </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" checked />
+                            <label class="form-check-label" for="defaultCheck2"> Indeterminate </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck3" checked />
+                            <label class="form-check-label" for="defaultCheck3"> Checked </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="disabledCheck1" disabled />
+                            <label class="form-check-label" for="disabledCheck1"> Disabled Unchecked </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              value=""
+                              id="disabledCheck2"
+                              disabled
+                              checked />
+                            <label class="form-check-label" for="disabledCheck2"> Disabled Checked </label>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <small class="text-light fw-medium">Radio</small>
+                          <div class="form-check mt-3">
+                            <input
+                              name="default-radio-1"
+                              class="form-check-input"
+                              type="radio"
+                              value=""
+                              id="defaultRadio1" />
+                            <label class="form-check-label" for="defaultRadio1"> Unchecked </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              name="default-radio-1"
+                              class="form-check-input"
+                              type="radio"
+                              value=""
+                              id="defaultRadio2"
+                              checked />
+                            <label class="form-check-label" for="defaultRadio2"> Checked </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="" id="disabledRadio1" disabled />
+                            <label class="form-check-label" for="disabledRadio1"> Disabled unchecked </label>
+                          </div>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              value=""
+                              id="disabledRadio2"
+                              disabled
+                              checked />
+                            <label class="form-check-label" for="disabledRadio2"> Disabled checkbox </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr class="m-0" />
+                    <!-- Inline Checkboxes -->
+                    <div class="card-body">
+                      <div class="row gy-6">
+                        <div class="col-md">
+                          <small class="text-light fw-medium d-block">Inline Checkboxes</small>
+                          <div class="form-check form-check-inline mt-3">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
+                            <label class="form-check-label" for="inlineCheckbox1">1</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+                            <label class="form-check-label" for="inlineCheckbox2">2</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              id="inlineCheckbox3"
+                              value="option3"
+                              disabled />
+                            <label class="form-check-label" for="inlineCheckbox3">3 (disabled)</label>
+                          </div>
+                        </div>
+                        <div class="col-md">
+                          <small class="text-light fw-medium d-block">Inline Radio</small>
+                          <div class="form-check form-check-inline mt-3">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="inlineRadioOptions"
+                              id="inlineRadio1"
+                              value="option1" />
+                            <label class="form-check-label" for="inlineRadio1">1</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="inlineRadioOptions"
+                              id="inlineRadio2"
+                              value="option2" />
+                            <label class="form-check-label" for="inlineRadio2">2</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="inlineRadioOptions"
+                              id="inlineRadio3"
+                              value="option3"
+                              disabled />
+                            <label class="form-check-label" for="inlineRadio3">3 (disabled)</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Switches -->
+                  <div class="card mb-6">
+                    <h5 class="card-header">Switches</h5>
+                    <div class="card-body">
+                      <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
+                        <label class="form-check-label" for="flexSwitchCheckDefault"
+                          >Default switch checkbox input</label
+                        >
+                      </div>
+                      <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+                        <label class="form-check-label" for="flexSwitchCheckChecked"
+                          >Checked switch checkbox input</label
+                        >
+                      </div>
+                      <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDisabled" disabled />
+                        <label class="form-check-label" for="flexSwitchCheckDisabled"
+                          >Disabled switch checkbox input</label
+                        >
+                      </div>
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="flexSwitchCheckCheckedDisabled"
+                          checked
+                          disabled />
+                        <label class="form-check-label" for="flexSwitchCheckCheckedDisabled"
+                          >Disabled checked switch checkbox input</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Range -->
+                  <div class="card mb-6 mb-xl-0">
+                    <h5 class="card-header">Range</h5>
+                    <div class="card-body">
+                      <div class="mb-4">
+                        <label for="formRange1" class="form-label">Example range</label>
+                        <input type="range" class="form-range" id="formRange1" />
+                      </div>
+                      <div class="mb-4">
+                        <label for="disabledRange" class="form-label">Disabled range</label>
+                        <input type="range" class="form-range" id="disabledRange" disabled />
+                      </div>
+                      <div class="mb-4">
+                        <label for="formRange2" class="form-label">Min and max</label>
+                        <input type="range" class="form-range" min="0" max="5" id="formRange2" />
+                      </div>
+                      <div>
+                        <label for="formRange3" class="form-label">Steps</label>
+                        <input type="range" class="form-range" min="0" max="5" step="0.5" id="formRange3" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xl-6">
+                  <!-- HTML5 Inputs -->
+                  <div class="card mb-6">
+                    <h5 class="card-header">HTML5 Inputs</h5>
+                    <div class="card-body">
+                      <div class="mb-4 row">
+                        <label for="html5-text-input" class="col-md-2 col-form-label">Text</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="text" value="sneat" id="html5-text-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-search-input" class="col-md-2 col-form-label">Search</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="search" value="Search ..." id="html5-search-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-email-input" class="col-md-2 col-form-label">Email</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="email" value="john@example.com" id="html5-email-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-url-input" class="col-md-2 col-form-label">URL</label>
+                        <div class="col-md-10">
+                          <input
+                            class="form-control"
+                            type="url"
+                            value="https://themeselection.com"
+                            id="html5-url-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-tel-input" class="col-md-2 col-form-label">Phone</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="tel" value="90-(164)-188-556" id="html5-tel-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-password-input" class="col-md-2 col-form-label">Password</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="password" value="password" id="html5-password-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-number-input" class="col-md-2 col-form-label">Number</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="number" value="18" id="html5-number-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-datetime-local-input" class="col-md-2 col-form-label">Datetime</label>
+                        <div class="col-md-10">
+                          <input
+                            class="form-control"
+                            type="datetime-local"
+                            value="2021-06-18T12:30:00"
+                            id="html5-datetime-local-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-date-input" class="col-md-2 col-form-label">Date</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="date" value="2021-06-18" id="html5-date-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-month-input" class="col-md-2 col-form-label">Month</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="month" value="2021-06" id="html5-month-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-week-input" class="col-md-2 col-form-label">Week</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="week" value="2021-W25" id="html5-week-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-time-input" class="col-md-2 col-form-label">Time</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="time" value="12:30:00" id="html5-time-input" />
+                        </div>
+                      </div>
+                      <div class="mb-4 row">
+                        <label for="html5-color-input" class="col-md-2 col-form-label">Color</label>
+                        <div class="col-md-10">
+                          <input class="form-control" type="color" value="#666EE8" id="html5-color-input" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <label for="html5-range" class="col-md-2 col-form-label">Range</label>
+                        <div class="col-md-10">
+                          <input type="range" class="form-range mt-4" id="html5-range" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- File input -->
+                  <div class="card">
+                    <h5 class="card-header">File input</h5>
+                    <div class="card-body">
+                      <div class="mb-4">
+                        <label for="formFile" class="form-label">Default file input example</label>
+                        <input class="form-control" type="file" id="formFile" />
+                      </div>
+                      <div class="mb-4">
+                        <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+                        <input class="form-control" type="file" id="formFileMultiple" multiple />
+                      </div>
+                      <div>
+                        <label for="formFileDisabled" class="form-label">Disabled file input example</label>
+                        <input class="form-control" type="file" id="formFileDisabled" disabled />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- / Content -->
@@ -1328,13 +1266,13 @@
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <script src="../assets/js/form-basic-inputs.js"></script>
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
