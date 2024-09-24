@@ -14,4 +14,8 @@ public class HomeController {
     public String login() {
         return "auth-login-basic";
     }
+    @GetMapping("/DonationProject")
+    public String DonationProject() {
+        return "DonationProject";
+    }
 }
