@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html
+<html xmlns:th="http://www.thymeleaf.org"
   lang="en"
   class="light-style layout-wide customizer-hide"
   dir="ltr"
@@ -110,7 +110,7 @@
                       </g>
                     </svg>
                   </span>
-                  <span class="app-brand-text demo text-heading fw-bold">sneat</span>
+                  <span class="app-brand-text demo text-heading fw-bold">SGU - Donation</span>
                 </a>
               </div>
               <!-- /Logo -->
@@ -160,7 +160,7 @@
 
               <p class="text-center">
                 <span>Already have an account?</span>
-                <a href="auth-login-basic.html">
+                <a th:href="@{/login}">
                   <span>Sign in instead</span>
                 </a>
               </p>
@@ -173,14 +173,7 @@
 
     <!-- / Content -->
 
-    <div class="buy-now">
-      <a
-        href="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/"
-        target="_blank"
-        class="btn btn-danger btn-buy-now"
-        >Upgrade to Pro</a
-      >
-    </div>
+
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
