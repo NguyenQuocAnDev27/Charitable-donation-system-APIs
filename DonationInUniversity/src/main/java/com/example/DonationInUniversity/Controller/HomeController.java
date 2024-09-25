@@ -10,9 +10,17 @@ public class HomeController {
     public String homepage() {
         return "index";
     }
-    @GetMapping("/auth-login-basic")
+    @GetMapping("/login")
     public String login() {
         return "auth-login-basic";
+    }
+    @GetMapping("/register")
+    public String register() {
+        return "auth-register-basic";
+    }
+    @GetMapping("/forgot_password")
+    public String forgot_password() {
+        return "auth-forgot-password-basic";
     }
     @GetMapping("/DonationProject")
     public String DonationProject() {
