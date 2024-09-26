@@ -9,12 +9,14 @@
   data-style="light">
           <ul class="menu-inner py-1" th:fragment="dashboards">
             <!-- Dashboards -->
+
                 <li class="menu-item"  th:classappend="${currentUrl == 'AccountManagement'} ? ' active'">
                   <a th:href="@{/AccountManagement}" class="menu-link">
                     <span class="text-truncate" >Account Management</span>
                   </a>
                 </li>
                 <li class="menu-item"  th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
+
                   <a th:href="@{/DonationProject}" class="menu-link">
                     <span class="text-truncate" >Project Management</span>
                   </a>
@@ -22,7 +24,9 @@
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+
                 <span class="text-truncate" data-i18n="Authentications">Authentications</span>
+
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
