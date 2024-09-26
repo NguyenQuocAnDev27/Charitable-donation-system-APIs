@@ -32,7 +32,7 @@ public class User {
     @Column(nullable = false)
     private Date updatedAt;
 
-    public User() {}
+    public User(int userId, String fullName, String email, String phoneNumber, int roleId, Object o, Object object) {}
 
     public User(int userId, String fullName, String email, String passwordHash, String phoneNumber, int roleId, Date createdAt, Date updatedAt) {
         this.userId = userId;
@@ -43,6 +43,10 @@ public class User {
         this.roleId = roleId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public User() {
+
     }
 
     // Getters and Setters

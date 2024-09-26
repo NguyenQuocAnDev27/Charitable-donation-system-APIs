@@ -1,4 +1,12 @@
 package com.example.DonationInUniversity.Exception;
 
-public class MyException {
+public class MyException extends RuntimeException {
+
+    public MyException(String message) {
+        super(message);
+    }
+
+    public MyException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
