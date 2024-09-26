@@ -27,15 +27,17 @@ public class User {
     private int roleId;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    public User(int userId, String fullName, String email, String phoneNumber, int roleId, Object o, Object object) {}
+    // Default constructor
+    public User() {}
 
-    public User(int userId, String fullName, String email, String passwordHash, String phoneNumber, int roleId, Date createdAt, Date updatedAt) {
-        this.userId = userId;
+    public User(String fullName, String email, String passwordHash, String phoneNumber, int roleId, Date createdAt, Date updatedAt) {
         this.fullName = fullName;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -43,10 +45,6 @@ public class User {
         this.roleId = roleId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public User() {
-
     }
 
     // Getters and Setters
@@ -112,5 +110,16 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+        updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = new Date();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.DonationInUniversity.Controller.Api;
 
+import com.example.DonationInUniversity.Dto.CreateUserDTO;
 import com.example.DonationInUniversity.Dto.UserDTO;
 import com.example.DonationInUniversity.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,12 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserRestController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
 
     // Get all users
     @GetMapping
@@ -34,9 +39,9 @@ public class UserRestController {
 
     // Create a new user
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO userDTO) {
+        UserDTO new_user = userService.createUser(userDTO);
+        return new ResponseEntity<>(new_user, HttpStatus.OK);
     }
 
     // Update an existing user

@@ -1,28 +1,22 @@
 package com.example.DonationInUniversity.Dto;
 
-import java.util.Date;
-
-public class UserDTO {
+public class CreateUserDTO {
     private String fullName;
     private String email;
-    private String passwordHash;
+    private String password;
     private String phoneNumber;
     private int roleId;
-    private Date createdAt;
-    private Date updatedAt;
 
     // Default constructor
-    public UserDTO() {}
+    public CreateUserDTO() {}
 
-    // Constructor for all fields
-    public UserDTO(String fullName, String email, String passwordHash, String phoneNumber, int roleId, Date createdAt, Date updatedAt) {
+    // Constructor for required fields
+    public CreateUserDTO(String fullName, String email, String password, String phoneNumber, int roleId) {
         this.fullName = fullName;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.roleId = roleId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     // Getters and Setters
@@ -42,12 +36,12 @@ public class UserDTO {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhoneNumber() {
@@ -64,21 +58,5 @@ public class UserDTO {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }
