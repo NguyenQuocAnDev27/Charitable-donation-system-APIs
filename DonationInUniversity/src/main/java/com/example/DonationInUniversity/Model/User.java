@@ -1,15 +1,38 @@
 package com.example.DonationInUniversity.Model;
+
+import jakarta.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name = "users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
+
+    @Column(nullable = false)
     private String fullName;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String passwordHash;
+
+    @Column
     private String phoneNumber;
+
+    @Column(nullable = false)
     private int roleId;
+
+    @Column(nullable = false)
     private Date createdAt;
+
+    @Column(nullable = false)
     private Date updatedAt;
+
+    public User() {}
 
     public User(int userId, String fullName, String email, String passwordHash, String phoneNumber, int roleId, Date createdAt, Date updatedAt) {
         this.userId = userId;
