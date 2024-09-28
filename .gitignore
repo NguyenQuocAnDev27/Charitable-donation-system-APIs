@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### EVN ###
-/src/main/resources/env.properties
+/DonationInUniversity/src/main/resources/env.properties
