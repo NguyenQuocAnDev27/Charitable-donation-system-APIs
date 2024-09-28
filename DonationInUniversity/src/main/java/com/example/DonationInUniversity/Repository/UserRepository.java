@@ -11,8 +11,8 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     // Custom query using @Query annotation
-    @Query("SELECT u FROM User u WHERE u.roleId = ?1")
-    List<User> findUsersByRoleId(int roleId);
+    @Query("SELECT u FROM User u WHERE u.role = ?1")
+    List<User> findUsersByRoleId(int role);
 
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     User findByEmail(String email);

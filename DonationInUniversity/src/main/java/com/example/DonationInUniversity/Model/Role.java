@@ -1,15 +1,30 @@
 package com.example.DonationInUniversity.Model;
-import java.util.Date;
+import jakarta.persistence.*;
 
+import java.util.Date;
+import java.util.Set;
+
+@Entity
+@Table(name = "roles")
 public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
+    @Column(nullable = false)
     private String roleName;
+    @OneToMany(mappedBy = "role")
+    private Set<User> user;
+    @Column(nullable = false)
     private Date createdAt;
 
     public Role(int roleId, String roleName, Date createdAt) {
         this.roleId = roleId;
         this.roleName = roleName;
         this.createdAt = createdAt;
+    }
+
+    public Role() {
+
     }
 
     // Getters and Setters

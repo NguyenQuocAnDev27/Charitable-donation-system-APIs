@@ -23,7 +23,7 @@ public class UserService {
 
     // Convert Entity to DTO
     private UserDTO convertToDto(User user) {
-        return new UserDTO(user.getUserId(), user.getFullName(), user.getEmail(), user.getPhoneNumber(), user.getRoleId());
+        return new UserDTO(user.getUserId(), user.getFullName(), user.getEmail(), user.getPhoneNumber(), user.getRole());
     }
 
     // Convert DTO to Entity
@@ -86,8 +86,5 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         userRepository.delete(user);
-    }
-    public void loginAdmin(String email, String password) {
-
     }
 }

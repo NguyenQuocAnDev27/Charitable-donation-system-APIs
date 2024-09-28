@@ -16,7 +16,8 @@ public class WebSecurityConfig {
         http.csrf(csrf->csrf.disable());
         http.authorizeHttpRequests(auth->auth
                 .requestMatchers("/*").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .requestMatchers("/admin/**").hasAuthority("admin")
+                .requestMatchers("/admin/**").hasAuthority("project_manager")
                 .anyRequest().authenticated()
         );
         http.formLogin(login->login

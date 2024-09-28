@@ -23,8 +23,9 @@ public class User {
     @Column
     private String phoneNumber;
 
-    @Column(nullable = false)
-    private int roleId;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(nullable = false)
     private Date createdAt;
@@ -32,15 +33,15 @@ public class User {
     @Column(nullable = false)
     private Date updatedAt;
 
-    public User(int userId, String fullName, String email, String phoneNumber, int roleId, Object o, Object object) {}
+    public User(int userId, String fullName, String email, String phoneNumber, int role, Object o, Object object) {}
 
-    public User(int userId, String fullName, String email, String passwordHash, String phoneNumber, int roleId, Date createdAt, Date updatedAt) {
+    public User(int userId, String fullName, String email, String passwordHash, String phoneNumber, Role role, Date createdAt, Date updatedAt) {
         this.userId = userId;
         this.fullName = fullName;
         this.email = email;
         this.passwordHash = passwordHash;
         this.phoneNumber = phoneNumber;
-        this.roleId = roleId;
+        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -90,12 +91,12 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Date getCreatedAt() {
