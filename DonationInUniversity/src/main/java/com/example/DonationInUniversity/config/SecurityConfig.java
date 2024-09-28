@@ -93,16 +93,12 @@ public class SecurityConfig {
                                 "/login",
                                 "/register",
                                 "/forgot_password",
-                                "/swagger-ui/index.html"
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/register", "/api/authenticate").permitAll()  // Allow public access to register and authenticate
-//                        .anyRequest().authenticated());
 
         return http.build();
     }
