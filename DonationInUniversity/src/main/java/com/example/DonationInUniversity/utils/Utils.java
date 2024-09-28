@@ -21,4 +21,6 @@ public class Utils {
             throw new RuntimeException("Error occurred while hashing the password", e);
         }
     }
+
+
 }

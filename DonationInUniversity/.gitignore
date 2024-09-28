@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### EVN ###
+/src/main/resources/env.properties
