@@ -1,17 +1,32 @@
 package com.example.DonationInUniversity.Model;
-import java.util.Date;
+import jakarta.persistence.*;
 
+import java.util.Date;
+@Entity
 public class DonationProject {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Khóa chính, tự động tăng
     private int projectId;
+
     private String projectName;
     private String description;
     private double goalAmount;
     private double currentAmount;
+
+    @Temporal(TemporalType.DATE) // Chỉ lưu phần ngày
     private Date startDate;
+
+    @Temporal(TemporalType.DATE)
     private Date endDate;
+
     private String status;
+
     private int projectManagerId;
+
+    @Temporal(TemporalType.TIMESTAMP) // Lưu cả ngày và giờ
     private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     public DonationProject(int projectId, String projectName, String description, double goalAmount, double currentAmount, Date startDate, Date endDate, String status, int projectManagerId, Date createdAt, Date updatedAt) {
@@ -26,6 +41,10 @@ public class DonationProject {
         this.projectManagerId = projectManagerId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public DonationProject() {
+
     }
 
     // Getters and Setters
