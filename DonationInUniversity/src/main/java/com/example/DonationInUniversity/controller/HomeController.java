@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Controller;
+package com.example.DonationInUniversity.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

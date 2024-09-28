@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Exception;
+package com.example.DonationInUniversity.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

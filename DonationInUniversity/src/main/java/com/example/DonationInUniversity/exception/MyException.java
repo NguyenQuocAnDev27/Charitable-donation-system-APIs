@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Exception;
+package com.example.DonationInUniversity.exception;
 
 public class MyException extends RuntimeException {
 

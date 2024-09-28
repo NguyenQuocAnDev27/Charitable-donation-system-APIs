@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Model;
+package com.example.DonationInUniversity.model;
 import java.util.Date;
 
 public class Report {
