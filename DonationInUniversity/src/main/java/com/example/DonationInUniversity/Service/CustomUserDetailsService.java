@@ -1,8 +1,11 @@
 package com.example.DonationInUniversity.Service;
 
+import com.example.DonationInUniversity.Model.CustomUserDetails;
+import com.example.DonationInUniversity.Model.Role;
 import com.example.DonationInUniversity.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +26,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
-        return null;
+        Role role = user.getRole();
+        authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+
+        return new CustomUserDetails(user, authorities);
     }
 }

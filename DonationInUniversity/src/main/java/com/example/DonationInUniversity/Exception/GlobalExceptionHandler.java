@@ -2,6 +2,7 @@ package com.example.DonationInUniversity.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -17,6 +18,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleMyException(MyException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(AuthenticationException.class)
+    public String handleAuthenticationException(AuthenticationException ex) {
+        // Xuất lỗi ra console
+        System.out.println("Authentication error: " + ex.getMessage());
 
+        // Redirect về trang login với thông báo lỗi
+        return "redirect:/login?error=true";
+    }
     // Handle other exceptions...
 }

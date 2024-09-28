@@ -1,4 +1,5 @@
 package com.example.DonationInUniversity.Config;
+import com.example.DonationInUniversity.Service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
+    @Autowired
+    private CustomUserDetailsService detailsService;
+    @Bean
+    BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
         http.csrf(csrf->csrf.disable());
