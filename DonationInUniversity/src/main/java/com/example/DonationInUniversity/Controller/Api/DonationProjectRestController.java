@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Controller.Api;
+package com.example.DonationInUniversity.controller.api;
 
 import org.springframework.web.bind.annotation.RestController;
 

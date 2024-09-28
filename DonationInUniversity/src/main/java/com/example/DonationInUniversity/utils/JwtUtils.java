@@ -3,19 +3,18 @@ package com.example.DonationInUniversity.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.stereotype.Component;
-
 @Component
 public class JwtUtils {
 
     // Secret key for signing the token
-    private String SECRET_KEY = "123645";  // Replace with your actual secret key
+    private final String SECRET_KEY = "123645";  // Replace with your actual secret key
 
     // Generate token for user
     public String generateToken(String username) {

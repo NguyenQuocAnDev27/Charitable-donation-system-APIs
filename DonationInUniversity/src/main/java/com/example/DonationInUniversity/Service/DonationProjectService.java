@@ -12,18 +12,23 @@ import java.util.Optional;
 public class DonationProjectService {
     @Autowired
     private DonationProjectRepository donationProjectRepository;
+
     public List<DonationProject> getAllDonationProjects() {
         return donationProjectRepository.findAll();
     }
+
     public DonationProject getDonationProjectById(int id) {
         return donationProjectRepository.findById(id).orElse(null);
     }
+
     public void deleteDonationProject(int id) {
         donationProjectRepository.deleteById(id);
     }
+
     public void addDonationProject(DonationProject donationProject) {
         donationProjectRepository.save(donationProject);
     }
+
     public DonationProject updateDonationProject(DonationProject updateDonationProject, int id) {
         Optional<DonationProject> optionalDonationProject = donationProjectRepository.findById(id);
         if (optionalDonationProject.isPresent()) {
@@ -35,8 +40,7 @@ public class DonationProjectService {
             oldDonationProject.setStartDate(updateDonationProject.getStartDate());
             oldDonationProject.setStatus(updateDonationProject.getStatus());
             return donationProjectRepository.save(oldDonationProject);
-        }
-        else {
+        } else {
             return null;
         }
     }

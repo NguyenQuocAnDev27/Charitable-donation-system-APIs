@@ -1,4 +1,5 @@
 package com.example.DonationInUniversity.model;
+
 import java.util.Date;
 
 public class TransactionPayMethod {

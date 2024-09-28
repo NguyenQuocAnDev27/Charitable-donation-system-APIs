@@ -11,26 +11,30 @@ public class HomeController {
     public String homepage() {
         return "index";
     }
+
     @GetMapping("/login")
     public String login() {
         return "auth-login-basic";
     }
+
     @GetMapping("/register")
     public String register() {
         return "auth-register-basic";
     }
+
     @GetMapping("/forgot_password")
     public String forgot_password() {
         return "auth-forgot-password-basic";
     }
-//    @GetMapping("/DonationProject")
+
+    //    @GetMapping("/DonationProject")
 //    public String DonationProject(Model model) {
 //    	model.addAttribute("currentUrl", "DonationProject");
 //        return "DonationProject";
 //    }
     @GetMapping("/AccountManagement")
     public String AccountManagement(Model model) {
-    	model.addAttribute("currentUrl", "AccountManagement");
+        model.addAttribute("currentUrl", "AccountManagement");
         return "AccountManagement";
     }
 }
