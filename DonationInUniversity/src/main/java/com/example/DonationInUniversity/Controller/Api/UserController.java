@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,12 +17,14 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil) {
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Register new user
@@ -62,10 +65,10 @@ public class UserController {
     public ResponseEntity<MyCustomResponse<?>> authenticateUser(@RequestBody AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), passwordEncoder.encode(request.getPassword()))
             );
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new MyCustomResponse<>(400, "Invalid credentials", null));
+            return ResponseEntity.badRequest().body(new MyCustomResponse<>(400, "Invalid credentials - " + e.getMessage(), null));
         }
 
         UserDetails userDetails = userService.loadUserByUsername(request.getEmail());
