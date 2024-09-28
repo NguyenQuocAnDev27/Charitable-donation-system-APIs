@@ -23,11 +23,11 @@ public class HomeController {
     public String forgot_password() {
         return "auth-forgot-password-basic";
     }
-    @GetMapping("/DonationProject")
-    public String DonationProject(Model model) {
-    	model.addAttribute("currentUrl", "DonationProject");
-        return "DonationProject";
-    }
+//    @GetMapping("/DonationProject")
+//    public String DonationProject(Model model) {
+//    	model.addAttribute("currentUrl", "DonationProject");
+//        return "DonationProject";
+//    }
     @GetMapping("/AccountManagement")
     public String AccountManagement(Model model) {
     	model.addAttribute("currentUrl", "AccountManagement");
