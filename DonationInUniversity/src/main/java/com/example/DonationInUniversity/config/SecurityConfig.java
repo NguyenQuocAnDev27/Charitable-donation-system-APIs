@@ -1,7 +1,9 @@
 package com.example.DonationInUniversity.config;
 
 import com.example.DonationInUniversity.security.JwtRequestFilter;
+import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -22,6 +24,8 @@ import static org.springframework.http.HttpMethod.POST;
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
+    @Value("${jwt.secret}") // Read JWT secret from properties
+    private String jwtSecret;
 
     @Autowired
     public SecurityConfig(@Lazy JwtRequestFilter jwtRequestFilter) {
@@ -57,7 +61,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new Sha256PasswordEncoder();
     }
 }
 

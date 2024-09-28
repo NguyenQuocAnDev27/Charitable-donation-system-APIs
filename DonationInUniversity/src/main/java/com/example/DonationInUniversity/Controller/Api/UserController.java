@@ -10,10 +10,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
@@ -64,10 +68,13 @@ public class UserController {
     @PostMapping("/authenticate")
     public ResponseEntity<MyCustomResponse<?>> authenticateUser(@RequestBody AuthenticationRequest request) {
         try {
+            logger.info("User Info {}: {}", request.getEmail(), request.getPassword());
+            logger.info("Password hash: {}", passwordEncoder.encode(request.getPassword()));
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), passwordEncoder.encode(request.getPassword()))
             );
         } catch (Exception e) {
+            logger.error("Authentication failed for user {}: {}", request.getEmail(), e.getMessage());
             return ResponseEntity.badRequest().body(new MyCustomResponse<>(400, "Invalid credentials - " + e.getMessage(), null));
         }
 
