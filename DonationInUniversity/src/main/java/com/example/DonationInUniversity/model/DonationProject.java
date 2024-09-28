@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Model;
+package com.example.DonationInUniversity.model;
 import jakarta.persistence.*;
 
 import java.util.Date;

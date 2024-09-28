@@ -1,7 +1,7 @@
-package com.example.DonationInUniversity.Service;
+package com.example.DonationInUniversity.service;
 
-import com.example.DonationInUniversity.Model.DonationProject;
-import com.example.DonationInUniversity.Repository.DonationProjectRepository;
+import com.example.DonationInUniversity.model.DonationProject;
+import com.example.DonationInUniversity.repository.DonationProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
