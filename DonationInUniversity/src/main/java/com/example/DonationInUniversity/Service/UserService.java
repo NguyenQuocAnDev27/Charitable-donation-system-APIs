@@ -87,4 +87,7 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         userRepository.delete(user);
     }
+    public void loginAdmin(String email, String password) {
+
+    }
 }
