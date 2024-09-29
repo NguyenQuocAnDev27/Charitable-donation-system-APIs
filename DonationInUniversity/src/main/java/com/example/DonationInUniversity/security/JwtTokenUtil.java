@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Component
 public class JwtTokenUtil {
-    @Value("${JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String SECRET_KEY;
 
     public SecretKey getSecretKey() {

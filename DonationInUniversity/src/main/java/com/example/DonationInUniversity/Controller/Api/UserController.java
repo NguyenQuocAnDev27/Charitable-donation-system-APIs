@@ -19,14 +19,12 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.passwordEncoder = passwordEncoder;
     }
@@ -34,62 +32,86 @@ public class UserController {
     // Register new user
     @PostMapping("/register")
     public ResponseEntity<MyCustomResponse<VerifiedUser>> registerUser(@RequestBody UserRegistrationRequest request) {
+        logger.info("User registration requested: Full Name: {}, Email: {}", request.getFullName(), request.getEmail());
+
         VerifiedUser newUser = new VerifiedUser();
         newUser.setFullName(request.getFullName());
         newUser.setEmail(request.getEmail());
-        newUser.setPasswordHash(request.getPassword()); // Password will be hashed in the service
+
+        // Hash the password using Sha256PasswordEncoder
+        newUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         newUser.setPhoneNumber(request.getPhoneNumber());
 
-        // Save the user with a default role
         VerifiedUser savedUser = userService.saveUser(newUser, "normal_user");
 
-        // Return response with registered user data
+        logger.info("User registration successful: Email: {}", request.getEmail());
         return ResponseEntity.ok(new MyCustomResponse<>(200, "User registered successfully", savedUser));
     }
 
-    // Register new user
+    // Register new admin user
     @PostMapping("/register/admin")
     public ResponseEntity<MyCustomResponse<VerifiedUser>> registerAdminUser(@RequestBody UserRegistrationRequest request) {
+        logger.info("Admin registration requested: Full Name: {}, Email: {}", request.getFullName(), request.getEmail());
+
         VerifiedUser newUser = new VerifiedUser();
         newUser.setFullName(request.getFullName());
         newUser.setEmail(request.getEmail());
-        newUser.setPasswordHash(request.getPassword()); // Password will be hashed in the service
+
+        // Hash the password using Sha256PasswordEncoder
+        newUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         newUser.setPhoneNumber(request.getPhoneNumber());
 
-        // Save the user with a default role
         VerifiedUser savedUser = userService.saveUser(newUser, "admin");
 
-        // Return response with registered user data
-        return ResponseEntity.ok(new MyCustomResponse<>(200, "User registered successfully", savedUser));
+        logger.info("Admin registration successful: Email: {}", request.getEmail());
+        return ResponseEntity.ok(new MyCustomResponse<>(200, "Admin registered successfully", savedUser));
     }
-
 
     // Authenticate user and return JWT
     @PostMapping("/authenticate")
     public ResponseEntity<MyCustomResponse<?>> authenticateUser(@RequestBody AuthenticationRequest request) {
+        logger.info("User authentication requested: Email: {}", request.getEmail());
+
         try {
-            logger.info("User Info {}: {}", request.getEmail(), request.getPassword());
-            logger.info("Password hash: {}", passwordEncoder.encode(request.getPassword()));
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), passwordEncoder.encode(request.getPassword()))
-            );
+            // Step 1: Hash the provided password
+            String providedPasswordHash = passwordEncoder.encode(request.getPassword());
+            logger.warn("The password hash: {}", providedPasswordHash);
+
+            // Step 2: Load the user by email (this should get the stored password hash from the database)
+            VerifiedUser user = userService.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Step 3: Compare the hashed password with the stored password
+            if (!providedPasswordHash.equals(user.getPasswordHash())) {
+                logger.warn("Authentication failed: Invalid credentials for user {}", request.getEmail());
+                throw new RuntimeException("Invalid credentials");
+            }
+
+            // Step 4: Authentication successful, generate JWT token
+            String jwt = jwtTokenUtil.generateToken(user.getEmail());
+            logger.info("User authentication successful: Email: {}", request.getEmail());
+
+            return ResponseEntity.ok(new MyCustomResponse<>(200, "Authentication successful", new AuthenticationResponse(jwt)));
+
         } catch (Exception e) {
             logger.error("Authentication failed for user {}: {}", request.getEmail(), e.getMessage());
             return ResponseEntity.badRequest().body(new MyCustomResponse<>(400, "Invalid credentials - " + e.getMessage(), null));
         }
-
-        UserDetails userDetails = userService.loadUserByUsername(request.getEmail());
-        String jwt = jwtTokenUtil.generateToken(userDetails.getUsername());
-
-        return ResponseEntity.ok(new MyCustomResponse<>(200, "Authentication successful", new AuthenticationResponse(jwt)));
     }
 
-
+    // Get user information by email
     @GetMapping("/getInfoDetail")
     public ResponseEntity<MyCustomResponse<VerifiedUser>> getUserInfo(@RequestParam String email) {
-        return userService.findByEmail(email)
-                .map(user -> ResponseEntity.ok(new MyCustomResponse<VerifiedUser>(200, "User found", user)))
-                .orElseGet(() -> ResponseEntity.badRequest().body(new MyCustomResponse<VerifiedUser>(400, "User not found", null)));
-    }
+        logger.info("User info requested: Email: {}", email);
 
+        return userService.findByEmail(email)
+                .map(user -> {
+                    logger.info("User info retrieved successfully: Email: {}", email);
+                    return ResponseEntity.ok(new MyCustomResponse<>(200, "User found", user));
+                })
+                .orElseGet(() -> {
+                    logger.warn("User info not found: Email: {}", email);
+                    return ResponseEntity.badRequest().body(new MyCustomResponse<>(400, "User not found", null));
+                });
+    }
 }
