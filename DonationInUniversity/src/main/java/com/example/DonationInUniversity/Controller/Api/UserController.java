@@ -1,8 +1,8 @@
 package com.example.DonationInUniversity.controller.api;
 
 import com.example.DonationInUniversity.model.*;
-import com.example.DonationInUniversity.security.JwtTokenUtil;
 import com.example.DonationInUniversity.service.UserService;
+import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final Sha256PasswordEncoder sha256PasswordEncoder;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, Sha256PasswordEncoder sha256PasswordEncoder, PasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.sha256PasswordEncoder = sha256PasswordEncoder;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -68,24 +68,21 @@ public class UserController {
     @PostMapping("/authenticate")
     public ResponseEntity<MyCustomResponse<?>> authenticateUser(@RequestBody AuthenticationRequest request) {
         logger.info("User authentication requested: Email: {}", request.getEmail());
+        logger.info("User authentication successful: Passwordhash: {}", passwordEncoder.encode(request.getPassword()));
 
         try {
-            // Step 1: Hash the provided password
-            String providedPasswordHash = passwordEncoder.encode(request.getPassword());
-            logger.warn("The password hash: {}", providedPasswordHash);
-
-            // Step 2: Load the user by email (this should get the stored password hash from the database)
+            // Step 1: Load the user by email
             VerifiedUser user = userService.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
-            // Step 3: Compare the hashed password with the stored password
-            if (!providedPasswordHash.equals(user.getPasswordHash())) {
+            // Step 2: Compare the provided password with the stored hashed password
+            if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
                 logger.warn("Authentication failed: Invalid credentials for user {}", request.getEmail());
                 throw new RuntimeException("Invalid credentials");
             }
 
-            // Step 4: Authentication successful, generate JWT token
-            String jwt = jwtTokenUtil.generateToken(user.getEmail());
+            // Step 3: Authentication successful, generate JWT token
+            String jwt = sha256PasswordEncoder.generateToken(user.getEmail());
             logger.info("User authentication successful: Email: {}", request.getEmail());
 
             return ResponseEntity.ok(new MyCustomResponse<>(200, "Authentication successful", new AuthenticationResponse(jwt)));
@@ -95,6 +92,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(new MyCustomResponse<>(400, "Invalid credentials - " + e.getMessage(), null));
         }
     }
+
 
     // Get user information by email
     @GetMapping("/getInfoDetail")
