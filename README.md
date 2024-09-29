@@ -6,8 +6,7 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 
 ## Technologies Used
 - **Spring Boot** (v3.x)
-- **Spring Doc OpenAI**
-- **JWT-Token**
+- **JWT-Token** (for security, session management)
 - **JPA** (Java Persistence API)
 - **MySQL** (Database)
 - **Jakarta EE** (JPA, Validation, etc.)
