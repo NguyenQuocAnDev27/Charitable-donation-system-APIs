@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class VerifiedUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,12 +82,12 @@ public class VerifiedUser implements UserDetails {
         return userId;
     }
 
-    public void setPasswordHash(String normalPassword) {
-        this.passwordHash = normalPassword;
-    }
-
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public void setPasswordHash(String normalPassword) {
+        this.passwordHash = normalPassword;
     }
 
     public LocalDateTime getCreatedAt() {
