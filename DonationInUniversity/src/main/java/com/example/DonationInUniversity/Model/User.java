@@ -2,6 +2,7 @@ package com.example.DonationInUniversity.Model;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -33,17 +34,21 @@ public class User {
     @Column(nullable = false)
     private Date updatedAt;
 
+    @OneToMany(mappedBy = "projectManagerId")
+    private Set<DonationProject> project_manager;
+
     public User(int userId, String fullName, String email, String phoneNumber, int role, Object o, Object object) {}
 
-    public User(int userId, String fullName, String email, String passwordHash, String phoneNumber, Role role, Date createdAt, Date updatedAt) {
-        this.userId = userId;
-        this.fullName = fullName;
+    public User(String email, Set<DonationProject> project_manager, Date createdAt, Date updatedAt, Role role, String phoneNumber, String passwordHash, String fullName, int userId) {
         this.email = email;
-        this.passwordHash = passwordHash;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.project_manager = project_manager;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.passwordHash = passwordHash;
+        this.fullName = fullName;
+        this.userId = userId;
     }
 
     public User() {
@@ -114,4 +119,13 @@ public class User {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Set<DonationProject> getProject_manager() {
+        return project_manager;
+    }
+
+    public void setProject_manager(Set<DonationProject> project_manager) {
+        this.project_manager = project_manager;
+    }
 }
+

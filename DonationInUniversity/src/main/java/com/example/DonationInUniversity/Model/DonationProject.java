@@ -1,20 +1,34 @@
 package com.example.DonationInUniversity.Model;
-import java.util.Date;
+import jakarta.persistence.*;
 
+import java.util.Date;
+@Entity
+@Table(name = "donation_projects")
 public class DonationProject {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int projectId;
+    @Column(nullable = false)
     private String projectName;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private double goalAmount;
+    @Column(nullable = false)
     private double currentAmount;
+    @Column(nullable = false)
     private Date startDate;
+    @Column(nullable = false)
     private Date endDate;
+    @Column(nullable = false)
     private String status;
-    private int projectManagerId;
+    @ManyToOne
+    @JoinColumn(name = "users")
+    private User projectManagerId;
     private Date createdAt;
     private Date updatedAt;
 
-    public DonationProject(int projectId, String projectName, String description, double goalAmount, double currentAmount, Date startDate, Date endDate, String status, int projectManagerId, Date createdAt, Date updatedAt) {
+    public DonationProject(int projectId, String projectName, String description, double goalAmount, double currentAmount, Date startDate, Date endDate, String status, User projectManagerId, Date createdAt, Date updatedAt) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.description = description;
@@ -27,6 +41,11 @@ public class DonationProject {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public DonationProject() {
+
+    }
+
 
     // Getters and Setters
     public int getProjectId() {
@@ -93,11 +112,11 @@ public class DonationProject {
         this.status = status;
     }
 
-    public int getProjectManagerId() {
+    public User getProjectManagerId() {
         return projectManagerId;
     }
 
-    public void setProjectManagerId(int projectManagerId) {
+    public void setProjectManagerId(User projectManagerId) {
         this.projectManagerId = projectManagerId;
     }
 

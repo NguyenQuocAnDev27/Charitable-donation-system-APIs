@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     @Autowired
     private UserRepository userRepository;
-
-
     public User loginAdmin(String email) {
         return  userRepository.findByEmail(email);
     }
