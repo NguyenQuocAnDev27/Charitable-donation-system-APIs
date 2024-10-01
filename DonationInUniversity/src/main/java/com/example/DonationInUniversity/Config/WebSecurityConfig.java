@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -22,8 +25,8 @@ public class WebSecurityConfig {
         http.csrf(csrf->csrf.disable());
         http.authorizeHttpRequests(auth->auth
                 .requestMatchers("/*").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("admin")
-                .requestMatchers("/admin/**").hasAuthority("project_manager")
+                .requestMatchers("/admin/**").hasAuthority("Admin")
+                .requestMatchers("/admin/**").hasAuthority("Project Manager")
                 .anyRequest().authenticated()
         );
         http.formLogin(login->login
@@ -34,9 +37,24 @@ public class WebSecurityConfig {
                 .defaultSuccessUrl("/")
 
         );
+        http.rememberMe(rememberMe->rememberMe
+                .rememberMeParameter("remember-me")
+                .rememberMeCookieName("remember-me-cookie")
+                .tokenValiditySeconds(7 * 24 * 60 * 60)
+                .key("uniqueAndSecret")
+                .tokenRepository(persistentTokenRepository())
+                .userDetailsService(detailsService)
+        );
+        http.logout(logout->logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+        );
         return http.build();
     }
-
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        return new InMemoryTokenRepositoryImpl();
+    }
     @Bean
     WebSecurityCustomizer customizer() {
         return web -> web.ignoring().requestMatchers("/static/**", "/assets/**");

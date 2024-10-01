@@ -8,8 +8,6 @@
   data-template="vertical-menu-template-free"
   data-style="light">
           <ul class="menu-inner py-1" th:fragment="dashboards">
-            <!-- Dashboards -->
-
                 <li class="menu-item"  th:classappend="${currentUrl == 'AccountManagement'} ? ' active'">
                   <a th:href="@{/AccountManagement}" class="menu-link">
                     <span class="text-truncate" >Account Management</span>
@@ -17,7 +15,7 @@
                 </li>
                 <li class="menu-item"  th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
 
-                  <a th:href="@{/DonationProject}" class="menu-link">
+                  <a th:href="@{/admin/DonationProject}" class="menu-link">
                     <span class="text-truncate" >Project Management</span>
                   </a>
                 </li>

@@ -35,7 +35,10 @@ public class CustomUserDetails implements UserDetails {
     public String getPassword() {
         return user.getPasswordHash();
     }
-
+    // Getter cho fullName từ đối tượng User
+    public String getFullName() {
+        return user.getFullName();
+    }
     @Override
     public String getUsername() {
         return user.getEmail();

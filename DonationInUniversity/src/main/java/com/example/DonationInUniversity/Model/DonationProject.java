@@ -20,10 +20,9 @@ public class DonationProject {
     private Date startDate;
     @Column(nullable = false)
     private Date endDate;
-    @Column(nullable = false)
     private String status;
     @ManyToOne
-    @JoinColumn(name = "users")
+    @JoinColumn(name = "projectManagerId")
     private User projectManagerId;
     private Date createdAt;
     private Date updatedAt;
