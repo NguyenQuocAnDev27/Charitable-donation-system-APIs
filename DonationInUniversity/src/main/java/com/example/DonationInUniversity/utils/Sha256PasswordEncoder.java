@@ -55,14 +55,19 @@ public class Sha256PasswordEncoder implements PasswordEncoder {
     }
 
     // Method to generate JWT token using the secret key
-    public String generateToken(String subject) {
+    public String generateToken(String subject, int exp_time) {
         try {
-            return Jwts.builder().
-                    subject(subject).
-                    issuedAt(new Date(System.currentTimeMillis())).
-                    expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // 7 days expiration
+            Date expirationDate = new Date(System.currentTimeMillis() + (exp_time * 1000L));
+            String token = Jwts.builder()
+                    .subject(subject)
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(expirationDate)
                     .signWith(getSecretKey(), Jwts.SIG.HS256)
                     .compact();
+
+            // Log the expiration time of the token
+            logger.info("Token generated. Expiration time: {}", expirationDate);
+            return token;
         } catch (Exception e) {
             throw new RuntimeException("Error while generating token", e);
         }
@@ -101,7 +106,7 @@ public class Sha256PasswordEncoder implements PasswordEncoder {
             boolean isUsernameMatch = extractedUsername.equals(username);
             boolean isTokenNotExpired = !isTokenExpired(token);
 
-            logger.info("Username match: {}, Token expired: {}", isUsernameMatch, isTokenNotExpired);
+            logger.info("Username match: {}, Token expired: {}", isUsernameMatch, !isTokenNotExpired);
 
             // Check if the extracted username matches and the token is not expired
             return (isUsernameMatch && isTokenNotExpired);

@@ -1,20 +1,31 @@
 package com.example.DonationInUniversity.model;
 
 public class AuthenticationResponse {
-    private String jwt;
+    private String accessToken;
+    private String refreshToken;
 
     // Constructor
-    public AuthenticationResponse(String jwt) {
-        this.jwt = jwt;
+    public AuthenticationResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
-    // Getter
-    public String getJwt() {
-        return jwt;
+    // Getters and setters
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setJwt(String jwt) {
-        this.jwt = jwt;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
+
 

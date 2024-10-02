@@ -2,6 +2,7 @@ package com.example.DonationInUniversity.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -98,10 +99,17 @@ public class VerifiedUser implements UserDetails {
         return updatedAt;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of();
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        // Assuming the Role entity has a roleName field like "ROLE_USER" or "ROLE_ADMIN"
+        return List.of(new SimpleGrantedAuthority(role.getRoleName()));
     }
+
 
     @Override
     public String getPassword() {

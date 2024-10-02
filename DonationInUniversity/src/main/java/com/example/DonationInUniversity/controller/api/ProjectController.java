@@ -1,10 +1,8 @@
 package com.example.DonationInUniversity.controller.api;
 
-import com.example.DonationInUniversity.exception.MyException;
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,21 +19,21 @@ public class ProjectController {
         return projectService.getAllProjects();
     }
 
-    @PostMapping
-    public ResponseEntity<DonationProject> createProject(@RequestBody DonationProject project) {
-        try {
-            return ResponseEntity.ok(projectService.createProject(project));
-        } catch (MyException e) {
-            throw new MyException("Error creating project: " + e.getMessage());
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<DonationProject> createProject(@RequestBody DonationProject project) {
+//        try {
+//            return ResponseEntity.ok(projectService.createProject(project));
+//        } catch (MyException e) {
+//            throw new MyException("Error creating project: " + e.getMessage());
+//        }
+//    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DonationProject> getProjectById(@PathVariable int id) {
-        DonationProject project = projectService.getProjectById(id);
-        if (project == null) {
-            throw new MyException("Project not found with id: " + id);
-        }
-        return ResponseEntity.ok(project);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<DonationProject> getProjectById(@PathVariable int id) {
+//        DonationProject project = projectService.getProjectById(id);
+//        if (project == null) {
+//            throw new MyException("Project not found with id: " + id);
+//        }
+//        return ResponseEntity.ok(project);
+//    }
 }

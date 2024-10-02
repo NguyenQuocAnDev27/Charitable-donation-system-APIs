@@ -1,6 +1,6 @@
 package com.example.DonationInUniversity.config;
 
-import com.example.DonationInUniversity.security.JwtRequestFilter;
+import com.example.DonationInUniversity.security.ApiRequestFilter;
 import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,11 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final JwtRequestFilter jwtRequestFilter;
+    private final ApiRequestFilter apiRequestFilter;
 
     @Autowired
-    public SecurityConfig(@Lazy JwtRequestFilter jwtRequestFilter) {
-        this.jwtRequestFilter = jwtRequestFilter;
+    public SecurityConfig(@Lazy ApiRequestFilter apiRequestFilter) {
+        this.apiRequestFilter = apiRequestFilter;
     }
 
     @Bean
@@ -38,11 +38,12 @@ public class SecurityConfig {
                                 "/register",
                                 "/forgot_password",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/api/token/refresh"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(apiRequestFilter, UsernamePasswordAuthenticationFilter.class);
         // "/api/keys/generate"
         return http.build();
     }
