@@ -19,14 +19,25 @@ public class ProjectController {
         model.addAttribute("project", new DonationProject());
         return "DonationProject";
     }
-    @PostMapping("saveProject")
-    public String addProject(@ModelAttribute("project") DonationProject project) {
-       this.projectServiceAdmin.addProject(project);
+    @GetMapping("DonationProject/{id}")
+    public String getDonationProject(Model model, @PathVariable int id) {
+        DonationProject project = projectServiceAdmin.getProjectById(id);
+        model.addAttribute("project",project);
+        return "DonationProject";
+    }
+    @PostMapping("saveOrUpdateProject")
+    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {
+        if(project.getProjectId() == null){
+            projectServiceAdmin.addProject(project);
+        }
+        else {
+            projectServiceAdmin.updateProject(project);
+        }
         return "redirect:/admin/DonationProject";
     }
-    @GetMapping("deleteProject/{id}")
-    public String deleteProject(@PathVariable(value = "id") int id) {
+    @PostMapping("deleteProject/{id}")
+    public String deleteProject(@PathVariable int id) {
        this.projectServiceAdmin.deleteProject(id);
-       return "redirect:/DonationProject";
+       return "redirect:/admin/DonationProject";
     }
 }

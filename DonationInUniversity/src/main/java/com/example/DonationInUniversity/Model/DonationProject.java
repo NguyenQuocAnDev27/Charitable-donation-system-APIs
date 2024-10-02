@@ -1,5 +1,6 @@
 package com.example.DonationInUniversity.Model;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Entity
@@ -7,7 +8,7 @@ import java.util.Date;
 public class DonationProject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int projectId;
+    private Integer projectId;
     @Column(nullable = false)
     private String projectName;
     @Column(nullable = false)
@@ -17,17 +18,23 @@ public class DonationProject {
     @Column(nullable = false)
     private double currentAmount;
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private String status;
     @ManyToOne
     @JoinColumn(name = "projectManagerId")
     private User projectManagerId;
+    @Column()
+    private int isDeleted ;
     private Date createdAt;
     private Date updatedAt;
 
-    public DonationProject(int projectId, String projectName, String description, double goalAmount, double currentAmount, Date startDate, Date endDate, String status, User projectManagerId, Date createdAt, Date updatedAt) {
+
+
+    public DonationProject(int projectId, String projectName, String description, double goalAmount, double currentAmount, Date startDate, Date endDate, String status, User projectManagerId, Date createdAt, Date updatedAt,int isDeleted) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.description = description;
@@ -39,6 +46,7 @@ public class DonationProject {
         this.projectManagerId = projectManagerId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.isDeleted = isDeleted;
     }
 
     public DonationProject() {
@@ -46,12 +54,13 @@ public class DonationProject {
     }
 
 
+
     // Getters and Setters
-    public int getProjectId() {
+    public Integer getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         this.projectId = projectId;
     }
 
@@ -133,5 +142,13 @@ public class DonationProject {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(int deleted) {
+        isDeleted = deleted;
     }
 }

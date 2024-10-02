@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectServiceAdmin {
     @Autowired
     private ProjectRepository projectRepository;
     public List<DonationProject> getAllProjects() {
-        return projectRepository.findAll();
+        return projectRepository.findByIsDeleted(1);
     }
     public DonationProject getProjectById(int id) {
         return projectRepository.findByProjectId(id);
@@ -20,18 +21,15 @@ public class ProjectServiceAdmin {
     public DonationProject addProject(DonationProject donationProject) {
         return projectRepository.save(donationProject);
     }
-    public DonationProject updateProject(int id, DonationProject donationProject) {
-        DonationProject project = projectRepository.findByProjectId(id);
-        project.setProjectName(donationProject.getProjectName());
-        project.setDescription(donationProject.getDescription());
-        project.setCurrentAmount(donationProject.getCurrentAmount());
-        project.setGoalAmount(donationProject.getGoalAmount());
-        project.setStartDate(donationProject.getStartDate());
-        project.setEndDate(donationProject.getEndDate());
-        project.setStatus(donationProject.getStatus());
-        return projectRepository.save(project);
+    public DonationProject updateProject( DonationProject donationProject) {
+        return projectRepository.save(donationProject);
     }
-    public void deleteProject(int id) {
-        projectRepository.deleteById(id);
+    public void deleteProject(int projectId) {
+        Optional<DonationProject> projectOptional = projectRepository.findById(projectId);
+        if (projectOptional.isPresent()) {
+            DonationProject project = projectOptional.get();
+            project.setDeleted(0); // Đặt isDeleted = 1 để đánh dấu là đã xóa
+            projectRepository.save(project);
+        }
     }
 }
