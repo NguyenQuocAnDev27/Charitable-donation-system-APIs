@@ -37,6 +37,6 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 │   │   │               └── security       # Security configuration (authentication, authorization)
 │   │   └── resources
 │   │       └── application.properties     # Basic configuration file
-│   │       └── env.properties     # Local configuration file
-├── pom.xml                                 # Maven configuration file (dependencies, plugins, etc.)
-└── README.md                               # Project documentation
+│   │       └── env.properties             # Local configuration file
+├── pom.xml                                # Maven configuration file (dependencies, plugins, etc.)
+└── README.md                              # Project documentation
