@@ -16,6 +16,7 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 ## Folder Structure
 
 ```bash
+├── logs                                   # Save error logs file
 ├── src
 │   ├── main
 │   │   ├── java
