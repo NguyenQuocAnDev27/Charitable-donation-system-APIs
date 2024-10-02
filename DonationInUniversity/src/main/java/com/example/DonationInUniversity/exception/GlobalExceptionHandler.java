@@ -1,22 +1,26 @@
 package com.example.DonationInUniversity.exception;
 
+import com.example.DonationInUniversity.model.MyCustomResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<MyCustomResponse<?>> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        MyCustomResponse<String> errorResponse = new MyCustomResponse<>(
+                HttpStatus.NOT_FOUND.value(),
+                "The requested API endpoint is not available.",
+                null
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MyException.class)
-    public ResponseEntity<String> handleMyException(MyException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    // Handle other exceptions...
+    // You can add other exception handlers here if needed
 }
