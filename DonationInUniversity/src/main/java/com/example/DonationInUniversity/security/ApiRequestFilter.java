@@ -79,23 +79,24 @@ public class ApiRequestFilter extends OncePerRequestFilter {
             }
         } else if (username != null) {
             logger.info("User is already authenticated: " + username);
-        } else {
-            // Log strange API calls (unauthenticated requests to protected endpoints)
-            if (requestURI.startsWith("/api/")) { // Adjust based on your API's base path
-                logger.warn("Unauthenticated access attempt to protected endpoint: " + requestURI);
-
-                // Set response content type to application/json
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-                // Create JSON response string
-                String jsonResponse = "{ \"status\": 403, \"message\": \"Access denied to this resource\", \"data\": null }";
-
-                // Write the JSON response
-                response.getWriter().write(jsonResponse);
-                return;
-            }
         }
+//        else {
+//            // Log strange API calls (unauthenticated requests to protected endpoints)
+//            if (requestURI.startsWith("/api/")) { // Adjust based on your API's base path
+//                logger.warn("Unauthenticated access attempt to protected endpoint: " + requestURI);
+//
+//                // Set response content type to application/json
+//                response.setContentType("application/json");
+//                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//
+//                // Create JSON response string
+//                String jsonResponse = "{ \"status\": 403, \"message\": \"Access denied to this resource\", \"data\": null }";
+//
+//                // Write the JSON response
+//                response.getWriter().write(jsonResponse);
+//                return;
+//            }
+//        }
 
         // Check if the endpoint exists
         if (!isValidEndpoint(requestURI)) {
