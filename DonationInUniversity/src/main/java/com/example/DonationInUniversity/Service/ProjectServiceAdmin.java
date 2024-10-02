@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProjectService {
+public class ProjectServiceAdmin {
     @Autowired
     private ProjectRepository projectRepository;
     public List<DonationProject> getAllProjects() {
