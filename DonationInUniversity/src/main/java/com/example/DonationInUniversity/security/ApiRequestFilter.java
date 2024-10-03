@@ -38,49 +38,53 @@ public class ApiRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        final String authorizationHeader = request.getHeader("Authorization");
-        String username = null;
-        String jwt = null;
+        int requestPort = request.getLocalPort();
 
-        // Log the requested endpoint
-        String requestURI = request.getRequestURI();
-        logger.info("Requested Endpoint: " + requestURI);
+        if (requestPort == 8080) {
 
-        logger.info("Authorization Header: " + authorizationHeader);
+            final String authorizationHeader = request.getHeader("Authorization");
+            String username = null;
+            String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            logger.info("Extracted Access token: " + jwt);
+            // Log the requested endpoint
+            String requestURI = request.getRequestURI();
+            logger.info("Requested Endpoint: " + requestURI);
 
-            try {
-                username = sha256PasswordEncoder.extractUsername(jwt);
-                logger.info("Extracted Username from Access token: " + username);
-            } catch (Exception e) {
-                logger.error("Access token error: " + e.getMessage(), e);
-            }
-        } else {
-            logger.warn("Authorization header missing or does not start with Bearer");
-        }
+            logger.info("Authorization Header: " + authorizationHeader);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            logger.info("Security context is null. Trying to authenticate user: " + username);
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                jwt = authorizationHeader.substring(7);
+                logger.info("Extracted Access token: " + jwt);
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            logger.info("UserDetails loaded for user: " + userDetails.getUsername());
-
-            if (sha256PasswordEncoder.isTokenValid(jwt, userDetails.getUsername())) {
-                logger.info("Access token is valid for user: " + userDetails.getUsername());
-
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-                logger.info("User authenticated successfully: " + username);
+                try {
+                    username = sha256PasswordEncoder.extractUsername(jwt);
+                    logger.info("Extracted Username from Access token: " + username);
+                } catch (Exception e) {
+                    logger.error("Access token error: " + e.getMessage(), e);
+                }
             } else {
-                logger.warn("Access token is not valid for user: " + username);
+                logger.warn("Authorization header missing or does not start with Bearer");
             }
-        } else if (username != null) {
-            logger.info("User is already authenticated: " + username);
-        }
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                logger.info("Security context is null. Trying to authenticate user: " + username);
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                logger.info("UserDetails loaded for user: " + userDetails.getUsername());
+
+                if (sha256PasswordEncoder.isTokenValid(jwt, userDetails.getUsername())) {
+                    logger.info("Access token is valid for user: " + userDetails.getUsername());
+
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    logger.info("User authenticated successfully: " + username);
+                } else {
+                    logger.warn("Access token is not valid for user: " + username);
+                }
+            } else if (username != null) {
+                logger.info("User is already authenticated: " + username);
+            }
 //        else {
 //            // Log strange API calls (unauthenticated requests to protected endpoints)
 //            if (requestURI.startsWith("/api/")) { // Adjust based on your API's base path
@@ -99,13 +103,16 @@ public class ApiRequestFilter extends OncePerRequestFilter {
 //            }
 //        }
 
-        // Check if the endpoint exists
+            // Check if the endpoint exists
 //        if (!isValidEndpoint(requestURI)) {
 //            respondWithCustomError(response, 500, "No API endpoint named like that");
 //            return;
 //        }
 
-        chain.doFilter(request, response);
+            chain.doFilter(request, response);
+        } else {
+            chain.doFilter(request, response);
+        }
     }
 
 

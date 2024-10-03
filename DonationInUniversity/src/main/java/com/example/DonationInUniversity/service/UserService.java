@@ -1,15 +1,14 @@
 package com.example.DonationInUniversity.service;
 
-import com.example.DonationInUniversity.model.RefreshToken;
-import com.example.DonationInUniversity.model.Role;
-import com.example.DonationInUniversity.model.UserProfile;
-import com.example.DonationInUniversity.model.VerifiedUser;
+import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.RefreshTokenRepository;
 import com.example.DonationInUniversity.repository.RoleRepository;
 import com.example.DonationInUniversity.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -26,13 +27,20 @@ public class UserService implements UserDetailsService {
     private final RoleRepository roleRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LoginService loginService;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RefreshTokenRepository refreshTokenRepository) {
+    public UserService(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            RefreshTokenRepository refreshTokenRepository,
+            LoginService loginService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.loginService = loginService;
     }
 
     // Save a new user with a specific role
@@ -58,10 +66,21 @@ public class UserService implements UserDetailsService {
     }
 
     // Implementation of UserDetailsService for authentication
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        return userRepository.findByEmail(email)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+//    }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        User user = loginService.loginAdmin(email);
+        if(user == null){
+            throw new UsernameNotFoundException("User not found");
+        }
+        Collection<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+        Role role = user.getRole();
+        authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        return new CustomUserDetails(user, authorities);
     }
 
     // Convert VerifiedUser to UserProfile
