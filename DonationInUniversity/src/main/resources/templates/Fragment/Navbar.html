@@ -40,26 +40,13 @@
                         class="nav-link dropdown-toggle hide-arrow p-0"
                         href="javascript:void(0);"
                         data-bs-toggle="dropdown">
-                    <div class="avatar avatar-online">
-                        <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    <div>
+                        <div th:if="${#authentication.name != 'anonymousUser'}">
+                            <p>Welcome, <strong th:text="${#authentication.principal.fullName}"></strong></p>
+                        </div>
                     </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar avatar-online">
-                                        <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-0">John Doe</h6>
-                                    <small class="text-muted">Admin</small>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
                     <li>
                         <div class="dropdown-divider my-1"></div>
                     </li>
@@ -75,7 +62,7 @@
                         <div class="dropdown-divider my-1"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="javascript:void(0);">
+                        <a class="dropdown-item" th:href="@{/logout}">
                             <i class="bx bx-power-off bx-md me-3"></i><span>Log Out</span>
                         </a>
                     </li>

@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.Controller.admin;
 
 public class AdminController {
 }

@@ -1,6 +1,6 @@
 package com.example.DonationInUniversity.utils;
 
-import com.example.DonationInUniversity.controller.api.UserController;
+import com.example.DonationInUniversity.Controller.Api.UserController;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

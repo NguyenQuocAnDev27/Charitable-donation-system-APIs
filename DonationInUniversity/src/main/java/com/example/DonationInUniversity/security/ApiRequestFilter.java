@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +29,7 @@ public class ApiRequestFilter extends OncePerRequestFilter {
     private final EndpointService endpointService;
 
     @Autowired
-    public ApiRequestFilter(@Lazy Sha256PasswordEncoder sha256PasswordEncoder, @Lazy UserDetailsService userDetailsService, @Lazy EndpointService endpointService) {
+    public ApiRequestFilter(@Lazy Sha256PasswordEncoder sha256PasswordEncoder, @Qualifier("userService") @Lazy UserDetailsService userDetailsService, @Lazy EndpointService endpointService) {
         this.sha256PasswordEncoder = sha256PasswordEncoder;
         this.userDetailsService = userDetailsService;
         this.endpointService = endpointService;
@@ -79,29 +80,30 @@ public class ApiRequestFilter extends OncePerRequestFilter {
             }
         } else if (username != null) {
             logger.info("User is already authenticated: " + username);
-        } else {
-            // Log strange API calls (unauthenticated requests to protected endpoints)
-            if (requestURI.startsWith("/api/")) { // Adjust based on your API's base path
-                logger.warn("Unauthenticated access attempt to protected endpoint: " + requestURI);
-
-                // Set response content type to application/json
-                response.setContentType("application/json");
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-                // Create JSON response string
-                String jsonResponse = "{ \"status\": 403, \"message\": \"Access denied to this resource\", \"data\": null }";
-
-                // Write the JSON response
-                response.getWriter().write(jsonResponse);
-                return;
-            }
         }
+//        else {
+//            // Log strange API calls (unauthenticated requests to protected endpoints)
+//            if (requestURI.startsWith("/api/")) { // Adjust based on your API's base path
+//                logger.warn("Unauthenticated access attempt to protected endpoint: " + requestURI);
+//
+//                // Set response content type to application/json
+//                response.setContentType("application/json");
+//                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//
+//                // Create JSON response string
+//                String jsonResponse = "{ \"status\": 403, \"message\": \"Access denied to this resource\", \"data\": null }";
+//
+//                // Write the JSON response
+//                response.getWriter().write(jsonResponse);
+//                return;
+//            }
+//        }
 
         // Check if the endpoint exists
-        if (!isValidEndpoint(requestURI)) {
-            respondWithCustomError(response, 500, "No API endpoint named like that");
-            return;
-        }
+//        if (!isValidEndpoint(requestURI)) {
+//            respondWithCustomError(response, 500, "No API endpoint named like that");
+//            return;
+//        }
 
         chain.doFilter(request, response);
     }

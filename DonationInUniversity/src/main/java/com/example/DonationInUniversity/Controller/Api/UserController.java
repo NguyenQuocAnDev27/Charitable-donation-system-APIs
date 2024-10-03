@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.api;
+package com.example.DonationInUniversity.Controller.Api;
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.UserService;

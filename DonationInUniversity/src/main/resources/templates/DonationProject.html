@@ -39,8 +39,9 @@
           <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
+                <form th:object="${project}" th:action="@{/admin/saveOrUpdateProject}" method="post">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel1">Add New Project</h5>
+                  <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
                   <button
                           type="button"
                           class="btn-close"
@@ -49,24 +50,46 @@
                 </div>
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col mb-6">
+                    <input type="hidden" th:field="*{projectId}" class="form-control" />
+                    <div class="col-5 mb-6">
                       <label  class="form-label">Project Name</label>
-                      <input type="text"  class="form-control" placeholder="Enter Project Name" />
+                      <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" />
                     </div>
-                  </div>
-                  <div class="row g-6">
-                    <div class="col mb-0">
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Project Manager</label>
+                      <input type="text"  th:field="*{projectManagerId}"  class="form-control" placeholder="Enter Project Manager" />
+                    </div>
+
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Goal Amount</label>
+                      <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Current Amount</label>
+                      <input type="text"  th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Start Date</label>
+                      <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">End Date</label>
+                      <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" />
+                    </div>
+                    <div class="col mb-6">
                       <label  class="form-label">Project Description</label>
-                      <input type="text" id="nameBasic" class="form-control" placeholder="Enter Project Description" />
+                      <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" />
                     </div>
                   </div>
                 </div>
                 <div class="modal-footer">
+                  <button  type="submit" class="btn btn-primary mx-2" >Save</button>
                   <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     Close
                   </button>
-                  <button type="button" class="btn btn-primary">Add</button>
+
                 </div>
+                </form>
               </div>
             </div>
           </div>
@@ -89,7 +112,7 @@
                               data-bs-toggle="modal"
                               data-bs-target="#basicModal">
                         <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-                        <span class="d-none d-sm-inline-block">Add New Project</span>
+                        <span class="d-none d-sm-inline-block">Donation Project</span>
                       </button>
                     </div>
                   </div>
@@ -99,201 +122,50 @@
                     <thead>
                       <tr>
                         <th>Project-ID</th>
-                        <th>Client</th>
-                        <th>Users</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                        <th>Goal Amount</th>
+                        <th>Current Amount</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Project Manager</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody class="table-border-bottom-0">
-                      <tr>
-                        <td><i class="bx bxl-angular bx-md text-danger me-4"></i> <span>Angular Project</span></td>
-                        <td>Albert Cook</td>
-                        <td>
-                          <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Lilian Fuller">
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Sophia Wilkerson">
-                              <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Christina Parker">
-                              <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                          </ul>
-                        </td>
-                        <td><span class="badge bg-label-primary me-1">Active</span></td>
+                    <tbody class="table-border-bottom-0 align-items-center">
+                      <tr th:each="project : ${listProjects}">
+                        <td th:text="${project.projectId}"></td>
+                        <td th:text="${project.projectName}"></td>
+                        <td th:text="${project.description}"></td>
+                        <td th:text="${project.goalAmount}"></td>
+                        <td th:text="${project.currentAmount}"></td>
+                        <td th:text="${project.startDate}"></td>
+                        <td th:text="${project.endDate}"></td>
+                        <td th:text="${project.projectManagerId.fullName}"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                              <button class="dropdown-item" type="button"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#basicModal"
+                                      th:data-project-id="${project.projectId}"
+                                      th:data-project-manager-id="${project.projectManagerId}"
+                                      th:data-project-name="${project.projectName}"
+                                      th:data-goal-amount="${project.goalAmount}"
+                                      th:data-current-amount="${project.currentAmount}"
+                                      th:data-start-date="${project.startDate}"
+                                      th:data-end-date="${project.endDate}"
+                                      th:data-description="${project.description}"
+                                ><i class="bx bx-edit-alt me-1"></i> Edit</button
                               >
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-trash me-1"></i> Delete</a
-                              >
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><i class="bx bxl-react bx-md text-info me-4"></i> <span>React Project</span></td>
-                        <td>Barry Hunter</td>
-                        <td>
-                          <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Lilian Fuller">
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Sophia Wilkerson">
-                              <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Christina Parker">
-                              <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                          </ul>
-                        </td>
-                        <td><span class="badge bg-label-success me-1">Completed</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-edit-alt me-2"></i> Edit</a
-                              >
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-trash me-2"></i> Delete</a
-                              >
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><i class="bx bxl-vuejs bx-md text-success me-4"></i> <span>VueJs Project</span></td>
-                        <td>Trevor Baker</td>
-                        <td>
-                          <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Lilian Fuller">
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Sophia Wilkerson">
-                              <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Christina Parker">
-                              <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                          </ul>
-                        </td>
-                        <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-edit-alt me-2"></i> Edit</a
-                              >
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-trash me-2"></i> Delete</a
-                              >
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><i class="bx bxl-bootstrap bx-md text-primary me-4"></i> <span>Bootstrap Project</span></td>
-                        <td>Jerry Milton</td>
-                        <td>
-                          <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Lilian Fuller">
-                              <img src="../assets/img/avatars/5.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Sophia Wilkerson">
-                              <img src="../assets/img/avatars/6.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                            <li
-                              data-bs-toggle="tooltip"
-                              data-popup="tooltip-custom"
-                              data-bs-placement="top"
-                              class="avatar avatar-xs pull-up"
-                              title="Christina Parker">
-                              <img src="../assets/img/avatars/7.png" alt="Avatar" class="rounded-circle" />
-                            </li>
-                          </ul>
-                        </td>
-                        <td><span class="badge bg-label-warning me-1">Pending</span></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-edit-alt me-2"></i> Edit</a
-                              >
-                              <a class="dropdown-item" href="javascript:void(0);"
-                                ><i class="bx bx-trash me-2"></i> Delete</a
-                              >
+                              <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
+                                  <i class="bx bx-trash me-1"></i> Delete
+                                </button>
+                              </form>
                             </div>
                           </div>
                         </td>
@@ -340,6 +212,32 @@
 
     <!-- Page JS -->
     <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+    <script>
+      const editProjectModal = document.getElementById('basicModal');
+      editProjectModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Nút đã nhấn để mở modal
+        const projectManagerId = button.getAttribute('data-project-manager-id');
+        const projectName = button.getAttribute('data-project-name');
+        const goalAmount = button.getAttribute('data-goal-amount');
+        const currentAmount = button.getAttribute('data-current-amount');
+        const startDate = button.getAttribute('data-start-date');
+        const endDate = button.getAttribute('data-end-date');
+        const description = button.getAttribute('data-description');
+        const projectId = button.getAttribute('data-project-id');
+
+
+        document.querySelector('input[name="projectName"]').value = projectName;
+        document.querySelector('input[name="goalAmount"]').value = goalAmount;
+        document.querySelector('input[name="currentAmount"]').value = currentAmount;
+        document.querySelector('input[name="startDate"]').value = startDate;
+        document.querySelector('input[name="endDate"]').value = endDate;
+        document.querySelector('input[name="projectManagerId"]').value = projectManagerId;
+        document.querySelector('input[name="description"]').value = description;
+
+
+        document.querySelector('input[name="projectId"]').value = projectId;
+      });
+    </script>
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

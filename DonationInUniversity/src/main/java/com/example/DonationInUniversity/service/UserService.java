@@ -6,7 +6,7 @@ import com.example.DonationInUniversity.model.UserProfile;
 import com.example.DonationInUniversity.model.VerifiedUser;
 import com.example.DonationInUniversity.repository.RefreshTokenRepository;
 import com.example.DonationInUniversity.repository.RoleRepository;
-import com.example.DonationInUniversity.repository.UserRepository;
+import com.example.DonationInUniversity.Repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
