@@ -28,7 +28,10 @@ public class ApiRequestFilter extends OncePerRequestFilter {
     private final EndpointService endpointService;
 
     @Autowired
-    public ApiRequestFilter(@Lazy Sha256PasswordEncoder sha256PasswordEncoder, @Lazy UserDetailsService userDetailsService, @Lazy EndpointService endpointService) {
+    public ApiRequestFilter(
+            @Lazy Sha256PasswordEncoder sha256PasswordEncoder,
+            @Lazy UserDetailsService userDetailsService,
+            @Lazy EndpointService endpointService) {
         this.sha256PasswordEncoder = sha256PasswordEncoder;
         this.userDetailsService = userDetailsService;
         this.endpointService = endpointService;
