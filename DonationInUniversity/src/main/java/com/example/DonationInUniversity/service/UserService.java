@@ -3,7 +3,7 @@ package com.example.DonationInUniversity.service;
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.RefreshTokenRepository;
 import com.example.DonationInUniversity.repository.RoleRepository;
-import com.example.DonationInUniversity.Repository.UserRepository;
+import com.example.DonationInUniversity.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +49,14 @@ public class UserService implements UserDetailsService {
         Role role = roleRepository.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
 
-        // Encrypt password and assign role
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        user.setRole(role);
+        // Mã hóa mật khẩu trước khi lưu
+        String encodedPassword = passwordEncoder.encode(user.getPasswordHash());
+        user.setPasswordHash(encodedPassword);  // Lưu mật khẩu đã mã hóa
 
+        user.setRole(role);
         return userRepository.save(user);
     }
+
 
     // Find user by email
     public Optional<VerifiedUser> findByEmail(String email) {
@@ -157,4 +159,5 @@ public class UserService implements UserDetailsService {
                     logger.warn("Refresh token not found: {}", refreshToken);
                 });
     }
+
 }

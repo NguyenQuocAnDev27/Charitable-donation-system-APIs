@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Repository;
+package com.example.DonationInUniversity.repository;
 
 import com.example.DonationInUniversity.model.VerifiedUser;
 import org.springframework.data.jpa.repository.JpaRepository;

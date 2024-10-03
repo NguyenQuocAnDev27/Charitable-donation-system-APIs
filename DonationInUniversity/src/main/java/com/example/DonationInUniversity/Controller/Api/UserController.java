@@ -1,8 +1,9 @@
-package com.example.DonationInUniversity.Controller.Api;
+package com.example.DonationInUniversity.controller.api;
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.UserService;
-import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
+import com.example.DonationInUniversity.utils.JwtUtil;
+//import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,13 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final Sha256PasswordEncoder sha256PasswordEncoder;
+    private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService, Sha256PasswordEncoder sha256PasswordEncoder, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
-        this.sha256PasswordEncoder = sha256PasswordEncoder;
+        this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -90,8 +91,8 @@ public class UserController {
             }
 
             // Step 3: Authentication successful, generate both access and refresh tokens
-            String accessToken = sha256PasswordEncoder.generateToken(user.getEmail(), 3600);  // 1 hour (3600 seconds)
-            String refreshToken = sha256PasswordEncoder.generateToken(user.getEmail(), 604800);  // 7 days (604800 seconds)
+            String accessToken = jwtUtil.generateToken(user.getEmail(), 3600);  // 1 hour (3600 seconds)
+            String refreshToken = jwtUtil.generateToken(user.getEmail(), 604800);  // 7 days (604800 seconds)
 
             // Step 4: Save refresh token to db
             userService.saveRefreshToken(user.getUserId(), refreshToken);
@@ -139,7 +140,7 @@ public class UserController {
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             // Step 3: Generate new access token
-            String newAccessToken = sha256PasswordEncoder.generateToken(user.getEmail(), 3600);  // 1 hour
+            String newAccessToken = jwtUtil.generateToken(user.getEmail(), 3600);  // 1 hour
 
             logger.info("Access token refreshed for user: {}", user.getEmail());
 

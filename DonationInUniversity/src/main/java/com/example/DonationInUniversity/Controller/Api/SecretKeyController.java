@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Controller.Api;
+package com.example.DonationInUniversity.controller.api;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

@@ -12,7 +12,7 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/forgot_password")
+    @GetMapping("forgot_password")
     public String forgot_password() {
         return "forgot-password";
     }

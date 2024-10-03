@@ -3,10 +3,11 @@ package com.example.DonationInUniversity.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 
-public class CustomUserDetails implements UserDetails {
+public class CustomUserDetails implements UserDetails, Serializable {
 
     private User user;
     private Collection<? extends GrantedAuthority> authorities;
