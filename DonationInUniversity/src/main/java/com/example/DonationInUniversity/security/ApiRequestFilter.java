@@ -98,11 +98,13 @@ public class ApiRequestFilter extends OncePerRequestFilter {
 //            }
 //        }
 
+        // *** Note: In Dev or Debug mode, comment this function, it will not let swagger-ui through
         // Check if the endpoint exists
-        if (!isValidEndpoint(requestURI)) {
-            respondWithCustomError(response, 500, "No API endpoint named like that");
-            return;
-        }
+
+//        if (!isValidEndpoint(requestURI)) {
+//            respondWithCustomError(response, 500, "No API endpoint named like that");
+//            return;
+//        }
 
         chain.doFilter(request, response);
     }
@@ -119,7 +121,7 @@ public class ApiRequestFilter extends OncePerRequestFilter {
     private boolean isValidEndpoint(String requestURI) {
         List<String> validEndpoints = endpointService.getAllEndpoints();
 
-        // Dev: For testing
+        // *** Note  Dev: For testing
         // logger.info("List of Valid APIs: " + validEndpoints);
         // logger.info("Requested API: " + requestURI);
 
