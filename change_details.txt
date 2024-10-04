@@ -1,0 +1,7 @@
+- đổi encoder từ sha256 -> bcrypt 
+- thay đổi file sha256encoder thành JwtUtils trong folder utils
+- file JwtUtils chỉ liên quan tới JWT chứ ko còn encoder nữa
+- đã sửa các đường dẫn có liên quan tới file JwtUtils (trong file ApiRequestFilter)
+- seucurity config chia làm 2 hàm config khác nhau
+- Order(1) sẽ được ưu tiên trước, dành cho api
+- Order(1)  dành cho admin

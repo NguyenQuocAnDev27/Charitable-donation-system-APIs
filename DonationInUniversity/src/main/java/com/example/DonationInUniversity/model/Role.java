@@ -1,12 +1,14 @@
 package com.example.DonationInUniversity.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Roles")
-public class Role {
+public class Role implements  Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
