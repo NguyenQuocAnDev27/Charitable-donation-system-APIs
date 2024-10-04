@@ -110,13 +110,13 @@ public class SecurityConfig {
     @Order(2) // Đảm bảo cấu hình này được áp dụng sau API
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/admin/**", "/admin/login", "/admin/logout") // Áp dụng cho các đường dẫn admin và login
+                .securityMatcher("/admin/**", "/admin/login", "/admin/logout","/admin/register") // Áp dụng cho các đường dẫn admin và login
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // Stateful cho web
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/login").permitAll()
+                        .requestMatchers("/admin/login","/admin/register").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("admin") // Chỉ người dùng có quyền admin mới truy cập
                         .anyRequest().authenticated()
                 )

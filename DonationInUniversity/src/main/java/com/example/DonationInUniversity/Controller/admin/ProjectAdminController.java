@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.Controller.admin;
+package com.example.DonationInUniversity.controller.admin;
 
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.service.ProjectServiceAdmin;

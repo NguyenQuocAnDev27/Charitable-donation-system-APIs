@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
         Role role = roleRepository.findByRoleName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
 
-        // Mã hóa mật khẩu trước khi lưu
+
         String encodedPassword = passwordEncoder.encode(user.getPasswordHash());
         user.setPasswordHash(encodedPassword);  // Lưu mật khẩu đã mã hóa
 
