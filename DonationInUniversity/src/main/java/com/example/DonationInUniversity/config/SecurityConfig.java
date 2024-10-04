@@ -25,6 +25,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     private final ApiRequestFilter apiRequestFilter;
 
     @Autowired
@@ -58,7 +59,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(apiRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
@@ -116,6 +116,20 @@ public class SecurityConfig {
     @Bean
     WebSecurityCustomizer customizer() {
         return web -> web.ignoring().requestMatchers("/static/**", "/assets/**");
+    }
+
+    // Add this bean for CORS configuration
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Allow localhost:3000
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST")); // Allowed methods // "PUT", "DELETE", "OPTIONS"
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Allowed headers
+        configuration.setAllowCredentials(true); // Allow credentials (cookies, etc.)
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
 
