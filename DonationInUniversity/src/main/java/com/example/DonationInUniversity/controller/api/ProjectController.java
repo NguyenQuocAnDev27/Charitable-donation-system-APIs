@@ -1,15 +1,14 @@
 package com.example.DonationInUniversity.controller.api;
 
 import com.example.DonationInUniversity.model.*;
-import com.example.DonationInUniversity.security.ApiRequestFilter;
 import com.example.DonationInUniversity.service.api.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class ProjectController {
     public MyCustomResponse<List<ProjectTypeDisplay>> getAllProjects() {
         List<DonationProject> projects = projectService.getAllProjects();
 
-        List<ProjectTypeDisplay> filteredProjects =  projects.stream().map(project -> {
+        List<ProjectTypeDisplay> filteredProjects = projects.stream().map(project -> {
             ProjectManagerTypeDisplay managerDisplay = new ProjectManagerTypeDisplay(
                     project.getProjectManager().getUserId(),
                     project.getProjectManager().getFullName(),
@@ -50,22 +49,20 @@ public class ProjectController {
     }
 
     @GetMapping("/page")
-    public MyCustomResponse<PaginatedDonationProjectsResponse<DonationProject>> getDonationProjects(
+    public MyCustomResponse<PaginatedDonationProjectsResponse<DonationProject>> getProjectsByPage(
             @RequestParam(name = "number", defaultValue = "0") int pageNumber,
-            @RequestParam(name = "sortField", defaultValue = "projectId") String sortField,
-            @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
+            @RequestParam(name = "query", required = false) String searchQuery) {
 
         // Ensure page number is zero-based and non-negative
         if (pageNumber < 0) {
             throw new IllegalArgumentException("Invalid page number");
         }
 
+        // Retrieve paginated and filtered donation projects based on the search query
         PaginatedDonationProjectsResponse<DonationProject> data =
-                projectService.getDonationProjectsByPage(pageNumber);
+                projectService.getDonationProjectsByPageAndQuery(pageNumber, searchQuery);
 
-//        logger.info("Data project by page {}", data.getList());
-
-        return new MyCustomResponse<>(200, "Projects retrieved successfully", data);
+        return new MyCustomResponse<>(200, "Get list project success", data);
     }
 
 //    @PostMapping

@@ -1,6 +1,8 @@
 package com.example.DonationInUniversity.repository;
 
 import com.example.DonationInUniversity.model.DonationProject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +16,5 @@ public interface ProjectRepository extends JpaRepository<DonationProject,Integer
 //    @Query ("SELECT u FROM DonationProject  u where  u.projectManagerId =?1")
 //    DonationProject findByProjectManagerId(int id);
 
+    Page<DonationProject> findByProjectNameContainingIgnoreCase(String query, Pageable pageable);
 }

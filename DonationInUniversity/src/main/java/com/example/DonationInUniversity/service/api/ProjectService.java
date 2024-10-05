@@ -28,12 +28,21 @@ public class ProjectService {
         return projectRepository.findById(id).orElse(null);
     }
 
-    public PaginatedDonationProjectsResponse<DonationProject> getDonationProjectsByPage(int pageNumber) {
+    public PaginatedDonationProjectsResponse<DonationProject> getDonationProjectsByPageAndQuery(int pageNumber, String searchQuery) {
         int pageSize = 15; // Number of projects per page
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<DonationProject> donationProjectPage = projectRepository.findAll(pageable);
 
-        // Extract data from Page object
+        Page<DonationProject> donationProjectPage;
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            // If a search query is provided, find matching projects by name
+            donationProjectPage = projectRepository.findByProjectNameContainingIgnoreCase(searchQuery, pageable);
+        } else {
+            // Otherwise, return all projects for the given page
+            donationProjectPage = projectRepository.findAll(pageable);
+        }
+
+        // Extract data from the Page object
         List<DonationProject> projects = donationProjectPage.getContent();
         int totalPages = donationProjectPage.getTotalPages();
         int currentPage = donationProjectPage.getNumber();
@@ -41,4 +50,5 @@ public class ProjectService {
         // Create and return the paginated response
         return new PaginatedDonationProjectsResponse<>(totalPages, currentPage, projects);
     }
+
 }
