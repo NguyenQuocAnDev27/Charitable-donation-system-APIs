@@ -3,7 +3,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/error_logs_today.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/error_logs_at_%d{yyyy-MM-dd-HH-mm}.log</fileNamePattern>
+            <fileNamePattern>logs/error_logs_at_%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -11,20 +11,21 @@
         </encoder>
     </appender>
 
-    <!-- Console Appender for showing all log levels (default Spring Boot behavior) -->
+    <!-- Console Appender for showing all log levels -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Root logger for console -->
+    <!-- Root logger for console (displaying all logs starting from INFO) -->
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
 
     <!-- Logger for ERROR level logs to the file only -->
-    <logger name="ERROR_FILE_LOGGER" level="ERROR" additivity="false">
+    <logger name="com.example.DonationInUniversity" level="ERROR" additivity="false">
+        <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </logger>
 </configuration>

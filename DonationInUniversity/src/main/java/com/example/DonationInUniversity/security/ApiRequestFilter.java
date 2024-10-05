@@ -1,5 +1,6 @@
 package com.example.DonationInUniversity.security;
 
+import com.example.DonationInUniversity.constants.ResponseConstants;
 import com.example.DonationInUniversity.model.MyCustomResponse;
 import com.example.DonationInUniversity.service.api.EndpointService;
 import com.example.DonationInUniversity.utils.JwtUtil;
@@ -78,15 +79,24 @@ public class ApiRequestFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 logger.info("UserDetails loaded for user: {}", userDetails.getUsername());
 
-                if (jwtUtil.isTokenValid(jwt, userDetails.getUsername())) {
-                    logger.info("Access token is valid for user: {}", userDetails.getUsername());
+                if (jwtUtil.isTokenExpired(jwt)) {
+                    if (jwtUtil.isUsernameMatching(jwt, userDetails.getUsername())) {
+                        logger.info("Access token is valid for user: {}", userDetails.getUsername());
 
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                    logger.info("User authenticated successfully: {}", username);
-                } else {
-                    logger.warn("Access token is not valid for user: {}", username);
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                        logger.info("User authenticated successfully: {}", username);
+                    } else {
+                        logger.warn("Access token is not valid for user: {}", username);
+                    }
+                }  else {
+                    logger.warn("Access token has expired for user: {}", username);
+                    respondWithCustomError(
+                            response,
+                            ResponseConstants.EXPIRED_TOKEN.CODE,
+                            ResponseConstants.EXPIRED_TOKEN.MESSAGE);
+                    return;
                 }
             } else if (username != null) {
                 logger.info("User is already authenticated: {}", username);
