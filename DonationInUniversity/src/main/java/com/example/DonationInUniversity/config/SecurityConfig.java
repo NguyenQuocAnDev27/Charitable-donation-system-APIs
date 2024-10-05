@@ -31,14 +31,30 @@ public class SecurityConfig {
     @Autowired
     public SecurityConfig(ApiRequestFilter apiRequestFilter) {
         this.apiRequestFilter = apiRequestFilter;
-
     }
 
+    /**
+     * Password encoder bean for hashing passwords using BCrypt algorithm.
+     *
+     * @return a BCryptPasswordEncoder instance
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configures security for the API endpoints that start with /api/**.
+     * - Disables CSRF for stateless API requests.
+     * - Configures CORS.
+     * - Stateless session management.
+     * - Allows unauthenticated access for certain public API endpoints.
+     * - Adds custom Jwt-based ApiRequestFilter.
+     *
+     * @param http HttpSecurity configuration object
+     * @return a configured SecurityFilterChain for API requests
+     * @throws Exception in case of any configuration errors
+     */
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -62,6 +78,19 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Configures security for the admin interface.
+     * - Disables CSRF for admin endpoints.
+     * - Configures CORS.
+     * - Requires sessions for admin requests.
+     * - Allows unauthenticated access to login and register pages.
+     * - Requires "admin" authority for other admin endpoints.
+     * - Configures form login for admin access.
+     *
+     * @param http HttpSecurity configuration object
+     * @return a configured SecurityFilterChain for admin requests
+     * @throws Exception in case of any configuration errors
+     */
     @Bean
     @Order(2)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -90,33 +119,45 @@ public class SecurityConfig {
                 );
 
         return http.build();
-
-
     }
 
+    /**
+     * Provides the AuthenticationManager bean for managing authentication processes.
+     *
+     * @param authenticationConfiguration the AuthenticationConfiguration object
+     * @return an AuthenticationManager instance
+     * @throws Exception in case of configuration errors
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // CORS Configuration
+    /**
+     * Configures CORS to allow specific origins, HTTP methods, and headers.
+     *
+     * @return a configured UrlBasedCorsConfigurationSource
+     */
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Cho phép origin
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép phương thức
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Cho phép headers
-        configuration.setAllowCredentials(true); // Cho phép credentials
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Allowed origins
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Allowed headers
+        configuration.setAllowCredentials(true); // Allow credentials
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
+    /**
+     * Ignores security checks for static resources.
+     *
+     * @return a WebSecurityCustomizer instance
+     */
     @Bean
     WebSecurityCustomizer customizer() {
         return web -> web.ignoring().requestMatchers("/static/**", "/assets/**");
     }
 }
-
-

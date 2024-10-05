@@ -1,5 +1,6 @@
 package com.example.DonationInUniversity.security;
 
+import com.example.DonationInUniversity.constants.ResponseConstants;
 import com.example.DonationInUniversity.model.MyCustomResponse;
 import com.example.DonationInUniversity.service.api.EndpointService;
 import com.example.DonationInUniversity.utils.JwtUtil;
@@ -54,42 +55,51 @@ public class ApiRequestFilter extends OncePerRequestFilter {
 
             // Log the requested endpoint
             String requestURI = request.getRequestURI();
-            logger.info("Requested Endpoint: " + requestURI);
+            logger.info("Requested Endpoint: {}", requestURI);
 
-            logger.info("Authorization Header: " + authorizationHeader);
+            logger.info("Authorization Header: {}", authorizationHeader);
 
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 jwt = authorizationHeader.substring(7);
-                logger.info("Extracted Access token: " + jwt);
+                logger.info("Extracted Access token: {}", jwt);
 
                 try {
                     username = jwtUtil.extractUsername(jwt);
-                    logger.info("Extracted Username from Access token: " + username);
+                    logger.info("Extracted Username from Access token: {}", username);
                 } catch (Exception e) {
-                    logger.error("Access token error: " + e.getMessage(), e);
+                    logger.error("Access token error: {}", e.getMessage(), e);
                 }
             } else {
                 logger.warn("Authorization header missing or does not start with Bearer");
             }
           
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                logger.info("Security context is null. Trying to authenticate user: " + username);
+                logger.info("Security context is null. Trying to authenticate user: {}", username);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                logger.info("UserDetails loaded for user: " + userDetails.getUsername());
+                logger.info("UserDetails loaded for user: {}", userDetails.getUsername());
 
-                if (jwtUtil.isTokenValid(jwt, userDetails.getUsername())) {
-                    logger.info("Access token is valid for user: " + userDetails.getUsername());
+                if (jwtUtil.isTokenExpired(jwt)) {
+                    if (jwtUtil.isUsernameMatching(jwt, userDetails.getUsername())) {
+                        logger.info("Access token is valid for user: {}", userDetails.getUsername());
 
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                    logger.info("User authenticated successfully: " + username);
-                } else {
-                    logger.warn("Access token is not valid for user: " + username);
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                        logger.info("User authenticated successfully: {}", username);
+                    } else {
+                        logger.warn("Access token is not valid for user: {}", username);
+                    }
+                }  else {
+                    logger.warn("Access token has expired for user: {}", username);
+                    respondWithCustomError(
+                            response,
+                            ResponseConstants.EXPIRED_TOKEN.CODE,
+                            ResponseConstants.EXPIRED_TOKEN.MESSAGE);
+                    return;
                 }
             } else if (username != null) {
-                logger.info("User is already authenticated: " + username);
+                logger.info("User is already authenticated: {}", username);
             }
 
             // Check if the endpoint exists
