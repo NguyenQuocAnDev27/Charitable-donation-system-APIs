@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -79,7 +80,7 @@ public class ApiRequestFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 logger.info("UserDetails loaded for user: {}", userDetails.getUsername());
 
-                if (jwtUtil.isTokenExpired(jwt)) {
+                if (!jwtUtil.isTokenExpired(jwt)) {
                     if (jwtUtil.isUsernameMatching(jwt, userDetails.getUsername())) {
                         logger.info("Access token is valid for user: {}", userDetails.getUsername());
 
@@ -91,11 +92,16 @@ public class ApiRequestFilter extends OncePerRequestFilter {
                         logger.warn("Access token is not valid for user: {}", username);
                     }
                 }  else {
-                    logger.warn("Access token has expired for user: {}", username);
+                    Date expirationDate = jwtUtil.getExpirationDateFromToken(jwt);  // Retrieve expiration date
+                    logger.warn("Access token has expired for user: {}. Expired at: {}", username, expirationDate);
+
+                    String expiredMessage = String.format("%s Time expired: %s",
+                            ResponseConstants.EXPIRED_TOKEN.MESSAGE, expirationDate.toString());
+
                     respondWithCustomError(
                             response,
                             ResponseConstants.EXPIRED_TOKEN.CODE,
-                            ResponseConstants.EXPIRED_TOKEN.MESSAGE);
+                            expiredMessage);
                     return;
                 }
             } else if (username != null) {

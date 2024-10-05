@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 
@@ -46,11 +47,18 @@ public class JwtUtil {
     // Check if token is expired
     public boolean isTokenExpired(String token) {
         try {
-            logger.debug("Checking if token is expired: {}", token);
+            logger.info("Checking if token is expired: {}", token);
             Claims claims = parseClaims(token);
             Date expiration = claims.getExpiration();
-            boolean isExpired = expiration.before(new Date());
-            logger.debug("Token expiration status: {}. Expiration time: {}", isExpired, expiration);
+
+            // Convert both times to Instant
+            Instant expirationInstant = expiration.toInstant();
+            Instant nowInstant = Instant.now();
+
+            // Compare the instants
+            boolean isExpired = expirationInstant.isBefore(nowInstant);
+
+            logger.info("Token expiration status: {}. Expiration time: {} - Now: {}", isExpired, expiration, nowInstant);
             return isExpired;
         } catch (Exception e) {
             logger.error("Error while checking token expiration for token: {}: {}", token, e.getMessage());
@@ -58,9 +66,10 @@ public class JwtUtil {
         }
     }
 
+
     public boolean isTokenValid(String token, String username) {
         try {
-            logger.debug("Validating token for username: {}", username);
+            logger.info("Validating token for username: {}", username);
             boolean isUsernameMatch = isUsernameMatching(token, username);
             boolean isTokenNotExpired = !isTokenExpired(token);
 
@@ -75,10 +84,10 @@ public class JwtUtil {
     // Method to check if the username matches the one in the token
     public boolean isUsernameMatching(String token, String username) {
         try {
-            logger.debug("Checking if token username matches provided username: {}", username);
+            logger.info("Checking if token username matches provided username: {}", username);
             Claims claims = parseClaims(token);
             String extractedUsername = claims.getSubject();
-            logger.debug("Extracted username from token: {}", extractedUsername);
+            logger.info("Extracted username from token: {}", extractedUsername);
             return extractedUsername.equals(username);
         } catch (Exception e) {
             logger.error("Error while extracting username from token for username: {}: {}", username, e.getMessage());
@@ -89,10 +98,10 @@ public class JwtUtil {
     // Extract username from token
     public String extractUsername(String token) {
         try {
-            logger.debug("Extracting username from token: {}", token);
+            logger.info("Extracting username from token: {}", token);
             Claims claims = parseClaims(token);
             String username = claims.getSubject();
-            logger.debug("Username extracted from token: {}", username);
+            logger.info("Username extracted from token: {}", username);
             return username;
         } catch (Exception e) {
             logger.error("Error while extracting username from token: {}: {}", token, e.getMessage());
@@ -103,13 +112,13 @@ public class JwtUtil {
     // Parse claims from token
     private Claims parseClaims(String token) {
         try {
-            logger.debug("Parsing claims from token: {}", token);
+            logger.info("Parsing claims from token: {}", token);
             Claims claims = Jwts.parser()
                     .setSigningKey(getSecretKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            logger.debug("Claims parsed successfully for token: {}", token);
+            logger.info("Claims parsed successfully for token: {}", token);
             return claims;
         } catch (Exception e) {
             logger.error("Error while parsing claims from token: {}: {}", token, e.getMessage());
@@ -120,7 +129,7 @@ public class JwtUtil {
     // Get secret key
     private SecretKey getSecretKey() {
         try {
-            logger.debug("Decoding secret key.");
+            logger.info("Decoding secret key.");
             byte[] decodedKey = Base64.getDecoder().decode(secretKey);
             return new SecretKeySpec(decodedKey, 0, decodedKey.length, HMAC_SHA256);
         } catch (Exception e) {
@@ -128,5 +137,11 @@ public class JwtUtil {
             throw new RuntimeException("Error while decoding secret key", e);
         }
     }
+
+    public Date getExpirationDateFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.getExpiration();
+    }
+
 }
 

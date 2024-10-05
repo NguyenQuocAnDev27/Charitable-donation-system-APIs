@@ -2,8 +2,9 @@ package com.example.DonationInUniversity.repository;
 
 import com.example.DonationInUniversity.model.DonationProject;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DonationProjectRepository extends JpaRepository<DonationProject, Integer> {
+public interface DonationProjectRepository extends PagingAndSortingRepository<DonationProject, Integer> {
 }

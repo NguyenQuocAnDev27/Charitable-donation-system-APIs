@@ -1,9 +1,14 @@
 package com.example.DonationInUniversity.controller.api;
 
 import com.example.DonationInUniversity.model.*;
+import com.example.DonationInUniversity.security.ApiRequestFilter;
 import com.example.DonationInUniversity.service.api.ProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
-
+    private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
     @Autowired
     private ProjectService projectService;
 
@@ -44,40 +49,23 @@ public class ProjectController {
         return new MyCustomResponse<>(200, "Get list project success", filteredProjects);
     }
 
-    @GetMapping
-    public MyCustomResponse<PaginatedDonationProjectsResponse<ProjectTypeDisplay>> getProjectsByPage(
-            @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber) {
+    @GetMapping("/page")
+    public MyCustomResponse<PaginatedDonationProjectsResponse<DonationProject>> getDonationProjects(
+            @RequestParam(name = "number", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "sortField", defaultValue = "projectId") String sortField,
+            @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection) {
 
-        int pageSize = 15; // Limit number of projects per page
-        Page<DonationProject> pagedProjects = projectService.getProjectsByPage(pageNumber, pageSize);
+        // Ensure page number is zero-based and non-negative
+        if (pageNumber < 0) {
+            throw new IllegalArgumentException("Invalid page number");
+        }
 
-        List<ProjectTypeDisplay> projectDisplays = pagedProjects.getContent().stream().map(project -> {
-            ProjectManagerTypeDisplay managerDisplay = new ProjectManagerTypeDisplay(
-                    project.getProjectManager().getUserId(),
-                    project.getProjectManager().getFullName(),
-                    project.getProjectManager().getEmail(),
-                    project.getProjectManager().getPhoneNumber()
-            );
-            return new ProjectTypeDisplay(
-                    project.getProjectId(),
-                    project.getProjectName(),
-                    project.getDescription(),
-                    project.getGoalAmount(),
-                    project.getCurrentAmount(),
-                    project.getStartDate(),
-                    project.getEndDate(),
-                    project.getStatus(),
-                    managerDisplay
-            );
-        }).collect(Collectors.toList());
+        PaginatedDonationProjectsResponse<DonationProject> data =
+                projectService.getDonationProjectsByPage(pageNumber);
 
-        PaginatedDonationProjectsResponse<ProjectTypeDisplay> response = new PaginatedDonationProjectsResponse<>(
-                pagedProjects.getTotalPages(),
-                pageNumber,
-                projectDisplays
-        );
+//        logger.info("Data project by page {}", data.getList());
 
-        return new MyCustomResponse<>(200, "Project list retrieved successfully", response);
+        return new MyCustomResponse<>(200, "Projects retrieved successfully", data);
     }
 
 //    @PostMapping

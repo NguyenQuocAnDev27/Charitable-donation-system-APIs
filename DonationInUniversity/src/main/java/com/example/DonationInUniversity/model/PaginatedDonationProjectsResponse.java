@@ -5,12 +5,12 @@ import java.util.List;
 public class PaginatedDonationProjectsResponse<T> {
     private int totalPages;
     private int currentPage;
-    private List<T> data;
+    private List<T> list;
 
-    public PaginatedDonationProjectsResponse(int totalPages, int currentPage, List<T> data) {
+    public PaginatedDonationProjectsResponse(int totalPages, int currentPage, List<T> list) {
         this.totalPages = totalPages;
         this.currentPage = currentPage;
-        this.data = data;
+        this.list = list;
     }
 
     // Getters and Setters
@@ -30,11 +30,11 @@ public class PaginatedDonationProjectsResponse<T> {
         this.currentPage = currentPage;
     }
 
-    public List<T> getData() {
-        return data;
+    public List<T> getList() {
+        return list;
     }
 
-    public void setData(List<T> data) {
-        this.data = data;
+    public void setList(List<T> list) {
+        this.list = list;
     }
 }
