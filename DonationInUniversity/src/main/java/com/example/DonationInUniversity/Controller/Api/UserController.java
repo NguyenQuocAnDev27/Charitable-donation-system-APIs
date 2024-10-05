@@ -1,7 +1,7 @@
 package com.example.DonationInUniversity.controller.api;
 
 import com.example.DonationInUniversity.model.*;
-import com.example.DonationInUniversity.service.UserService;
+import com.example.DonationInUniversity.service.api.UserService;
 import com.example.DonationInUniversity.utils.JwtUtil;
 //import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
 import org.slf4j.Logger;

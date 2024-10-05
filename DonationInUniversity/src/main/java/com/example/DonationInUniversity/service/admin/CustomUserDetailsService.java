@@ -1,20 +1,4 @@
-package com.example.DonationInUniversity.service;
-
-import com.example.DonationInUniversity.model.CustomUserDetails;
-import com.example.DonationInUniversity.model.Role;
-import com.example.DonationInUniversity.model.User;
-import com.example.DonationInUniversity.service.LoginService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+package com.example.DonationInUniversity.service.admin;
 
 //@Service
 //public class CustomUserDetailsService implements UserDetailsService {

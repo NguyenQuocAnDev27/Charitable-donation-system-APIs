@@ -4,7 +4,7 @@ import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.MyCustomResponse;
 import com.example.DonationInUniversity.model.ProjectManagerTypeDisplay;
 import com.example.DonationInUniversity.model.ProjectTypeDisplay;
-import com.example.DonationInUniversity.service.ProjectService;
+import com.example.DonationInUniversity.service.api.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

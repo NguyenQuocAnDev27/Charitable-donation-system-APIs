@@ -2,7 +2,7 @@ package com.example.DonationInUniversity.controller.admin;
 
 import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.model.VerifiedUser;
-import com.example.DonationInUniversity.service.UserService;
+import com.example.DonationInUniversity.service.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,7 +1,7 @@
 package com.example.DonationInUniversity.security;
 
 import com.example.DonationInUniversity.model.MyCustomResponse;
-import com.example.DonationInUniversity.service.EndpointService;
+import com.example.DonationInUniversity.service.api.EndpointService;
 import com.example.DonationInUniversity.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

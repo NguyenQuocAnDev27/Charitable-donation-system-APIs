@@ -1,66 +1,50 @@
 package com.example.DonationInUniversity.model;
-import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Entity
-@Table(name = "donation_projects")
+@Table(name = "Donation_Projects")
 public class DonationProject {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer projectId;
+    private int projectId;
+
     @Column(nullable = false)
     private String projectName;
-    @Column(nullable = false)
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     @Column(nullable = false)
-    private double goalAmount;
+    private BigDecimal goalAmount;
+
     @Column(nullable = false)
-    private double currentAmount;
+    private BigDecimal currentAmount = BigDecimal.ZERO;
+
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date startDate;
+    private LocalDate startDate;
+
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endDate;
+    private LocalDate endDate;
+
+    @Column(nullable = false)
     private String status;
+
     @ManyToOne
-    @JoinColumn(name = "projectManagerId")
-    private User projectManagerId;
-    @Column()
-    private int isDeleted ;
-    private Date createdAt;
-    private Date updatedAt;
+    @JoinColumn(name = "project_manager_id", referencedColumnName = "userId")
+    private User projectManager;
 
+    // Getters and setters
 
-
-    public DonationProject(int projectId, String projectName, String description, double goalAmount, double currentAmount, Date startDate, Date endDate, String status, User projectManagerId, Date createdAt, Date updatedAt,int isDeleted) {
-        this.projectId = projectId;
-        this.projectName = projectName;
-        this.description = description;
-        this.goalAmount = goalAmount;
-        this.currentAmount = currentAmount;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.status = status;
-        this.projectManagerId = projectManagerId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.isDeleted = isDeleted;
-    }
-
-    public DonationProject() {
-
-    }
-
-
-
-    // Getters and Setters
-    public Integer getProjectId() {
+    public int getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Integer projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
@@ -80,35 +64,35 @@ public class DonationProject {
         this.description = description;
     }
 
-    public double getGoalAmount() {
+    public BigDecimal getGoalAmount() {
         return goalAmount;
     }
 
-    public void setGoalAmount(double goalAmount) {
+    public void setGoalAmount(BigDecimal goalAmount) {
         this.goalAmount = goalAmount;
     }
 
-    public double getCurrentAmount() {
+    public BigDecimal getCurrentAmount() {
         return currentAmount;
     }
 
-    public void setCurrentAmount(double currentAmount) {
+    public void setCurrentAmount(BigDecimal currentAmount) {
         this.currentAmount = currentAmount;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -120,35 +104,11 @@ public class DonationProject {
         this.status = status;
     }
 
-    public User getProjectManagerId() {
-        return projectManagerId;
+    public User getProjectManager() {
+        return projectManager;
     }
 
-    public void setProjectManagerId(User projectManagerId) {
-        this.projectManagerId = projectManagerId;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public int isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(int deleted) {
-        isDeleted = deleted;
+    public void setProjectManager(User projectManager) {
+        this.projectManager = projectManager;
     }
 }
