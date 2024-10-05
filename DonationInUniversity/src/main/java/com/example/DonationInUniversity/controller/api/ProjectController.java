@@ -1,12 +1,14 @@
 package com.example.DonationInUniversity.controller.api;
 
-import com.example.DonationInUniversity.model.DonationProject;
-import com.example.DonationInUniversity.model.MyCustomResponse;
-import com.example.DonationInUniversity.model.ProjectManagerTypeDisplay;
-import com.example.DonationInUniversity.model.ProjectTypeDisplay;
+import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.api.ProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,15 +16,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
-
+    private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping
+    @GetMapping("/all")
     public MyCustomResponse<List<ProjectTypeDisplay>> getAllProjects() {
         List<DonationProject> projects = projectService.getAllProjects();
 
-        List<ProjectTypeDisplay> filteredProjects =  projects.stream().map(project -> {
+        List<ProjectTypeDisplay> filteredProjects = projects.stream().map(project -> {
             ProjectManagerTypeDisplay managerDisplay = new ProjectManagerTypeDisplay(
                     project.getProjectManager().getUserId(),
                     project.getProjectManager().getFullName(),
@@ -44,6 +46,23 @@ public class ProjectController {
         }).collect(Collectors.toList());
 
         return new MyCustomResponse<>(200, "Get list project success", filteredProjects);
+    }
+
+    @GetMapping("/page")
+    public MyCustomResponse<PaginatedDonationProjectsResponse<DonationProject>> getProjectsByPage(
+            @RequestParam(name = "number", defaultValue = "0") int pageNumber,
+            @RequestParam(name = "query", required = false) String searchQuery) {
+
+        // Ensure page number is zero-based and non-negative
+        if (pageNumber < 0) {
+            throw new IllegalArgumentException("Invalid page number");
+        }
+
+        // Retrieve paginated and filtered donation projects based on the search query
+        PaginatedDonationProjectsResponse<DonationProject> data =
+                projectService.getDonationProjectsByPageAndQuery(pageNumber, searchQuery);
+
+        return new MyCustomResponse<>(200, "Get list project success", data);
     }
 
 //    @PostMapping

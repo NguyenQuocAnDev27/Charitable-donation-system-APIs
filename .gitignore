@@ -34,3 +34,4 @@ build/
 
 ### EVN ###
 /DonationInUniversity/src/main/resources/env.properties
+DonationInUniversity/logs/spring.log

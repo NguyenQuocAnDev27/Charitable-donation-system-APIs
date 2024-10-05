@@ -70,7 +70,8 @@ public class SecurityConfig {
                                 "/api/authenticate",
                                 "/api/token/refresh",
                                 "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/api/projects/page" // for guest
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
