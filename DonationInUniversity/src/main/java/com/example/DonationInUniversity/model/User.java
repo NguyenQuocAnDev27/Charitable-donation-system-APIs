@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class User implements  Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private Integer userId;
 
     @Column(nullable = false)
     private String fullName;
@@ -27,7 +27,9 @@ public class User implements  Serializable {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
+    // add column for soft delete
+    @Column(nullable = false)
+    private int isDeleted;
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
@@ -46,11 +48,11 @@ public class User implements  Serializable {
 
     // Getters and setters
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -108,5 +110,13 @@ public class User implements  Serializable {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

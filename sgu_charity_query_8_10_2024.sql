@@ -209,3 +209,5 @@ VALUES
 ('Chắp Cánh Ước Mơ', 'Giúp đỡ trẻ em nghèo đến trường', 150000.00, 1000.00, '2024-08-01', '2024-12-25', 'completed', 2, NOW(), NOW());
 ALTER TABLE donation_projects
 ADD COLUMN is_deleted TINYINT DEFAULT 1;
+ALTER TABLE users
+ADD COLUMN is_deleted TINYINT DEFAULT 1;
