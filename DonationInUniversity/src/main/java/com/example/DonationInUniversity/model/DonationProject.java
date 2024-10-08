@@ -11,7 +11,7 @@ public class DonationProject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer projectId;
+    private int projectId;
 
     @Column(nullable = false)
     private String projectName;
@@ -32,21 +32,19 @@ public class DonationProject {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private String status ="pending";
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "project_manager_id", referencedColumnName = "userId")
     private User projectManager;
-    @Column(nullable = false)
-    private int isDeleted;
 
     // Getters and setters
 
-    public Integer getProjectId() {
+    public int getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(Integer projectId) {
+    public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
@@ -112,13 +110,5 @@ public class DonationProject {
 
     public void setProjectManager(User projectManager) {
         this.projectManager = projectManager;
-    }
-
-    public int getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(int isDeleted) {
-        this.isDeleted = isDeleted;
     }
 }
