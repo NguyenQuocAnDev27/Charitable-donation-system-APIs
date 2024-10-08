@@ -57,9 +57,14 @@
                     </div>
                     <div class="col-5 mb-6">
                       <label  class="form-label">Project Manager</label>
-                      <input type="text"  th:field="*{projectManagerId}"  class="form-control" placeholder="Enter Project Manager" />
+                    <select class="form-select"  th:field="*{projectManager}" >
+                      <option value="" disabled selected>-- Choose Project Manager --</option>
+                      <option th:each="manager : ${projectManagers}"
+                              th:value="${manager.userId}"
+                              th:text="${manager.fullName}">
+                      </option>
+                    </select>
                     </div>
-
                     <div class="col-5 mb-6">
                       <label  class="form-label">Goal Amount</label>
                       <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />
@@ -141,7 +146,7 @@
                         <td th:text="${project.currentAmount}"></td>
                         <td th:text="${project.startDate}"></td>
                         <td th:text="${project.endDate}"></td>
-                        <td th:text="${project.projectManagerId.fullName}"></td>
+                        <td th:text="${project.projectManager.fullName}"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -152,7 +157,7 @@
                                       data-bs-toggle="modal"
                                       data-bs-target="#basicModal"
                                       th:data-project-id="${project.projectId}"
-                                      th:data-project-manager-id="${project.projectManagerId}"
+                                      th:data-project-manager="${project.projectManager.userId}"
                                       th:data-project-name="${project.projectName}"
                                       th:data-goal-amount="${project.goalAmount}"
                                       th:data-current-amount="${project.currentAmount}"
@@ -216,13 +221,13 @@
       const editProjectModal = document.getElementById('basicModal');
       editProjectModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget; // Nút đã nhấn để mở modal
-        const projectManagerId = button.getAttribute('data-project-manager-id');
+        const projectManager = button.getAttribute('data-project-manager');
         const projectName = button.getAttribute('data-project-name');
         const goalAmount = button.getAttribute('data-goal-amount');
         const currentAmount = button.getAttribute('data-current-amount');
         const startDate = button.getAttribute('data-start-date');
         const endDate = button.getAttribute('data-end-date');
-        const description = button.getAttribute('data-description');
+        const projectDescription = button.getAttribute('data-description');
         const projectId = button.getAttribute('data-project-id');
 
 
@@ -231,12 +236,13 @@
         document.querySelector('input[name="currentAmount"]').value = currentAmount;
         document.querySelector('input[name="startDate"]').value = startDate;
         document.querySelector('input[name="endDate"]').value = endDate;
-        document.querySelector('input[name="projectManagerId"]').value = projectManagerId;
-        document.querySelector('input[name="description"]').value = description;
-
-
+        document.querySelector('input[name="description"]').value = projectDescription;
         document.querySelector('input[name="projectId"]').value = projectId;
+        document.querySelector('select[name="projectManager"]').value=projectManager;
+
       });
+
+
     </script>
 
     <!-- Place this tag before closing body tag for github widget button. -->
