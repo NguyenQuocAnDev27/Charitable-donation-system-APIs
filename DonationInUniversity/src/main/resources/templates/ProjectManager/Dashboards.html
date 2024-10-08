@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed layout-compact"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="./static/assets"
+  data-template="vertical-menu-template-free"
+  data-style="light">
+          <ul class="menu-inner py-1" th:fragment="dashboards">
+                <li class="menu-item"  th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
+                  <a th:href="@{/admin/DonationProject}" class="menu-link">
+                    <span class="text-truncate" >Project Management</span>
+                  </a>
+                </li>
+          </ul>
+</html>

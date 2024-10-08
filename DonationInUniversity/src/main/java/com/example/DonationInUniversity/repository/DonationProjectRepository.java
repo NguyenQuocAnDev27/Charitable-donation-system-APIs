@@ -1,5 +1,4 @@
-package com.example.DonationInUniversity.repository;
-
+package com.example.DonationInUniversity.Repository;
 import com.example.DonationInUniversity.model.DonationProject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
