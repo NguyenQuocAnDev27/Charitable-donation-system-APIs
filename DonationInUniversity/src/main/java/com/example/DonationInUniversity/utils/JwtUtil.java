@@ -1,6 +1,7 @@
 package com.example.DonationInUniversity.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
@@ -30,10 +31,10 @@ public class JwtUtil {
             SecretKey key = getSecretKey();
             Date expirationDate = new Date(System.currentTimeMillis() + (exp_time_seconds * 1000L));
             String token = Jwts.builder()
-                    .setSubject(subject)
-                    .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(expirationDate)
-                    .signWith(key, SignatureAlgorithm.HS256)
+                    .subject(subject)
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(expirationDate)
+                    .signWith(key, Jwts.SIG.HS256)
                     .compact();
 
             logger.info("Token generated successfully for subject: {}. Expiration time: {}", subject, expirationDate);
@@ -58,7 +59,7 @@ public class JwtUtil {
             // Compare the instants
             boolean isExpired = expirationInstant.isBefore(nowInstant);
 
-            logger.info("Token expiration status: {}. Expiration time: {} - Now: {}", isExpired, expiration, nowInstant);
+            logger.info("\nToken expiration status: {}. Expiration time: {} - Now: {}", isExpired, expiration, nowInstant);
             return isExpired;
         } catch (Exception e) {
             logger.error("Error while checking token expiration for token: {}: {}", token, e.getMessage());
@@ -103,6 +104,8 @@ public class JwtUtil {
             String username = claims.getSubject();
             logger.info("Username extracted from token: {}", username);
             return username;
+        } catch (ExpiredJwtException e) {
+            throw e;
         } catch (Exception e) {
             logger.error("Error while extracting username from token: {}: {}", token, e.getMessage());
             throw new RuntimeException("Error while extracting username", e);
@@ -114,12 +117,14 @@ public class JwtUtil {
         try {
             logger.info("Parsing claims from token: {}", token);
             Claims claims = Jwts.parser()
-                    .setSigningKey(getSecretKey())
+                    .verifyWith(getSecretKey())
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
             logger.info("Claims parsed successfully for token: {}", token);
             return claims;
+        } catch (ExpiredJwtException e) {
+            throw e;
         } catch (Exception e) {
             logger.error("Error while parsing claims from token: {}: {}", token, e.getMessage());
             throw new RuntimeException("Error while parsing claims", e);
