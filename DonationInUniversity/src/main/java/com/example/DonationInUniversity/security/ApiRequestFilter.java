@@ -5,6 +5,7 @@ import com.example.DonationInUniversity.model.MyCustomResponse;
 import com.example.DonationInUniversity.service.api.EndpointService;
 import com.example.DonationInUniversity.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
@@ -57,9 +59,9 @@ public class ApiRequestFilter extends OncePerRequestFilter {
             // Log the requested endpoint
             String requestURI = request.getRequestURI();
             logger.info("Requested Endpoint: {}", requestURI);
-
             logger.info("Authorization Header: {}", authorizationHeader);
 
+            // Extracting username
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 jwt = authorizationHeader.substring(7);
                 logger.info("Extracted Access token: {}", jwt);
@@ -67,42 +69,37 @@ public class ApiRequestFilter extends OncePerRequestFilter {
                 try {
                     username = jwtUtil.extractUsername(jwt);
                     logger.info("Extracted Username from Access token: {}", username);
+                } catch (ExpiredJwtException e) {
+                    respondWithCustomError(
+                            response,
+                            ResponseConstants.EXPIRED_TOKEN.CODE,
+                            ResponseConstants.EXPIRED_TOKEN.MESSAGE);
+                    return;
                 } catch (Exception e) {
                     logger.error("Access token error: {}", e.getMessage(), e);
                 }
             } else {
                 logger.warn("Authorization header missing or does not start with Bearer");
             }
-          
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 logger.info("Security context is null. Trying to authenticate user: {}", username);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 logger.info("UserDetails loaded for user: {}", userDetails.getUsername());
 
-                if (!jwtUtil.isTokenExpired(jwt)) {
-                    if (jwtUtil.isUsernameMatching(jwt, userDetails.getUsername())) {
-                        logger.info("Access token is valid for user: {}", userDetails.getUsername());
 
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                        logger.info("User authenticated successfully: {}", username);
-                    } else {
-                        logger.warn("Access token is not valid for user: {}", username);
-                    }
-                }  else {
-                    Date expirationDate = jwtUtil.getExpirationDateFromToken(jwt);  // Retrieve expiration date
-                    logger.warn("Access token has expired for user: {}. Expired at: {}", username, expirationDate);
+                if (jwtUtil.isUsernameMatching(jwt, userDetails.getUsername())) {
+                    logger.info("Access token is valid for user: {}", userDetails.getUsername());
 
-                    String expiredMessage = String.format("%s Time expired: %s",
-                            ResponseConstants.EXPIRED_TOKEN.MESSAGE, expirationDate.toString());
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
 
-                    respondWithCustomError(
-                            response,
-                            ResponseConstants.EXPIRED_TOKEN.CODE,
-                            expiredMessage);
-                    return;
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                    logger.info("User authenticated successfully: {}", username);
+                } else {
+                    logger.warn("Access token is not valid for user: {}", username);
                 }
             } else if (username != null) {
                 logger.info("User is already authenticated: {}", username);
@@ -122,11 +119,19 @@ public class ApiRequestFilter extends OncePerRequestFilter {
 
     // Custom method to respond with an error
     private void respondWithCustomError(HttpServletResponse response, int status, String message) throws IOException {
+        logger.warn("<<<>>> Return the custom reponse");
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.setStatus(status);
+
         MyCustomResponse<Object> customResponse = new MyCustomResponse<>(status, message, null);
-        response.getWriter().write(new ObjectMapper().writeValueAsString(customResponse));
+
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write(new ObjectMapper().writeValueAsString(customResponse));
+            writer.flush();
+        }
     }
+
 
     private boolean isValidEndpoint(String requestURI) {
         List<String> validEndpoints = endpointService.getAllEndpoints();

@@ -73,6 +73,9 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/projects/page" // for guest
                         ).permitAll()
+                        .requestMatchers((
+                                "/api/project_manager/**"
+                        )).hasAuthority("project_manager")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(apiRequestFilter, UsernamePasswordAuthenticationFilter.class);
