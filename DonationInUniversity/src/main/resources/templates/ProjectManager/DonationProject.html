@@ -117,12 +117,10 @@
                       <tr>
                         <th>Project-ID</th>
                         <th>Project Name</th>
-                        <th>Description</th>
                         <th>Goal Amount</th>
                         <th>Current Amount</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -130,12 +128,10 @@
                       <tr th:each="project : ${listProjects}">
                         <td th:text="${project.projectId}"></td>
                         <td th:text="${project.projectName}"></td>
-                        <td th:text="${project.description}"></td>
                         <td th:text="${project.goalAmount}"></td>
                         <td th:text="${project.currentAmount}"></td>
                         <td th:text="${project.startDate}"></td>
                         <td th:text="${project.endDate}"></td>
-                        <td th:text="${project.status}"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

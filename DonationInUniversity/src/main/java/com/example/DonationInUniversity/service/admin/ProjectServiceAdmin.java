@@ -1,6 +1,6 @@
 package com.example.DonationInUniversity.service.admin;
 
-import com.example.DonationInUniversity.Repository.ProjectAdminRepository;
+import com.example.DonationInUniversity.repository.ProjectAdminRepository;
 import com.example.DonationInUniversity.model.DonationProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
