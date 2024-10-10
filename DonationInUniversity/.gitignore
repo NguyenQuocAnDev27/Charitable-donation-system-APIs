@@ -34,3 +34,8 @@ build/
 
 ### EVN ###
 /src/main/resources/env.properties
+.metadata
+.vscode
+.idea
+
+DonationInUniversity/logs/
