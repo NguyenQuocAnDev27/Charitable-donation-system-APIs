@@ -40,13 +40,14 @@ CREATE TABLE `Donation_Projects` (
 	`current_amount` DECIMAL(10, 2) DEFAULT 0,
 	`start_date` DATE NOT NULL,
 	`end_date` DATE NOT NULL,
-	`status` VARCHAR(50) CHECK (`status` IN ('stopped', 'completed', 'pending')),
+	`status` VARCHAR(50) CHECK (`status` IN ('stopped', 'completed', 'pending')) ,
 	`project_manager_id` INT,
 	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`project_id`),
 	FOREIGN KEY (`project_manager_id`) REFERENCES `Users`(`user_id`)
 );
+
 
 -- Table: Tags
 CREATE TABLE `Tags` (
@@ -172,4 +173,61 @@ CREATE TABLE `Refresh_Tokens` (
     PRIMARY KEY (`token_id`),
     UNIQUE (`token`),
     FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
+);
+
+INSERT INTO Donation_Projects (project_name, description, goal_amount, current_amount, start_date, end_date, status, project_manager_id, created_at, updated_at)
+VALUES 
+('Quỹ Vì Người Nghèo', 'Giúp đỡ người nghèo khó khăn', 10000.00, 1000.00, '2024-01-02', '2024-11-30', 'pending', 2, NOW(), NOW()),
+('Quỹ Vì Trẻ Em', 'Giúp đỡ trẻ em khó khăn', 20000.00, 1000.00, '2024-01-11', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Mùa Đông Ấm', 'Quyên góp áo ấm cho vùng cao', 40000.00, 1000.00, '2024-01-14', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Nhà Chống Lũ', 'Xây nhà chống lũ cho miền Trung', 10000.00, 1000.00, '2024-01-21', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Góp Sức Vì Biển Đảo', 'Ủng hộ người lính và dân đảo', 30000.00, 1000.00, '2024-01-28', '2024-11-30', 'pending', 2, NOW(), NOW()),
+('Quỹ Học Bổng Vừ A Dính', 'Học bổng cho trẻ em dân tộc thiểu số', 50000.00, 1000.00, '2024-01-30', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Chung Tay Vì Người Nghèo', 'Giúp đỡ hộ nghèo', 60000.00, 1000.00, '2024-02-01', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Tấm Lòng Vàng', 'Ủng hộ bệnh nhân nghèo', 80000.00, 1000.00, '2024-02-03', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Cùng Em Đến Trường', 'Xây trường cho trẻ em vùng sâu', 100000.00, 1000.00, '2024-02-05', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Mái Ấm Tình Thương', 'Xây nhà tình nghĩa cho người nghèo', 130000.00, 1000.00, '2024-02-08', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Trái Tim Cho Em', 'Giúp trẻ em bị bệnh tim bẩm sinh', 140000.00, 1000.00, '2024-02-10', '2024-11-30', 'stopped', 2, NOW(), NOW()),
+('Chung Tay Vì Sức Khỏe', 'Ủng hộ bệnh viện vùng sâu', 150000.00, 1000.00, '2024-02-15', '2024-11-30', 'pending', 2, NOW(), NOW()),
+('Vượt Qua Mùa Lũ', 'Quyên góp đồng bào lũ lụt', 170000.00, 1000.00, '2024-02-20', '2024-11-30', 'pending', 2, NOW(), NOW()),
+('Vì Một Trái Tim Khỏe', 'Hỗ trợ mổ tim cho trẻ em nghèo', 180000.00, 1000.00, '2024-02-26', '2024-11-30', 'pending', 2, NOW(), NOW()),
+('Giọt Nước Sẻ Chia', 'Cung cấp nước sạch vùng khan hiếm', 110000.00, 1000.00, '2024-02-28', '2024-11-30', 'pending', 2, NOW(), NOW()),
+('Mái Ấm Hướng Dương', 'Giúp đỡ trẻ em mồ côi', 10000.00, 1000.00, '2024-03-03', '2024-12-25', 'stopped', 2, NOW(), NOW()),
+('Vì Nụ Cười Trẻ Thơ', 'Phẫu thuật nụ cười cho trẻ em hở hàm ếch', 20000.00, 1000.00, '2024-03-05', '2024-12-25', 'stopped', 2, NOW(), NOW()),
+('Hành Trình Sức Khỏe', 'Chăm sóc sức khỏe cộng đồng', 30000.00, 1000.00, '2024-03-11', '2024-12-25', 'pending', 2, NOW(), NOW()),
+('Sức Mạnh Nhân Đạo', 'Hiến máu nhân đạo', 40000.00, 1000.00, '2024-03-12', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Góp Gạch Xây Trường', 'Xây dựng cơ sở giáo dục ở vùng sâu', 50000.00, 1000.00, '2024-03-16', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Quỹ Ước Mơ Xanh', 'Giúp đỡ người khuyết tật', 60000.00, 1000.00, '2024-03-21', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Cùng Lên Rừng', 'Bảo vệ môi trường rừng', 70000.00, 1000.00, '2024-03-25', '2024-12-25', 'pending', 2, NOW(), NOW()),
+('Tình Người Mùa Lũ', 'Hỗ trợ đồng bào lũ lụt miền Trung', 80000.00, 1000.00, '2024-03-28', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Ánh Sáng Đời Em', 'Đem ánh sáng cho trẻ em vùng cao', 90000.00, 1000.00, '2024-03-30', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Ngôi Trường Ước Mơ', 'Quyên góp xây trường học', 100000.00, 1000.00, '2024-04-01', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Chung Sức Cộng Đồng', 'Xây cầu dân sinh vùng sâu vùng xa', 110000.00, 1000.00, '2024-04-12', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Bàn Tay Nhân Ái', 'Hỗ trợ người nghèo vượt qua khó khăn', 120000.00, 1000.00, '2024-04-13', '2024-12-25', 'pending', 2, NOW(), NOW()),
+('Hướng Về Miền Trung', 'Hỗ trợ đồng bào miền Trung chịu thiên tai', 130000.00, 1000.00, '2024-06-10', '2024-12-25', 'pending', 2, NOW(), NOW()),
+('Vì Tương Lai Xanh', 'Bảo vệ môi trường và trồng cây xanh', 140000.00, 1000.00, '2024-06-21', '2024-12-25', 'completed', 2, NOW(), NOW()),
+('Chắp Cánh Ước Mơ', 'Giúp đỡ trẻ em nghèo đến trường', 150000.00, 1000.00, '2024-08-01', '2024-12-25', 'completed', 2, NOW(), NOW());
+ALTER TABLE donation_projects
+ADD COLUMN is_deleted TINYINT DEFAULT 1;
+
+-- Table: ProjectDetailText
+CREATE TABLE `ProjectDetailText` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `project_id` INT NOT NULL,
+    `content` TEXT NOT NULL,
+    `IsDelete` BOOLEAN DEFAULT FALSE,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
+);
+
+-- Table: ProjectDetailImage
+CREATE TABLE `ProjectDetailImage` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `project_id` INT NOT NULL,
+    `pathImage` VARCHAR(255) NOT NULL,
+    `IsDelete` BOOLEAN DEFAULT FALSE,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
 );
