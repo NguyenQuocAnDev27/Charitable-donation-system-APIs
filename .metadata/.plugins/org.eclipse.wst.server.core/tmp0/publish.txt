@@ -1,3 +1,0 @@
-#Tomcat publish data
-#Thu Sep 26 08:31:49 ICT 2024
-org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\TBL\\.m2\\repository\\org\\springframework\\spring-web\\6.1.12\\spring-web-6.1.12.jar=WEB-INF/lib/spring-web-6.1.12.jar
