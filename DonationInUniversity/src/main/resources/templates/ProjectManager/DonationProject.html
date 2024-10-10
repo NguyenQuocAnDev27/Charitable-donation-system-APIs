@@ -36,63 +36,57 @@
 
 
     <!--  Modal -->
-<!--          <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">-->
-<!--            <div class="modal-dialog" role="document">-->
-<!--              <div class="modal-content">-->
-<!--                <form th:object="${project}" th:action="@{/admin/saveOrUpdateProject}" method="post">-->
-<!--                <div class="modal-header">-->
-<!--                  <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>-->
-<!--                  <button-->
-<!--                          type="button"-->
-<!--                          class="btn-close"-->
-<!--                          data-bs-dismiss="modal"-->
-<!--                          aria-label="Close"></button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                  <div class="row">-->
-<!--                    <input type="hidden" th:field="*{projectId}" class="form-control" />-->
-<!--                    <div class="col-5 mb-6">-->
-<!--                      <label  class="form-label">Project Name</label>-->
-<!--                      <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" />-->
-<!--                    </div>-->
-<!--                    <div class="col-5 mb-6">-->
-<!--                      <label  class="form-label">Project Manager</label>-->
-<!--                      <input type="text"  th:field="*{projectManagerId}"  class="form-control" placeholder="Enter Project Manager" />-->
-<!--                    </div>-->
-
-<!--                    <div class="col-5 mb-6">-->
-<!--                      <label  class="form-label">Goal Amount</label>-->
-<!--                      <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />-->
-<!--                    </div>-->
-<!--                    <div class="col-5 mb-6">-->
-<!--                      <label  class="form-label">Current Amount</label>-->
-<!--                      <input type="text"  th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" />-->
-<!--                    </div>-->
-<!--                    <div class="col-5 mb-6">-->
-<!--                      <label  class="form-label">Start Date</label>-->
-<!--                      <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" />-->
-<!--                    </div>-->
-<!--                    <div class="col-5 mb-6">-->
-<!--                      <label  class="form-label">End Date</label>-->
-<!--                      <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" />-->
-<!--                    </div>-->
-<!--                    <div class="col mb-6">-->
-<!--                      <label  class="form-label">Project Description</label>-->
-<!--                      <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" />-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div class="modal-footer">-->
-<!--                  <button  type="submit" class="btn btn-primary mx-2" >Save</button>-->
-<!--                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">-->
-<!--                    Close-->
-<!--                  </button>-->
-
-<!--                </div>-->
-<!--                </form>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+          <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <form th:object="${project}" th:action="@{manager/saveOrUpdateProject}" method="post">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
+                  <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <input type="hidden" th:field="*{projectId}" class="form-control" />
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Project Name</label>
+                      <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Goal Amount</label>
+                      <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Current Amount</label>
+                      <input type="text"  th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">Start Date</label>
+                      <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" />
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label  class="form-label">End Date</label>
+                      <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" />
+                    </div>
+                    <div class="col mb-6">
+                      <label  class="form-label">Project Description</label>
+                      <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" />
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button  type="submit" class="btn btn-primary mx-2" >Save</button>
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                  </button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
     <!--  / Modal-->
 
 
@@ -128,7 +122,7 @@
                         <th>Current Amount</th>
                         <th>Start Date</th>
                         <th>End Date</th>
-                        <th>Project Manager</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -141,7 +135,7 @@
                         <td th:text="${project.currentAmount}"></td>
                         <td th:text="${project.startDate}"></td>
                         <td th:text="${project.endDate}"></td>
-                        <td th:text="${project.projectManager.fullName}"></td>
+                        <td th:text="${project.status}"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -152,16 +146,15 @@
                                       data-bs-toggle="modal"
                                       data-bs-target="#basicModal"
                                       th:data-project-id="${project.projectId}"
-                                      th:data-project-manager-id="${project.projectManager}"
                                       th:data-project-name="${project.projectName}"
                                       th:data-goal-amount="${project.goalAmount}"
                                       th:data-current-amount="${project.currentAmount}"
                                       th:data-start-date="${project.startDate}"
                                       th:data-end-date="${project.endDate}"
                                       th:data-description="${project.description}"
-                                ><i class="bx bx-edit-alt me-1"></i> Edit</button
+                                ><i class="bx bx-edit-alt me-1"></i>Edit</button
                               >
-                              <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                              <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
                                 <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
                                   <i class="bx bx-trash me-1"></i> Delete
                                 </button>
@@ -216,7 +209,6 @@
       const editProjectModal = document.getElementById('basicModal');
       editProjectModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget; // Nút đã nhấn để mở modal
-        const projectManagerId = button.getAttribute('data-project-manager-id');
         const projectName = button.getAttribute('data-project-name');
         const goalAmount = button.getAttribute('data-goal-amount');
         const currentAmount = button.getAttribute('data-current-amount');
@@ -231,7 +223,6 @@
         document.querySelector('input[name="currentAmount"]').value = currentAmount;
         document.querySelector('input[name="startDate"]').value = startDate;
         document.querySelector('input[name="endDate"]').value = endDate;
-        document.querySelector('input[name="projectManagerId"]').value = projectManagerId;
         document.querySelector('input[name="description"]').value = description;
 
 

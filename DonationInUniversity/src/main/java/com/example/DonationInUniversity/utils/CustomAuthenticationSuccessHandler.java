@@ -22,7 +22,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         // Kiểm tra quyền và chuyển hướng
         if (roles.contains("admin")) {
-            response.sendRedirect("/admin"); // Chuyển hướng đến /admin nếu là admin
+            response.sendRedirect("/admin/"); // Chuyển hướng đến /admin nếu là admin
         } else if (roles.contains("project_manager")) {
             response.sendRedirect("/manager"); // Chuyển hướng đến /manager nếu là project manager
         }

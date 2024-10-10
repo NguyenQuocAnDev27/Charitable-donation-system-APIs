@@ -19,10 +19,20 @@ public class ProjectServiceAdmin {
         return projectRepository.findById(id);
     }
     public DonationProject addProject(DonationProject donationProject) {
-        return projectRepository.save(donationProject);
+        try {
+            return projectRepository.save(donationProject);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     public DonationProject updateProject( DonationProject donationProject) {
-        return projectRepository.save(donationProject);
+        try{
+            return projectRepository.save(donationProject);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     public void deleteProject(int projectId) {
         Optional<DonationProject> projectOptional = projectRepository.findById(projectId);
