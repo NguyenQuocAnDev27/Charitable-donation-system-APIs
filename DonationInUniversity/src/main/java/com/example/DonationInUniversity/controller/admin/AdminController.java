@@ -14,9 +14,5 @@ public class AdminController {
     public String homepage() {
         return "index";
     }
-    @GetMapping("AccountManagement")
-    public String AccountManagement(Model model) {
-        model.addAttribute("currentUrl", "AccountManagement");
-        return "AccountManagement";
-    }
+
 }

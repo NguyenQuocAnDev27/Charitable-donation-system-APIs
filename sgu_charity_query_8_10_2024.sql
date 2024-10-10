@@ -209,25 +209,5 @@ VALUES
 ('Chắp Cánh Ước Mơ', 'Giúp đỡ trẻ em nghèo đến trường', 150000.00, 1000.00, '2024-08-01', '2024-12-25', 'completed', 2, NOW(), NOW());
 ALTER TABLE donation_projects
 ADD COLUMN is_deleted TINYINT DEFAULT 1;
-
--- Table: ProjectDetailText
-CREATE TABLE `ProjectDetailText` (
-    `id` INT AUTO_INCREMENT NOT NULL,
-    `project_id` INT NOT NULL,
-    `content` TEXT NOT NULL,
-    `IsDelete` BOOLEAN DEFAULT FALSE,
-    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
-);
-
--- Table: ProjectDetailImage
-CREATE TABLE `ProjectDetailImage` (
-    `id` INT AUTO_INCREMENT NOT NULL,
-    `project_id` INT NOT NULL,
-    `pathImage` VARCHAR(255) NOT NULL,
-    `IsDelete` BOOLEAN DEFAULT FALSE,
-    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
-);
+ALTER TABLE users
+ADD COLUMN is_deleted TINYINT DEFAULT 1;
