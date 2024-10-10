@@ -1,5 +1,7 @@
 package com.example.DonationInUniversity.config;
 
+import com.example.DonationInUniversity.exception.CustomAccessDeniedHandler;
+import com.example.DonationInUniversity.exception.GlobalExceptionHandler;
 import com.example.DonationInUniversity.security.ApiRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -94,18 +96,21 @@ public class SecurityConfig {
      */
     @Bean
     @Order(2)
-    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http, GlobalExceptionHandler globalExceptionHandler, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
-                .securityMatcher("/admin/**", "/admin/login", "/admin/logout", "/admin/register")
+                .securityMatcher("/admin/**", "/admin/login", "/admin/logout")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/login", "/admin/register").permitAll()
+                        .requestMatchers("/admin/login","/admin/403").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("admin")
                         .anyRequest().authenticated()
+
                 )
+
+
                 .formLogin(form -> form
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
@@ -113,7 +118,10 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .defaultSuccessUrl("/admin/", true)
                         .failureUrl("/admin/login?error=true")
+
                 )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler(customAccessDeniedHandler))
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout")
                         .logoutSuccessUrl("/admin/login")
