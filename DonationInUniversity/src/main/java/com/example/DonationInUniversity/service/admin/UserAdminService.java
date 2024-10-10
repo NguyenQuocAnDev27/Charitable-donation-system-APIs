@@ -44,4 +44,7 @@ public class UserAdminService {
     public List<Role> getAllRole () {
         return roleRepository.findAll();
     }
+    public User adminGetUserByUsername(String username) {
+        return userAdminRepository.findByEmail(username);
+    }
 }

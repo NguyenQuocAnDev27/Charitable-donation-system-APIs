@@ -5,8 +5,3 @@
 - seucurity config chia làm 2 hàm config khác nhau
 - Order(1) sẽ được ưu tiên trước, dành cho api
 - Order(1)  dành cho admin
-
-
-
-//change 8/10/2024
-- them column is_delete trong bảng users cho soft delete

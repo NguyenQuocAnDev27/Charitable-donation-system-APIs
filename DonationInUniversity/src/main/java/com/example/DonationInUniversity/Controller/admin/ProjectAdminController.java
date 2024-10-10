@@ -48,7 +48,7 @@ public class ProjectAdminController {
     }
     @PostMapping("deleteProject/{id}")
     public String deleteProject(@PathVariable int id) {
-       this.projectServiceAdmin.deleteProject(id);
-       return "redirect:/admin/DonationProject";
+        this.projectServiceAdmin.deleteProject(id);
+        return "redirect:/admin/DonationProject";
     }
 }

@@ -1,62 +1,63 @@
+
 <!doctype html>
 <html
-	xmlns:th="http://www.thymeleaf.org"
-  lang="en"
-  class="light-style layout-menu-fixed layout-compact"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="./static/assets"
-  data-template="vertical-menu-template-free"
-  data-style="light">
- 	<head th:replace="~{Fragment/Head :: head}"></head>
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+        class="light-style layout-menu-fixed layout-compact"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="./static/assets"
+        data-template="vertical-menu-template-free"
+        data-style="light">
+<head th:replace="~{Fragment/Head :: head}"></head>
 
-  <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <!-- Menu -->
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{Fragment/Menu :: menu}">
-          <!--  DashBoard in menu  -->
-        </aside>>
-        <!-- / Menu -->
+    <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{Fragment/Menu :: menu}">
+      <!--  DashBoard in menu  -->
+    </aside>>
+    <!-- / Menu -->
 
-        <!-- Layout container -->
-        <div class="layout-page">
-          <!-- Navbar -->
+    <!-- Layout container -->
+    <div class="layout-page">
+      <!-- Navbar -->
 
-          <nav
-                  class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                  id="layout-navbar"
-                  th:replace="~{Fragment/Navbar :: navbar}"
-          >
-          </nav>
+      <nav
+              class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+              id="layout-navbar"
+              th:replace="~{Fragment/Navbar :: navbar}"
+      >
+      </nav>
 
-          <!-- / Navbar -->
+      <!-- / Navbar -->
 
 
-    <!--  Modal -->
-          <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <form th:object="${project}" th:action="@{/admin/saveOrUpdateProject}" method="post">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
-                  <button
-                          type="button"
-                          class="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <div class="row">
-                    <input type="hidden" th:field="*{projectId}" class="form-control" />
-                    <div class="col-5 mb-6">
-                      <label  class="form-label">Project Name</label>
-                      <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" />
-                    </div>
-                    <div class="col-5 mb-6">
-                      <label  class="form-label">Project Manager</label>
+      <!--  Modal -->
+      <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <form th:object="${project}" th:action="@{/admin/saveOrUpdateProject}" method="post">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <input type="hidden" th:field="*{projectId}" class="form-control" />
+                  <div class="col-5 mb-6">
+                    <label  class="form-label">Project Name</label>
+                    <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" />
+                  </div>
+                  <div class="col-5 mb-6">
+                    <label  class="form-label">Project Manager</label>
                     <select class="form-select"  th:field="*{projectManager}" >
                       <option value="" disabled selected>-- Choose Project Manager --</option>
                       <option th:each="manager : ${projectManagers}"
@@ -64,189 +65,188 @@
                               th:text="${manager.fullName}">
                       </option>
                     </select>
-                    </div>
-
-                    <div class="col-5 mb-6">
-                      <label  class="form-label">Goal Amount</label>
-                      <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />
-                    </div>
-                    <div class="col-5 mb-6">
-                      <label  class="form-label">Current Amount</label>
-                      <input type="text"  th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" />
-                    </div>
-                    <div class="col-5 mb-6">
-                      <label  class="form-label">Start Date</label>
-                      <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" />
-                    </div>
-                    <div class="col-5 mb-6">
-                      <label  class="form-label">End Date</label>
-                      <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" />
-                    </div>
-                    <div class="col mb-6">
-                      <label  class="form-label">Project Description</label>
-                      <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" />
-                    </div>
+                  </div>
+                  <div class="col-5 mb-6">
+                    <label  class="form-label">Goal Amount</label>
+                    <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />
+                  </div>
+                  <div class="col-5 mb-6">
+                    <label  class="form-label">Current Amount</label>
+                    <input type="text"  th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" />
+                  </div>
+                  <div class="col-5 mb-6">
+                    <label  class="form-label">Start Date</label>
+                    <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" />
+                  </div>
+                  <div class="col-5 mb-6">
+                    <label  class="form-label">End Date</label>
+                    <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" />
+                  </div>
+                  <div class="col mb-6">
+                    <label  class="form-label">Project Description</label>
+                    <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" />
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button  type="submit" class="btn btn-primary mx-2" >Save</button>
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close
-                  </button>
-
-                </div>
-                </form>
               </div>
-            </div>
-          </div>
-    <!--  / Modal-->
+              <div class="modal-footer">
+                <button  type="submit" class="btn btn-primary mx-2" >Save</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
 
-
-
-		<!-- Table -->
-			<div class="container-xxl flex-grow-1 container-p-y">
-              <div class="card">
-                <div  class="row align-items-center">
-                  <div class = "col-3">
-                <h5 class="card-header">Donation Projects</h5>
-                  </div>
-                  <div class = "col-8 ">
-                    <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
-                      <button
-                              type="button"
-                              class="btn btn-secondary add-new btn-primary"
-                              data-bs-toggle="modal"
-                              data-bs-target="#basicModal">
-                        <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-                        <span class="d-none d-sm-inline-block">Donation Project</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="table-responsive text-nowrap">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>Project-ID</th>
-                        <th>Project Name</th>
-                        <th>Description</th>
-                        <th>Goal Amount</th>
-                        <th>Current Amount</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Project Manager</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0 align-items-center">
-                      <tr th:each="project : ${listProjects}">
-                        <td th:text="${project.projectId}"></td>
-                        <td th:text="${project.projectName}"></td>
-                        <td th:text="${project.description}"></td>
-                        <td th:text="${project.goalAmount}"></td>
-                        <td th:text="${project.currentAmount}"></td>
-                        <td th:text="${project.startDate}"></td>
-                        <td th:text="${project.endDate}"></td>
-                        <td th:text="${project.projectManager.fullName}"></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <button class="dropdown-item" type="button"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#basicModal"
-                                      th:data-project-id="${project.projectId}"
-                                      th:data-project-manager="${project.projectManager.userId}"
-                                      th:data-project-name="${project.projectName}"
-                                      th:data-goal-amount="${project.goalAmount}"
-                                      th:data-current-amount="${project.currentAmount}"
-                                      th:data-start-date="${project.startDate}"
-                                      th:data-end-date="${project.endDate}"
-                                      th:data-description="${project.description}"
-                                ><i class="bx bx-edit-alt me-1"></i> Edit</button
-                              >
-                              <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
-                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa project này không?');">
-                                  <i class="bx bx-trash me-1"></i> Delete
-                                </button>
-                              </form>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-            </div>
               </div>
-          <!-- /Table -->
-            <!-- Footer -->
-            <footer class="content-footer footer bg-footer-theme" th:replace="~{Fragment/Footer :: footer}">           
-            </footer>
-            <!-- / Footer -->
-
-            <div class="content-backdrop fade"></div>
+            </form>
           </div>
-          <!-- Content wrapper -->
         </div>
-        <!-- / Layout page -->
       </div>
-
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
-    <!-- / Layout wrapper -->
+      <!--  / Modal-->
 
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
 
-    <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
-    <script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
-    <script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
-    <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
-    <script th:src="@{/assets/vendor/js/menu.js}"></script>
+      <!-- Table -->
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="card">
+          <div  class="row align-items-center">
+            <div class = "col-3">
+              <h5 class="card-header">Donation Projects</h5>
+            </div>
+            <div class = "col-8 ">
+              <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
+                <button
+                        type="button"
+                        class="btn btn-secondary add-new btn-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#basicModal">
+                  <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+                  <span class="d-none d-sm-inline-block">Donation Project</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive text-nowrap">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Project-ID</th>
+                <th>Project Name</th>
+                <th>Description</th>
+                <th>Goal Amount</th>
+                <th>Current Amount</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Project Manager</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody class="table-border-bottom-0 align-items-center">
+              <tr th:each="project : ${listProjects}">
+                <td th:text="${project.projectId}"></td>
+                <td th:text="${project.projectName}"></td>
+                <td th:text="${project.description}"></td>
+                <td th:text="${project.goalAmount}"></td>
+                <td th:text="${project.currentAmount}"></td>
+                <td th:text="${project.startDate}"></td>
+                <td th:text="${project.endDate}"></td>
+                <td th:text="${project.projectManager.fullName}"></td>
+                <td>
+                  <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item" type="button"
+                              data-bs-toggle="modal"
+                              data-bs-target="#basicModal"
+                              th:data-project-id="${project.projectId}"
+                              th:data-project-manager="${project.projectManager.userId}"
+                              th:data-project-name="${project.projectName}"
+                              th:data-goal-amount="${project.goalAmount}"
+                              th:data-current-amount="${project.currentAmount}"
+                              th:data-start-date="${project.startDate}"
+                              th:data-end-date="${project.endDate}"
+                              th:data-description="${project.description}"
+                      ><i class="bx bx-edit-alt me-1"></i> Edit</button
+                      >
+                      <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                        <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
+                          <i class="bx bx-trash me-1"></i> Delete
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- /Table -->
+      <!-- Footer -->
+      <footer class="content-footer footer bg-footer-theme" th:replace="~{Fragment/Footer :: footer}">
+      </footer>
+      <!-- / Footer -->
 
-    <!-- endbuild -->
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
 
-    <!-- Vendors JS -->
-    <script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
-
-    <!-- Main JS -->
-    <script th:src="@{/assets/js/main.js}"></script>
-
-    <!-- Page JS -->
-    <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
-    <script>
-      const editProjectModal = document.getElementById('basicModal');
-      editProjectModal.addEventListener('show.bs.modal', function (event) {
-        const button = event.relatedTarget; // Nút đã nhấn để mở modal
-        const projectManager = button.getAttribute('data-project-manager');
-        const projectName = button.getAttribute('data-project-name');
-        const goalAmount = button.getAttribute('data-goal-amount');
-        const currentAmount = button.getAttribute('data-current-amount');
-        const startDate = button.getAttribute('data-start-date');
-        const endDate = button.getAttribute('data-end-date');
-        const projectDescription = button.getAttribute('data-description');
-        const projectId = button.getAttribute('data-project-id');
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+<!-- / Layout wrapper -->
 
 
-        document.querySelector('input[name="projectName"]').value = projectName;
-        document.querySelector('input[name="goalAmount"]').value = goalAmount;
-        document.querySelector('input[name="currentAmount"]').value = currentAmount;
-        document.querySelector('input[name="startDate"]').value = startDate;
-        document.querySelector('input[name="endDate"]').value = endDate;
-        document.querySelector('input[name="description"]').value = projectDescription;
-        document.querySelector('input[name="projectId"]').value = projectId;
-        document.querySelector('select[name="projectManager"]').value=projectManager;
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
 
-      });
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- Page JS -->
+<script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+<script>
+  const editProjectModal = document.getElementById('basicModal');
+  editProjectModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget; // Nút đã nhấn để mở modal
+    const projectManager = button.getAttribute('data-project-manager');
+    const projectName = button.getAttribute('data-project-name');
+    const goalAmount = button.getAttribute('data-goal-amount');
+    const currentAmount = button.getAttribute('data-current-amount');
+    const startDate = button.getAttribute('data-start-date');
+    const endDate = button.getAttribute('data-end-date');
+    const projectDescription = button.getAttribute('data-description');
+    const projectId = button.getAttribute('data-project-id');
 
 
-    </script>
+    document.querySelector('input[name="projectName"]').value = projectName;
+    document.querySelector('input[name="goalAmount"]').value = goalAmount;
+    document.querySelector('input[name="currentAmount"]').value = currentAmount;
+    document.querySelector('input[name="startDate"]').value = startDate;
+    document.querySelector('input[name="endDate"]').value = endDate;
+    document.querySelector('input[name="description"]').value = projectDescription;
+    document.querySelector('input[name="projectId"]').value = projectId;
+    document.querySelector('select[name="projectManager"]').value=projectManager;
 
-    <!-- Place this tag before closing body tag for github widget button. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+  });
+
+
+</script>
+
+<!-- Place this tag before closing body tag for github widget button. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
 </html>
