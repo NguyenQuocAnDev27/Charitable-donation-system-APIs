@@ -1,5 +1,7 @@
 package com.example.DonationInUniversity.config;
 
+import com.example.DonationInUniversity.exception.CustomAccessDeniedHandler;
+import com.example.DonationInUniversity.exception.GlobalExceptionHandler;
 import com.example.DonationInUniversity.security.ApiRequestFilter;
 import com.example.DonationInUniversity.utils.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,6 @@ import java.util.List;
 public class SecurityConfig {
 
     private final ApiRequestFilter apiRequestFilter;
-    //Khai báo biến xử lý đăng nhập thành công theo các quyền của tài khoản
     private final CustomAuthenticationSuccessHandler successHandler;
 
     @Autowired
@@ -77,9 +78,6 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/projects/page" // for guest
                         ).permitAll()
-                        .requestMatchers((
-                                "/api/project_manager/**"
-                        )).hasAuthority("project_manager")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(apiRequestFilter, UsernamePasswordAuthenticationFilter.class);
@@ -101,27 +99,33 @@ public class SecurityConfig {
      */
     @Bean
     @Order(2)
-    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http, GlobalExceptionHandler globalExceptionHandler, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
-                .securityMatcher("/admin/**",  "/manager/**","/admin/login", "/admin/logout", "/admin/register")
+                .securityMatcher("/admin/**", "/manager/**","/admin/login", "/admin/logout")
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/login", "/admin/register").permitAll()
+                        .requestMatchers("/admin/login","/admin/403").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("admin")
                         .requestMatchers("/manager/**").hasAuthority("project_manager")
                         .anyRequest().authenticated()
+
                 )
+
+
                 .formLogin(form -> form
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .successHandler(successHandler)// Chỉnh sửa để chuyển trang sang admin hoặc manager
+                        .successHandler(successHandler)
                         .failureUrl("/admin/login?error=true")
+
                 )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler(customAccessDeniedHandler))
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout")
                         .logoutSuccessUrl("/admin/login")
