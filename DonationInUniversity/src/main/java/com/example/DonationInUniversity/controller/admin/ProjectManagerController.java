@@ -30,9 +30,9 @@ public class ProjectManagerController {
         if (user == null) {
             return "redirect:/admin/login";
         }
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            model.addAttribute("currentUrl", "DonationProject");
-            model.addAttribute("listProjects", projectServiceAdmin.adminGetDonationProjectByManager(userDetails.getUserModel().getUserId()));
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        model.addAttribute("currentUrl", "DonationProject");
+        model.addAttribute("listProjects", projectServiceAdmin.adminGetDonationProjectByManager(userDetails.getUserModel().getUserId()));
         model.addAttribute("project", new DonationProject());
         return "ProjectManager/DonationProject";
     }

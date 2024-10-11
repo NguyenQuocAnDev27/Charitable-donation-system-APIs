@@ -11,9 +11,8 @@ public class LoginController {
     public String login() {
         return "login";
     }
-
-    @GetMapping("forgot_password")
-    public String forgot_password() {
-        return "forgot-password";
+    @GetMapping("/403")
+    public String error403() {
+        return "403";
     }
 }
