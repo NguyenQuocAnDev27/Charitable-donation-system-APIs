@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "Donation_Projects")
@@ -40,6 +41,11 @@ public class DonationProject {
     @Column(nullable = false)
     private int isDeleted;
 
+    @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectDetailText> projectDetailTexts;
+
+    @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectDetailImage> projectDetailImages;
     // Getters and setters
 
     public Integer getProjectId() {

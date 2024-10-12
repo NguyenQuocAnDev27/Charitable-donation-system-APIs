@@ -1,0 +1,141 @@
+<!doctype html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+        class="light-style layout-menu-fixed layout-compact"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="./static/assets"
+        data-template="vertical-menu-template-free"
+        data-style="light">
+<head th:replace="~{ProjectManager/Head :: head}"></head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <!-- Menu -->
+
+    <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{ProjectManager/Menu :: menu}">
+      <!--  DashBoard in menu  -->
+    </aside>>
+    <!-- / Menu -->
+
+    <!-- Layout container -->
+    <div class="layout-page">
+      <!-- Navbar -->
+      <nav
+              class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+              id="layout-navbar"
+              th:replace="~{ProjectManager/Navbar :: navbar}"
+      >
+      </nav>
+      <div id="dynamic-inputs" class="mt-3"></div>
+      <button
+              type="button"
+              class="btn btn-secondary add-new btn-primary">
+        <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+        <span class="d-none d-sm-inline-block">Add text</span>
+      </button>
+      <button
+              type="button"
+              class="btn btn-secondary add-new btn-primary">
+        <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+        <span class="d-none d-sm-inline-block">Add image</span>
+      </button>
+
+      <!-- Footer -->
+      <footer class="content-footer footer bg-footer-theme" th:replace="~{ProjectManager/Footer :: footer}">
+      </footer>
+      <!-- / Footer -->
+
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+  <!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+<!-- / Layout wrapper -->
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- Page JS -->
+<script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+<script>
+  const dynamicInputsContainer = document.getElementById('dynamic-inputs');
+
+  document.querySelectorAll('.btn-primary').forEach(button => {
+    button.addEventListener('click', function() {
+      let inputElement;
+
+      if (this.textContent.includes("Add text")) {
+        inputElement = document.createElement('textarea');
+        inputElement.placeholder = 'Enter your text here...';
+        inputElement.classList.add('form-control', 'mt-2');
+      } else if (this.textContent.includes("Add image")) {
+        inputElement = document.createElement('input');
+        inputElement.type = 'file';
+        inputElement.accept = 'image/*';
+        inputElement.classList.add('form-control', 'mt-2');
+      }
+
+      // Tạo thẻ div bao quanh để chứa input
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('input-wrapper');
+      wrapper.draggable = true; // Cho phép kéo thả
+      wrapper.appendChild(inputElement);
+
+      // Thêm sự kiện cho kéo thả
+      wrapper.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', null); // Giúp cho kéo thả hoạt động trên Firefox
+        this.classList.add('dragging'); // Thêm class để tạo hiệu ứng khi kéo
+      });
+
+      wrapper.addEventListener('dragend', function() {
+        this.classList.remove('dragging'); // Xóa class khi kết thúc kéo
+      });
+
+      // Thêm sự kiện để cho phép thả
+      wrapper.addEventListener('dragover', function(e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định
+        const draggingElement = document.querySelector('.dragging'); // Tìm phần tử đang kéo
+        if (this !== draggingElement) {
+          const rect = this.getBoundingClientRect();
+          const offset = rect.y + rect.height / 2; // Tính toán vị trí
+          if (e.clientY > offset) {
+            this.parentNode.insertBefore(draggingElement, this.nextSibling);
+          } else {
+            this.parentNode.insertBefore(draggingElement, this);
+          }
+        }
+      });
+
+      // Thêm wrapper vào container
+      dynamicInputsContainer.appendChild(wrapper);
+    });
+  });
+</script>
+
+<!-- Place this tag before closing body tag for github widget button. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>

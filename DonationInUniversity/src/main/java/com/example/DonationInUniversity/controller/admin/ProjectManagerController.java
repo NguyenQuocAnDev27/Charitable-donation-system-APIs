@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/manager")
 public class ProjectManagerController {
-    private static final Logger log = LoggerFactory.getLogger(ProjectManagerController.class);
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
     @Autowired
