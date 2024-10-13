@@ -18,8 +18,11 @@ public class ProjectDetailText {
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "IsDelete", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean isDelete = false;
+    @Column(name = "is_delete", nullable = false)
+    private int isDelete;
+
+    @Column(name = "order_no", nullable = false)
+    private Integer orderNo;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDate createdAt;
@@ -49,14 +52,21 @@ public class ProjectDetailText {
         this.content = content;
     }
 
-    public Boolean getIsDelete() {
+    public int getIsDelete() {
         return isDelete;
     }
 
-    public void setIsDelete(Boolean isDelete) {
+    public void setIsDelete(int isDelete) {
         this.isDelete = isDelete;
     }
 
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
+    }
     public LocalDate getCreatedAt() {
         return createdAt;
     }

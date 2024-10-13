@@ -20,7 +20,7 @@ public class ProjectDetailImageServiceAdmin {
     public List<ProjectDetailImage> getProjectDetailImages() {
         return projectDetailImageRepository.findAll();
     }
-    public ProjectDetailImage updateProjectDetailImage(ProjectDetailImage projectDetailImage) {
+    public ProjectDetailImage saveProjectDetailImageAdmin(ProjectDetailImage projectDetailImage) {
         try{
             return projectDetailImageRepository.save(projectDetailImage);
         }
@@ -28,7 +28,7 @@ public class ProjectDetailImageServiceAdmin {
             throw new RuntimeException(e);
         }
     }
-    public List<ProjectDetailImage> getProjectDetailImage(int projectId) {
+    public List<ProjectDetailImage> getProjectDetailImageAdmin(int projectId) {
         return projectDetailImageRepository.adminGetProjectDetailImageByProjectId(projectId);
     }
     public ProjectDetailImage findProjectDetailImageById(Integer imageId) {

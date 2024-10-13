@@ -117,27 +117,52 @@
                       <tr>
                         <th>Project-ID</th>
                         <th>Project Name</th>
-                        <th>Goal Amount</th>
                         <th>Current Amount</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Process</th>
+                        <th>Days Remaining</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0 align-items-center">
                       <tr th:each="project : ${listProjects}">
                         <td th:text="${project.projectId}"></td>
-                        <td th:text="${project.projectName}"></td>
-                        <td th:text="${project.goalAmount}"></td>
+                        <td>
+                          <span th:if="${project.status == 'stopped'}"
+                                th:text="${project.projectName}"
+                                class="text-danger text-decoration-line-through"></span>
+                          <span th:if="${project.status == 'completed'}"
+                                th:text="${project.projectName}"
+                                class="text-success"></span>
+                          <span th:if="${project.status == 'pending'}"
+                                th:text="${project.projectName}"
+                                class="text-warning"></span>
+                          <span th:if="${project.status != 'stopped' && project.status != 'completed' && project.status != 'pending'}"
+                                th:text="${project.projectName}"></span>
+                        </td>
                         <td th:text="${project.currentAmount}"></td>
-                        <td th:text="${project.startDate}"></td>
-                        <td th:text="${project.endDate}"></td>
+                        <td>
+                          <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="width: 150px; background-color: #e0e0e0; border-radius: 5px; margin: 0 10px;">
+                              <div th:style="'width: ' + ${project.currentAmount} / ${project.goalAmount} * 100 + '%; background-color: #76c7c0; height: 20px; border-radius: 5px;'"
+                                   title="Current: ${project.currentAmount} / Goal: ${project.goalAmount}">
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), project.endDate)} + ' ngày còn lại'"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
+                              <a class="dropdown-item"
+                                 th:href="@{/manager/{id}/ProjectDetail(id=${project.projectId})}"
+                                 data-bs-toggle="tooltip"
+                                 data-bs-placement="right"
+                                 title="Xem chi tiết">
+                                <i class="bx bx-show-alt me-1"></i>Detail
+                              </a>
                               <button class="dropdown-item" type="button"
                                       data-bs-toggle="modal"
                                       data-bs-target="#basicModal"

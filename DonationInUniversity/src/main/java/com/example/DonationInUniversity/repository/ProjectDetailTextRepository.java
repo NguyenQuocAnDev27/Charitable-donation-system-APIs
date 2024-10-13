@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ProjectDetailTextRepository extends JpaRepository<ProjectDetailText,Integer>{
-    @Query(value = "SELECT * FROM projectdetailtext where project_id=?1 and is_deleted = 1",nativeQuery = true)
+    @Query(value = "SELECT * FROM projectdetailtext where project_id=?1 and is_delete=1",nativeQuery = true)
     List<ProjectDetailText> adminGetProjectDetailTextByProjectId(int id);
 }

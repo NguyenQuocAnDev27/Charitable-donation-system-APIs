@@ -30,19 +30,40 @@
               th:replace="~{ProjectManager/Navbar :: navbar}"
       >
       </nav>
-      <div id="dynamic-inputs" class="mt-3"></div>
-      <button
-              type="button"
-              class="btn btn-secondary add-new btn-primary">
-        <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-        <span class="d-none d-sm-inline-block">Add text</span>
-      </button>
-      <button
-              type="button"
-              class="btn btn-secondary add-new btn-primary">
-        <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-        <span class="d-none d-sm-inline-block">Add image</span>
-      </button>
+      <div th:if="${donationProject.isPresent()}">
+        <!-- Hiển thị các thuộc tính của donationProject -->
+        <h4 th:text="${donationProject.get().projectName}"></h4>
+        <p th:text="${donationProject.get().description}"></p>
+        <p>Start Date: <span th:text="${donationProject.get().startDate}"></span></p>
+        <p>End Date: <span th:text="${donationProject.get().endDate}"></span></p>
+        <h4>Project Detail</h4>
+      </div>
+
+      <!-- Nếu không có project -->
+      <div th:if="${!donationProject.isPresent()}">
+        <p>No project found</p>
+      </div>
+      <form th:action="@{/manager/{projectId}/saveOrUpdateProjectDetail(projectId=${donationProject.get().projectId})}" method="post" enctype="multipart/form-data">
+        <button  type="submit" class="btn btn-primary mx-2" >Save</button>
+        <div id="dynamic-inputs" class="mt-3"></div>
+      </form>
+      <div class="d-flex justify-content-center">
+        <button
+                type="button"
+                class="btn btn-secondary add-new btn-primary flex-grow-1 mx-10"
+                style="max-width: 50%;">
+          <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+          <span class="d-none d-sm-inline-block">Add Text</span>
+        </button>
+        <button
+                type="button"
+                class="btn btn-secondary add-new btn-primary flex-grow-1 mx-10"
+                style="max-width: 50%;">
+          <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+          <span class="d-none d-sm-inline-block">Add Image</span>
+        </button>
+      </div>
+
 
       <!-- Footer -->
       <footer class="content-footer footer bg-footer-theme" th:replace="~{ProjectManager/Footer :: footer}">
@@ -86,53 +107,119 @@
   document.querySelectorAll('.btn-primary').forEach(button => {
     button.addEventListener('click', function() {
       let inputElement;
+      const wrapper = document.createElement('div'); // Tạo wrapper ngay từ đầu
+      wrapper.classList.add('input-wrapper', 'd-flex', 'align-items-center', 'mb-2'); // Kiểu flex giúp căn chỉnh đẹp hơn
+      wrapper.setAttribute('draggable', 'true'); // Thiết lập cho wrapper là draggable
 
-      if (this.textContent.includes("Add text")) {
+      // Khai báo cho input ẩn
+      const hiddenInputElement = document.createElement('input');
+      hiddenInputElement.type = 'hidden'; // Đặt loại là hidden
+      hiddenInputElement.classList.add('input-index'); // Thêm lớp cho dễ dàng quản lý
+
+      if (this.textContent.includes("Add Text")) {
         inputElement = document.createElement('textarea');
         inputElement.placeholder = 'Enter your text here...';
         inputElement.classList.add('form-control', 'mt-2');
-      } else if (this.textContent.includes("Add image")) {
+        hiddenInputElement.name = `newListText[${dynamicInputsContainer.children.length}].orderNo`; // Số thứ tự cho textarea
+        inputElement.name = `newListText[${dynamicInputsContainer.children.length}].content`; // Nội dung của textarea
+      } else if (this.textContent.includes("Add Image")) {
         inputElement = document.createElement('input');
         inputElement.type = 'file';
         inputElement.accept = 'image/*';
         inputElement.classList.add('form-control', 'mt-2');
+        hiddenInputElement.name = `newListImage[${dynamicInputsContainer.children.length}].orderNo`; // Số thứ tự cho hình ảnh
+        inputElement.name = `newListImage[${dynamicInputsContainer.children.length}].pathImage`; // Đường dẫn của hình ảnh
+        // Thêm sự kiện để hiển thị hình ảnh sau khi chọn tệp
+        inputElement.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const imgWrapper = document.createElement('div'); // Tạo một div để chứa hình ảnh
+              imgWrapper.classList.add('img-wrapper', 'mt-2'); // Thêm lớp để dễ dàng quản lý CSS và làm cho nó xuống dòng
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.classList.add('img-thumbnail'); // Sử dụng Bootstrap để thêm khung hình đẹp
+              img.style.maxWidth = '250px'; // Giới hạn kích thước hiển thị
+
+              // Thêm hình ảnh vào div
+              imgWrapper.appendChild(img);
+              wrapper.appendChild(imgWrapper); // Thêm div hình ảnh vào wrapper
+            };
+            reader.readAsDataURL(file); // Đọc file và chuyển thành URL để hiển thị
+          }
+        });
       }
 
-      // Tạo thẻ div bao quanh để chứa input
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('input-wrapper');
-      wrapper.draggable = true; // Cho phép kéo thả
-      wrapper.appendChild(inputElement);
+      // Thêm input ẩn vào wrapper
+      wrapper.appendChild(hiddenInputElement); // Thêm input ẩn vào wrapper
 
-      // Thêm sự kiện cho kéo thả
-      wrapper.addEventListener('dragstart', function(e) {
-        e.dataTransfer.setData('text/plain', null); // Giúp cho kéo thả hoạt động trên Firefox
-        this.classList.add('dragging'); // Thêm class để tạo hiệu ứng khi kéo
+      // Tạo nút Delete
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.classList.add('btn', 'btn-sm', 'btn-danger', 'ms-2'); // Thêm kiểu Bootstrap
+
+      // Xử lý sự kiện xóa input
+      deleteButton.addEventListener('click', function() {
+        dynamicInputsContainer.removeChild(wrapper); // Xóa phần tử chứa input khi nhấn nút Delete
+        updateInputIndexes(); // Cập nhật lại số thứ tự sau khi xóa
+      });
+
+      // Thêm các sự kiện cho tính năng kéo thả
+      wrapper.addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', null); // Thiết lập dữ liệu khi bắt đầu kéo
+        event.dataTransfer.effectAllowed = 'move'; // Chỉ cho phép di chuyển
+        this.classList.add('dragging'); // Thêm lớp CSS cho phần tử đang kéo
       });
 
       wrapper.addEventListener('dragend', function() {
-        this.classList.remove('dragging'); // Xóa class khi kết thúc kéo
+        this.classList.remove('dragging'); // Xóa lớp khi kết thúc kéo
+        updateInputIndexes(); // Cập nhật lại số thứ tự sau khi kéo thả
       });
 
-      // Thêm sự kiện để cho phép thả
-      wrapper.addEventListener('dragover', function(e) {
-        e.preventDefault(); // Ngăn chặn hành vi mặc định
-        const draggingElement = document.querySelector('.dragging'); // Tìm phần tử đang kéo
-        if (this !== draggingElement) {
-          const rect = this.getBoundingClientRect();
-          const offset = rect.y + rect.height / 2; // Tính toán vị trí
-          if (e.clientY > offset) {
-            this.parentNode.insertBefore(draggingElement, this.nextSibling);
-          } else {
-            this.parentNode.insertBefore(draggingElement, this);
-          }
+      // Xử lý dragover để cho phép thả
+      wrapper.addEventListener('dragover', function(event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định
+        event.dataTransfer.dropEffect = 'move'; // Hiển thị hiệu ứng thả
+      });
+
+      // Xử lý drop
+      wrapper.addEventListener('drop', function(event) {
+        event.preventDefault();
+        const draggingElement = document.querySelector('.dragging'); // Lấy phần tử đang kéo
+        if (draggingElement && draggingElement !== this) {
+          // Chèn phần tử đang kéo trước phần tử thả
+          dynamicInputsContainer.insertBefore(draggingElement, this);
+          updateInputIndexes(); // Cập nhật lại số thứ tự sau khi thả
         }
       });
 
+      // Thêm input và nút Delete vào wrapper
+      wrapper.appendChild(inputElement);
+      wrapper.appendChild(deleteButton);
+
       // Thêm wrapper vào container
       dynamicInputsContainer.appendChild(wrapper);
+
+      // Cập nhật lại số thứ tự sau khi thêm input mới
+      updateInputIndexes();
     });
   });
+
+  // Hàm cập nhật số thứ tự cho tất cả các input
+  function updateInputIndexes() {
+    const wrappers = dynamicInputsContainer.querySelectorAll('.input-wrapper');
+    wrappers.forEach((wrapper, index) => {
+      // Cập nhật thuộc tính data-index cho từng input
+      const input = wrapper.querySelector('textarea, input[type="file"]');
+      const hiddenInput = wrapper.querySelector('.input-index'); // Tìm input ẩn
+      if (input) {
+        hiddenInput.setAttribute('value', index + 1); // Lưu số thứ tự ẩn vào input hidden
+        console.log(`Input ${index + 1}: ${input.placeholder || 'File Input'}`);
+      }
+    });
+  }
+
 </script>
 
 <!-- Place this tag before closing body tag for github widget button. -->

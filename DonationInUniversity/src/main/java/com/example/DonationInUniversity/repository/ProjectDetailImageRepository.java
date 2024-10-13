@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface ProjectDetailImageRepository extends JpaRepository<ProjectDetailImage,Integer>{
-    @Query(value = "SELECT * FROM projectdetailiamge where project_id=?1 and is_deleted = 1",nativeQuery = true)
+    @Query(value = "SELECT * FROM projectdetailimage where project_id=?1 and is_delete=1",nativeQuery = true)
     List<ProjectDetailImage> adminGetProjectDetailImageByProjectId(int id);
 }

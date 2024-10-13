@@ -1,39 +1,55 @@
 package com.example.DonationInUniversity.controller.admin;
 
+import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.ProjectDetailImage;
 import com.example.DonationInUniversity.model.ProjectDetailText;
+import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.service.admin.ProjectDetailImageServiceAdmin;
 import com.example.DonationInUniversity.service.admin.ProjectDetailTextServiceAdmin;
+import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
 @RequestMapping("/manager")
 public class ProjectDetailAdminController {
     @Autowired
+    private ProjectServiceAdmin projectServiceAdmin;
+    @Autowired
     private ProjectDetailImageServiceAdmin projectDetailImageServiceAdmin;
     @Autowired
     private ProjectDetailTextServiceAdmin projectDetailTextServiceAdmin;
     @GetMapping("/{id}/ProjectDetail")
     public String getProjectDetail(Model model, @PathVariable int id) {
-        List<ProjectDetailText> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailText(id);
-        List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImage(id);
-        model.addAttribute("projectDetailTextList", projectDetailTextList);
-        model.addAttribute("projectDetailImageList", projectDetailImageList);
+        try{
+            List<ProjectDetailText> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(id);
+            List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(id);
+            model.addAttribute("projectDetailTextList", projectDetailTextList);
+            model.addAttribute("projectDetailImageList", projectDetailImageList);
+        }catch (Exception e){
+           throw new RuntimeException(e);
+        }
+        Optional<DonationProject> donationProject= projectServiceAdmin.getProjectById(id);
         List<ProjectDetailImage> newListImage = new ArrayList<ProjectDetailImage>();
         List<ProjectDetailText> newListText = new ArrayList<ProjectDetailText>();
+        model.addAttribute("donationProject", donationProject);
         model.addAttribute("newListImage", newListImage);
         model.addAttribute("newListText", newListText);
-        return "DonationProject";
+        return "ProjectManager/ProjectDetail";
     }
     @PostMapping("/{id}/ProjectDetail")
     public String deleteProjectDetail(@PathVariable int id,
@@ -91,5 +107,35 @@ public class ProjectDetailAdminController {
             }
         }
         return "redirect:/manager/" + id + "/ProjectDetail";
+    }
+    @Transactional
+    @PostMapping("/{projectId}/saveOrUpdateProjectDetail")
+    public String addOrUpdateProjectDetail(@ModelAttribute("newListImage") ArrayList<ProjectDetailImage> projectImageList,
+                                           @ModelAttribute("newListText") ArrayList<ProjectDetailText> projectTextList,
+                                     @PathVariable int projectId) {
+        Optional<DonationProject> donationProject= projectServiceAdmin.getProjectById(projectId);
+        if(donationProject.isPresent()){
+            DonationProject donationProject1 = donationProject.get();
+            if(!projectImageList.isEmpty()){
+                for (ProjectDetailImage projectDetailImage : projectImageList) {
+                    projectDetailImage.setDonationProject(donationProject1);
+                    projectDetailImage.setIsDelete(1);
+                    projectDetailImage.setCreatedAt(LocalDate.now());
+                    this.projectDetailImageServiceAdmin.saveProjectDetailImageAdmin(projectDetailImage);
+                }
+            }
+            if(!projectTextList.isEmpty()){
+                for (ProjectDetailText projectDetailText : projectTextList) {
+                    projectDetailText.setDonationProject(donationProject1);
+                    projectDetailText.setIsDelete(1);
+                    projectDetailText.setCreatedAt(LocalDate.now());
+                    this.projectDetailTextServiceAdmin.saveProjectDetailText(projectDetailText);
+                }
+            }
+            return "redirect:/manager/"+projectId+"/ProjectDetail";
+        }
+        else {
+            return "redirect:/error";
+        }
     }
 }

@@ -16,13 +16,13 @@ public class ProjectDetailTextServiceAdmin {
     private ProjectDetailTextRepository projectDetailTextRepository;
     private static final Logger logger = LoggerFactory.getLogger(ProjectDetailTextServiceAdmin.class);
 
-    public List<ProjectDetailText> getProjectDetailText(int projectId) {
+    public List<ProjectDetailText> getProjectDetailTextAdmin(int projectId) {
         return projectDetailTextRepository.adminGetProjectDetailTextByProjectId(projectId);
     }
     public List<ProjectDetailText> getProjectDetailTexts() {
         return projectDetailTextRepository.findAll();
     }
-    public ProjectDetailText updateProjectDetailText(ProjectDetailText projectDetailText) {
+    public ProjectDetailText saveProjectDetailText(ProjectDetailText projectDetailText) {
         try{
             return projectDetailTextRepository.save(projectDetailText);
         }
