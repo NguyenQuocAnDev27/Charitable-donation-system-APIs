@@ -76,7 +76,8 @@ public class SecurityConfig {
                                 "/api/token/refresh",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/api/projects/page" // for guest
+                                "/api/projects/page", // for guest
+                                "/api/project_detail/image/**" // for images
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
