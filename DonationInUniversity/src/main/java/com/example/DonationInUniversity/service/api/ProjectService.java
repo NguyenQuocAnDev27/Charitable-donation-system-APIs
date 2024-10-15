@@ -3,12 +3,17 @@ package com.example.DonationInUniversity.service.api;
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.OverviewProject;
 import com.example.DonationInUniversity.model.PaginatedDonationProjectsResponse;
+import com.example.DonationInUniversity.model.ProjectDetail;
+import com.example.DonationInUniversity.repository.ProjectDetailImageRepository;
+import com.example.DonationInUniversity.repository.ProjectDetailTextRepository;
 import com.example.DonationInUniversity.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.example.DonationInUniversity.model.ProjectDetailImage;
+import com.example.DonationInUniversity.model.ProjectDetailText;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -78,5 +83,4 @@ public class ProjectService {
         // Create and return the paginated response
         return new PaginatedDonationProjectsResponse<>(totalPages, currentPage, projects);
     }
-
 }

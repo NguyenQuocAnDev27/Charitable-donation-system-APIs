@@ -22,6 +22,8 @@ public class ProjectController {
 
     @GetMapping("/all")
     public MyCustomResponse<List<ProjectTypeDisplay>> getAllProjects() {
+        logger.info("");
+
         List<DonationProject> projects = projectService.getAllProjects();
 
         List<ProjectTypeDisplay> filteredProjects = projects.stream().map(project -> {
@@ -64,22 +66,4 @@ public class ProjectController {
 
         return new MyCustomResponse<>(200, "Get list project success", data);
     }
-
-//    @PostMapping
-//    public ResponseEntity<DonationProject> createProject(@RequestBody DonationProject project) {
-//        try {
-//            return ResponseEntity.ok(projectService.createProject(project));
-//        } catch (MyException e) {
-//            throw new MyException("Error creating project: " + e.getMessage());
-//        }
-//    }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<DonationProject> getProjectById(@PathVariable int id) {
-//        DonationProject project = projectService.getProjectById(id);
-//        if (project == null) {
-//            throw new MyException("Project not found with id: " + id);
-//        }
-//        return ResponseEntity.ok(project);
-//    }
 }
