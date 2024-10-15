@@ -5,9 +5,8 @@ import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,7 @@ public class ProjectManagerController {
     @Autowired
     private UserAdminService userAdminService;
     @GetMapping("")
-    public String projectHomePage(Model model) {
+    public String projectHomePage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user=userAdminService.adminGetUserByUsername(username);
@@ -30,8 +29,11 @@ public class ProjectManagerController {
             return "redirect:/admin/login";
         }
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Page<DonationProject> pageDonation= this.projectServiceAdmin.getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
         model.addAttribute("currentUrl", "DonationProject");
-        model.addAttribute("listProjects", projectServiceAdmin.adminGetDonationProjectByManager(userDetails.getUserModel().getUserId()));
+        model.addAttribute("totalPage", pageDonation.getTotalPages());
+        model.addAttribute("listProjects", pageDonation);
+        model.addAttribute("currentPage", pageNo);
         model.addAttribute("project", new DonationProject());
         return "ProjectManager/DonationProject";
     }

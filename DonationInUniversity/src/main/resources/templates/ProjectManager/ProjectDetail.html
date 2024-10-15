@@ -43,9 +43,25 @@
       <div th:if="${!donationProject.isPresent()}">
         <p>No project found</p>
       </div>
-      <form th:action="@{/manager/{projectId}/saveOrUpdateProjectDetail(projectId=${donationProject.get().projectId})}" method="post" enctype="multipart/form-data">
-        <button  type="submit" class="btn btn-primary mx-2" >Save</button>
-        <div id="dynamic-inputs" class="mt-3"></div>
+      <form th:action="@{/manager/{projectId}/saveOrUpdateProjectDetail(projectId=${donationProject.get().projectId})}" method="post" enctype="multipart/form-data" th:object="${projectDetailForm}">
+        <button type="submit" class="btn btn-primary mx-2" >Save</button>
+        <div id="dynamic-inputs" class="mt-3">
+          <!-- Mỗi input sẽ được bọc trong div "input-wrapper" -->
+          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailText : ${projectDetailTextList}">
+            <input type="hidden" class="input-index" th:name="'newListText['+${DetailText.orderNo - 1}+'].orderNo'" th:value="${DetailText.orderNo}">
+            <textarea class="form-control mt-2" th:name="'newListText['+${DetailText.orderNo - 1}+'].content'" th:text="${DetailText.content}"></textarea>
+            <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
+          </div>
+
+          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage : ${projectDetailImageList}">
+            <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.orderNo}+'].orderNo'" th:value="${DetailImage.orderNo}">
+            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.orderNo}+'].pathImage'" th:value="${DetailImage.pathImage}">
+            <div class="img-wrapper mt-2">
+              <img src="data:image/jpeg;base64,...(data image)" class="img-thumbnail" style="max-width: 250px;" th:value="${DetailImage.pathImage}">
+            </div>
+            <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
+          </div>
+        </div>
       </form>
       <div class="d-flex justify-content-center">
         <button
@@ -122,6 +138,7 @@
         inputElement.classList.add('form-control', 'mt-2');
         hiddenInputElement.name = `newListText[${dynamicInputsContainer.children.length}].orderNo`; // Số thứ tự cho textarea
         inputElement.name = `newListText[${dynamicInputsContainer.children.length}].content`; // Nội dung của textarea
+        inputElement.setAttribute('th:field', `*{newListText[${dynamicInputsContainer.children.length}].content}`); // Thêm th:field cho textarea
       } else if (this.textContent.includes("Add Image")) {
         inputElement = document.createElement('input');
         inputElement.type = 'file';
@@ -129,6 +146,7 @@
         inputElement.classList.add('form-control', 'mt-2');
         hiddenInputElement.name = `newListImage[${dynamicInputsContainer.children.length}].orderNo`; // Số thứ tự cho hình ảnh
         inputElement.name = `newListImage[${dynamicInputsContainer.children.length}].pathImage`; // Đường dẫn của hình ảnh
+        inputElement.setAttribute('th:field', `*{newListImage[${dynamicInputsContainer.children.length}].pathImage}`); // Thêm th:field cho hình ảnh
         // Thêm sự kiện để hiển thị hình ảnh sau khi chọn tệp
         inputElement.addEventListener('change', function(event) {
           const file = event.target.files[0];
@@ -215,7 +233,6 @@
       const hiddenInput = wrapper.querySelector('.input-index'); // Tìm input ẩn
       if (input) {
         hiddenInput.setAttribute('value', index + 1); // Lưu số thứ tự ẩn vào input hidden
-        console.log(`Input ${index + 1}: ${input.placeholder || 'File Input'}`);
       }
     });
   }

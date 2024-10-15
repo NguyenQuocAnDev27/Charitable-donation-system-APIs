@@ -217,7 +217,7 @@ CREATE TABLE ProjectDetailText (
     project_id INT NOT NULL,
     content TEXT NOT NULL,
     is_delete INT,
-    order_no INT NOT NULL, -- Thêm cột thứ tự
+    display_order INT NOT NULL, -- Thêm cột thứ tự
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (project_id) REFERENCES Donation_Projects(project_id) ON DELETE CASCADE
@@ -229,9 +229,8 @@ CREATE TABLE ProjectDetailImage (
     project_id INT NOT NULL,
     path_image VARCHAR(255) NOT NULL,
     is_delete INT,
-    order_no INT NOT NULL, -- Thêm cột thứ tự
+    display_order INT NOT NULL, -- Thêm cột thứ tự
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     FOREIGN KEY (project_id) REFERENCES Donation_Projects(project_id) ON DELETE CASCADE
 );
-

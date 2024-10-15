@@ -42,10 +42,10 @@ public class DonationProject {
     private int isDeleted;
 
     @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDetailText> projectDetailTexts;
+    private List<ProjectDetailTextAdmin> projectDetailTexts;
 
     @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDetailImage> projectDetailImages;
+    private List<ProjectDetailImageAdmin> projectDetailImages;
     // Getters and setters
 
     public Integer getProjectId() {

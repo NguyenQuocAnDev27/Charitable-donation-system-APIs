@@ -1,9 +1,11 @@
 package com.example.DonationInUniversity.service.admin;
 
-import com.example.DonationInUniversity.model.ProjectDetailImage;
+import com.example.DonationInUniversity.model.ProjectDetailImageAdmin;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 
 
-import com.example.DonationInUniversity.repository.ProjectDetailImageRepository;
+import com.example.DonationInUniversity.repository.ProjectDetailImageAdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +18,31 @@ import java.util.List;
 public class ProjectDetailImageServiceAdmin {
     private static final Logger logger = LoggerFactory.getLogger(ProjectDetailImageServiceAdmin.class);
     @Autowired
-    private ProjectDetailImageRepository projectDetailImageRepository;
-    public List<ProjectDetailImage> getProjectDetailImages() {
+    private ProjectDetailImageAdminRepository projectDetailImageRepository;
+    public List<ProjectDetailImageAdmin> getProjectDetailImages() {
         return projectDetailImageRepository.findAll();
     }
-    public ProjectDetailImage saveProjectDetailImageAdmin(ProjectDetailImage projectDetailImage) {
-        try{
+
+    public ProjectDetailImageAdmin saveProjectDetailImageAdmin(ProjectDetailImageAdmin projectDetailImage) {
+        try {
             return projectDetailImageRepository.save(projectDetailImage);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Vi phạm ràng buộc dữ liệu", e);
+        } catch (JpaSystemException e) {
+            throw new RuntimeException("Lỗi hệ thống khi tương tác với cơ sở dữ liệu", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi không xác định khi lưu ProjectDetailImage", e);
         }
     }
-    public List<ProjectDetailImage> getProjectDetailImageAdmin(int projectId) {
+
+    public List<ProjectDetailImageAdmin> getProjectDetailImageAdmin(int projectId) {
         return projectDetailImageRepository.adminGetProjectDetailImageByProjectId(projectId);
     }
-    public ProjectDetailImage findProjectDetailImageById(Integer imageId) {
+    public ProjectDetailImageAdmin findProjectDetailImageById(Integer imageId) {
         return projectDetailImageRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ProjectDetailImage với ID: " + imageId));
     }
-    public void deleteProjectDetailImage(ProjectDetailImage projectDetailImage) {
+    public void deleteProjectDetailImage(ProjectDetailImageAdmin projectDetailImage) {
         try {
             projectDetailImageRepository.delete(projectDetailImage);
         } catch (DataAccessException e) {
@@ -48,5 +55,8 @@ public class ProjectDetailImageServiceAdmin {
             logger.error("Lỗi không xác định khi xóa projectDetailImage: " + projectDetailImage, e);
             throw new RuntimeException("Đã xảy ra lỗi không xác định.");
         }
+    }
+    public void deleteProjectDetailImageByProjectId(int id){
+        this.projectDetailImageRepository.deleteProjectDetailImageByProjectId(id);
     }
 }

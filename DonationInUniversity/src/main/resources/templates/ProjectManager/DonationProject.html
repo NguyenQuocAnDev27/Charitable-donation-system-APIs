@@ -46,7 +46,9 @@
                           type="button"
                           class="btn-close"
                           data-bs-dismiss="modal"
-                          aria-label="Close"></button>
+                          style="background-color: red"
+                          aria-label="Close">
+                  </button>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -79,7 +81,7 @@
                 </div>
                 <div class="modal-footer">
                   <button  type="submit" class="btn btn-primary mx-2" >Save</button>
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  <button type="button" class="btn btn-outline-secondary btn-light" data-bs-dismiss="modal">
                     Close
                   </button>
                 </div>
@@ -143,7 +145,7 @@
                         <td>
                           <div style="display: flex; align-items: center; justify-content: space-between;">
                             <div style="width: 150px; background-color: #e0e0e0; border-radius: 5px; margin: 0 10px;">
-                              <div th:style="'width: ' + ${project.currentAmount} / ${project.goalAmount} * 100 + '%; background-color: #76c7c0; height: 20px; border-radius: 5px;'"
+                              <div th:style="'width: ' + (${project.currentAmount} > ${project.goalAmount} ? 100 : (${project.currentAmount} / ${project.goalAmount} * 100)) + '%; background-color: #76c7c0; height: 20px; border-radius: 5px;'"
                                    title="Current: ${project.currentAmount} / Goal: ${project.goalAmount}">
                               </div>
                             </div>
@@ -186,9 +188,24 @@
                       </tr>
                     </tbody>
                   </table>
+
                 </div>
             </div>
               </div>
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-3">
+              <li class="page-item"  th:if="${currentPage > 1}">
+                <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage )}" th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{'?page='+${i}}" th:text="${i}"></a>
+              </li>
+
+              <li class="page-item" th:if="${currentPage < totalPage}">
+                <a class="page-link" th:href="@{'?page='+${currentPage + 1}}">Next</a>
+              </li>
+            </ul>
+          </nav>
           <!-- /Table -->
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme" th:replace="~{ProjectManager/Footer :: footer}">

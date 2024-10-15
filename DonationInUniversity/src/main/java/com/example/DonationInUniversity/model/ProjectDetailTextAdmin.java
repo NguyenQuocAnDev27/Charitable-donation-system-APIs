@@ -1,11 +1,11 @@
 package com.example.DonationInUniversity.model;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ProjectDetailText")
-public class ProjectDetailText {
+@Table(name = "Projectdetailtext")
+public class ProjectDetailTextAdmin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +21,11 @@ public class ProjectDetailText {
     @Column(name = "is_delete", nullable = false)
     private int isDelete;
 
-    @Column(name = "order_no", nullable = false)
+    @Column(name = "display_order", nullable = false)
     private Integer orderNo;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     // Getters and Setters
 
@@ -67,11 +67,11 @@ public class ProjectDetailText {
     public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

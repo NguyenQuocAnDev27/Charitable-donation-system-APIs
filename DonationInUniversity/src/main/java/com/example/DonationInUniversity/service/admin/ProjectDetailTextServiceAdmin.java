@@ -1,11 +1,13 @@
 package com.example.DonationInUniversity.service.admin;
 
-import com.example.DonationInUniversity.model.ProjectDetailText;
-import com.example.DonationInUniversity.repository.ProjectDetailTextRepository;
+import com.example.DonationInUniversity.model.ProjectDetailTextAdmin;
+import com.example.DonationInUniversity.repository.ProjectDetailTextAdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,28 +15,31 @@ import java.util.List;
 @Service
 public class ProjectDetailTextServiceAdmin {
     @Autowired
-    private ProjectDetailTextRepository projectDetailTextRepository;
+    private ProjectDetailTextAdminRepository projectDetailTextRepository;
     private static final Logger logger = LoggerFactory.getLogger(ProjectDetailTextServiceAdmin.class);
 
-    public List<ProjectDetailText> getProjectDetailTextAdmin(int projectId) {
+    public List<ProjectDetailTextAdmin> getProjectDetailTextAdmin(int projectId) {
         return projectDetailTextRepository.adminGetProjectDetailTextByProjectId(projectId);
     }
-    public List<ProjectDetailText> getProjectDetailTexts() {
+    public List<ProjectDetailTextAdmin> getProjectDetailTexts() {
         return projectDetailTextRepository.findAll();
     }
-    public ProjectDetailText saveProjectDetailText(ProjectDetailText projectDetailText) {
-        try{
+    public ProjectDetailTextAdmin saveProjectDetailText(ProjectDetailTextAdmin projectDetailText) {
+        try {
             return projectDetailTextRepository.save(projectDetailText);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("Vi phạm ràng buộc dữ liệu khi lưu ProjectDetailText", e);
+        } catch (JpaSystemException e) {
+            throw new RuntimeException("Lỗi hệ thống khi tương tác với cơ sở dữ liệu", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi không xác định khi lưu ProjectDetailText", e);
         }
     }
-    public ProjectDetailText findProjectDetailTextById(Integer imageId) {
+    public ProjectDetailTextAdmin findProjectDetailTextById(Integer imageId) {
         return projectDetailTextRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ProjectDetailText với ID: " + imageId));
     }
-    public void deleteProjectDetailText(ProjectDetailText projectDetailText) {
+    public void deleteProjectDetailText(ProjectDetailTextAdmin projectDetailText) {
         try {
             projectDetailTextRepository.delete(projectDetailText);
             logger.info("Đã xóa thành công ProjectDetailText với ID: {}", projectDetailText.getId());
@@ -48,5 +53,8 @@ public class ProjectDetailTextServiceAdmin {
             logger.error("Lỗi không xác định khi xóa ProjectDetailText: {}", projectDetailText, e);
             throw new RuntimeException("Đã xảy ra lỗi không xác định khi xóa ProjectDetailText.");
         }
+    }
+    public void deleteProjectDetailTextByProjectId(int id) {
+        this.projectDetailTextRepository.deleteProjectDetailTextByProjectId(id);
     }
 }
