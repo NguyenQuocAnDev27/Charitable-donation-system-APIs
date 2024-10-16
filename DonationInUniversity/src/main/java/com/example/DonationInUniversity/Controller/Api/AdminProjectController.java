@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.api;
+package com.example.DonationInUniversity.controller.Api;
 
 import com.example.DonationInUniversity.model.MyCustomResponse;
 import com.example.DonationInUniversity.model.OverviewProject;
