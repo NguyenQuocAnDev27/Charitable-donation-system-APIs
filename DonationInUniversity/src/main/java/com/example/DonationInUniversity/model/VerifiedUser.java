@@ -27,6 +27,9 @@ public class VerifiedUser implements UserDetails {
 
     private String phoneNumber;
 
+    @Column
+    private int isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -40,6 +43,7 @@ public class VerifiedUser implements UserDetails {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+        this.isDeleted = 1;
     }
 
     @PreUpdate
@@ -99,7 +103,15 @@ public class VerifiedUser implements UserDetails {
         return updatedAt;
     }
 
-//    @Override
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of();
 //    }
@@ -123,21 +135,21 @@ public class VerifiedUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return getIsDeleted() != 0;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return getIsDeleted() != 0;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return getIsDeleted() != 0;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return getIsDeleted() != 0;
     }
 }
