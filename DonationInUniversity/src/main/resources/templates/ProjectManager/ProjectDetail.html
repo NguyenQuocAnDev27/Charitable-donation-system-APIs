@@ -54,8 +54,8 @@
           </div>
 
           <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage : ${projectDetailImageList}">
-            <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.orderNo}+'].orderNo'" th:value="${DetailImage.orderNo}">
-            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.orderNo}+'].pathImage'" th:value="${DetailImage.pathImage}">
+            <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.orderNo -1}+'].orderNo'" th:value="${DetailImage.orderNo}">
+            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.orderNo -1}+'].pathImage'" th:value="${DetailImage.pathImage}">
             <div class="img-wrapper mt-2">
               <img src="data:image/jpeg;base64,...(data image)" class="img-thumbnail" style="max-width: 250px;" th:value="${DetailImage.pathImage}">
             </div>
@@ -122,6 +122,10 @@
 
   document.querySelectorAll('.btn-primary').forEach(button => {
     button.addEventListener('click', function() {
+      const textarea = document.querySelectorAll('#dynamic-inputs textarea');
+      const textareaCount = textarea.length;
+      const fileInputs = document.querySelectorAll('#dynamic-inputs input[type="file"]');
+      const fileInputCount = fileInputs.length;
       let inputElement;
       const wrapper = document.createElement('div'); // Tạo wrapper ngay từ đầu
       wrapper.classList.add('input-wrapper', 'd-flex', 'align-items-center', 'mb-2'); // Kiểu flex giúp căn chỉnh đẹp hơn
@@ -136,17 +140,17 @@
         inputElement = document.createElement('textarea');
         inputElement.placeholder = 'Enter your text here...';
         inputElement.classList.add('form-control', 'mt-2');
-        hiddenInputElement.name = `newListText[${dynamicInputsContainer.children.length}].orderNo`; // Số thứ tự cho textarea
-        inputElement.name = `newListText[${dynamicInputsContainer.children.length}].content`; // Nội dung của textarea
-        inputElement.setAttribute('th:field', `*{newListText[${dynamicInputsContainer.children.length}].content}`); // Thêm th:field cho textarea
+        hiddenInputElement.name = `newListText[${textareaCount}].orderNo`; // Số thứ tự cho textarea
+        inputElement.name = `newListText[${textareaCount}].content`; // Nội dung của textarea
+        inputElement.setAttribute('th:field', `*{newListText[${textareaCount}].content}`); // Thêm th:field cho textarea
       } else if (this.textContent.includes("Add Image")) {
         inputElement = document.createElement('input');
         inputElement.type = 'file';
         inputElement.accept = 'image/*';
         inputElement.classList.add('form-control', 'mt-2');
-        hiddenInputElement.name = `newListImage[${dynamicInputsContainer.children.length}].orderNo`; // Số thứ tự cho hình ảnh
-        inputElement.name = `newListImage[${dynamicInputsContainer.children.length}].pathImage`; // Đường dẫn của hình ảnh
-        inputElement.setAttribute('th:field', `*{newListImage[${dynamicInputsContainer.children.length}].pathImage}`); // Thêm th:field cho hình ảnh
+        hiddenInputElement.name = `newListImage[${fileInputCount}].orderNo`; // Số thứ tự cho hình ảnh
+        inputElement.name = `newListImage[${fileInputCount}].pathImage`; // Đường dẫn của hình ảnh
+        inputElement.setAttribute('th:field', `*{newListImage[${fileInputCount}].pathImage}`); // Thêm th:field cho hình ảnh
         // Thêm sự kiện để hiển thị hình ảnh sau khi chọn tệp
         inputElement.addEventListener('change', function(event) {
           const file = event.target.files[0];
@@ -226,11 +230,26 @@
 
   // Hàm cập nhật số thứ tự cho tất cả các input
   function updateInputIndexes() {
+    let textIndex = 0;
+    let imageIndex = 0;
     const wrappers = dynamicInputsContainer.querySelectorAll('.input-wrapper');
     wrappers.forEach((wrapper, index) => {
       // Cập nhật thuộc tính data-index cho từng input
       const input = wrapper.querySelector('textarea, input[type="file"]');
       const hiddenInput = wrapper.querySelector('.input-index'); // Tìm input ẩn
+      if (input && input.tagName.toLowerCase() === 'textarea') {
+        // Cập nhật cho textarea
+        hiddenInput.name = `newListText[${textIndex}].orderNo`;
+        input.name = `newListText[${textIndex}].content`;
+        input.setAttribute('th:field', `*{newListText[${textIndex}].content}`);
+        textIndex++;
+      } else if (input && input.type === 'file') {
+        // Cập nhật cho input file
+        hiddenInput.name = `newListImage[${imageIndex}].orderNo`;
+        input.name = `newListImage[${imageIndex}].pathImage`;
+        input.setAttribute('th:field', `*{newListImage[${imageIndex}].pathImage}`);
+        imageIndex++;
+      }
       if (input) {
         hiddenInput.setAttribute('value', index + 1); // Lưu số thứ tự ẩn vào input hidden
       }
