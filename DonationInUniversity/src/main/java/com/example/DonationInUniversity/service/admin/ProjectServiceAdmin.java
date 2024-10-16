@@ -3,6 +3,9 @@ package com.example.DonationInUniversity.service.admin;
 import com.example.DonationInUniversity.repository.ProjectAdminRepository;
 import com.example.DonationInUniversity.model.DonationProject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +47,12 @@ public class ProjectServiceAdmin {
     }
     public List<DonationProject> adminGetDonationProjectByManager(int id) {
         return projectRepository.adminGetDonationProjectByManager(id);
+    }
+    public Page<DonationProject> getAllDonationProjectByManager(int id,int pageNo) {
+        Pageable pageable= PageRequest.of(pageNo-1, 5);
+        return this.projectRepository.findAll(pageable);
+    }
+    public DonationProject getDonationProjectById(int id) {
+        return this.projectRepository.getDonationProjectByProjectId(id);
     }
 }

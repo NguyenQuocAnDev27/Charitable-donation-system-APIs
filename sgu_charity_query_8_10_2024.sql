@@ -211,3 +211,26 @@ ALTER TABLE donation_projects
 ADD COLUMN is_deleted TINYINT DEFAULT 1;
 ALTER TABLE users
 ADD COLUMN is_deleted TINYINT DEFAULT 1;
+
+CREATE TABLE ProjectDetailText (
+    id INT AUTO_INCREMENT NOT NULL,
+    project_id INT NOT NULL,
+    content TEXT NOT NULL,
+    is_delete INT,
+    display_order INT NOT NULL, -- Thêm cột thứ tự
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (project_id) REFERENCES Donation_Projects(project_id) ON DELETE CASCADE
+);
+
+-- Table: ProjectDetailImage
+CREATE TABLE ProjectDetailImage (
+    id INT AUTO_INCREMENT NOT NULL,
+    project_id INT NOT NULL,
+    path_image VARCHAR(255) NOT NULL,
+    is_delete INT,
+    display_order INT NOT NULL, -- Thêm cột thứ tự
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (project_id) REFERENCES Donation_Projects(project_id) ON DELETE CASCADE
+);
