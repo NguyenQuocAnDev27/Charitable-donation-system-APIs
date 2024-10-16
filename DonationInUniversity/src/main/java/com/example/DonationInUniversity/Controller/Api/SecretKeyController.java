@@ -1,5 +1,5 @@
 
-package com.example.DonationInUniversity.controller.Api;
+package com.example.DonationInUniversity.controller.api;
 
 // Only for create secret key from start server
 
