@@ -46,7 +46,9 @@
                           type="button"
                           class="btn-close"
                           data-bs-dismiss="modal"
-                          aria-label="Close"></button>
+                          style="background-color: red"
+                          aria-label="Close">
+                  </button>
                 </div>
                 <div class="modal-body">
                   <div class="row">
@@ -79,7 +81,7 @@
                 </div>
                 <div class="modal-footer">
                   <button  type="submit" class="btn btn-primary mx-2" >Save</button>
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                  <button type="button" class="btn btn-outline-secondary btn-light" data-bs-dismiss="modal">
                     Close
                   </button>
                 </div>
@@ -117,27 +119,52 @@
                       <tr>
                         <th>Project-ID</th>
                         <th>Project Name</th>
-                        <th>Goal Amount</th>
                         <th>Current Amount</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
+                        <th>Process</th>
+                        <th>Days Remaining</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0 align-items-center">
                       <tr th:each="project : ${listProjects}">
                         <td th:text="${project.projectId}"></td>
-                        <td th:text="${project.projectName}"></td>
-                        <td th:text="${project.goalAmount}"></td>
+                        <td>
+                          <span th:if="${project.status == 'stopped'}"
+                                th:text="${project.projectName}"
+                                class="text-danger text-decoration-line-through"></span>
+                          <span th:if="${project.status == 'completed'}"
+                                th:text="${project.projectName}"
+                                class="text-success"></span>
+                          <span th:if="${project.status == 'pending'}"
+                                th:text="${project.projectName}"
+                                class="text-warning"></span>
+                          <span th:if="${project.status != 'stopped' && project.status != 'completed' && project.status != 'pending'}"
+                                th:text="${project.projectName}"></span>
+                        </td>
                         <td th:text="${project.currentAmount}"></td>
-                        <td th:text="${project.startDate}"></td>
-                        <td th:text="${project.endDate}"></td>
+                        <td>
+                          <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="width: 150px; background-color: #e0e0e0; border-radius: 5px; margin: 0 10px;">
+                              <div th:style="'width: ' + (${project.currentAmount} > ${project.goalAmount} ? 100 : (${project.currentAmount} / ${project.goalAmount} * 100)) + '%; background-color: #76c7c0; height: 20px; border-radius: 5px;'"
+                                   title="Current: ${project.currentAmount} / Goal: ${project.goalAmount}">
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), project.endDate)} + ' ngày còn lại'"></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
+                              <a class="dropdown-item"
+                                 th:href="@{/manager/{id}/ProjectDetail(id=${project.projectId})}"
+                                 data-bs-toggle="tooltip"
+                                 data-bs-placement="right"
+                                 title="Xem chi tiết">
+                                <i class="bx bx-show-alt me-1"></i>Detail
+                              </a>
                               <button class="dropdown-item" type="button"
                                       data-bs-toggle="modal"
                                       data-bs-target="#basicModal"
@@ -161,9 +188,24 @@
                       </tr>
                     </tbody>
                   </table>
+
                 </div>
             </div>
               </div>
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-3">
+              <li class="page-item"  th:if="${currentPage > 1}">
+                <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
+              </li>
+              <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage )}" th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{'?page='+${i}}" th:text="${i}"></a>
+              </li>
+
+              <li class="page-item" th:if="${currentPage < totalPage}">
+                <a class="page-link" th:href="@{'?page='+${currentPage + 1}}">Next</a>
+              </li>
+            </ul>
+          </nav>
           <!-- /Table -->
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme" th:replace="~{ProjectManager/Footer :: footer}">
