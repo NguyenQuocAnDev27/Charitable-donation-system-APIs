@@ -41,6 +41,5 @@ DonationInUniversity/logs/spring.log
 .idea
 
 DonationInUniversity/logs/
-DonationInUniversity\src\main\resources\secret.json
 DonationInUniversity/src/main/resources/secret.json
 DonationInUniversity/src/main/token
