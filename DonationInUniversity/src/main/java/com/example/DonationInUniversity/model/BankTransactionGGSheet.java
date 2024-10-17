@@ -1,130 +1,150 @@
 package com.example.DonationInUniversity.model;
 
 public class BankTransactionGGSheet {
-    private String maGD;               // Mã GD (Transaction ID)
-    private String moTa;               // Mô tả (Description)
-    private String giaTri;             // Giá trị (Value)
-    private String ngayDienRa;         // Ngày diễn ra (Date)
-    private String soTaiKhoan;         // Số tài khoản (Account Number)
-    private String maThamChieu;        // Mã tham chiếu (Reference Code)
-    private String soDu;               // Số dư (Balance)
-    private String soTaiKhoanAo;       // Số tài khoản ảo (Virtual Account Number)
-    private String tenTaiKhoanAo;      // Tên tài khoản ảo (Virtual Account Name)
-    private String soTaiKhoanDoiUng;   // Số tài khoản đối ứng (Counter Account Number)
-    private String tenTaiKhoanDoiUng;  // Tên tài khoản đối ứng (Counter Account Name)
-    private String maBinNganHangDoiUng; // Mã BIN ngân hàng đối ứng (Counter Bank BIN)
-    private String tenNHTaiKhoanDoiUng; // Tên NH tài khoản đối ứng (Counter Bank Name)
-    private String kenhThanhToan;      // Kênh thanh toán (Payment Channel)
+    private String Id;               // Mã GD (Transaction ID)
+    private String Description;               // Mô tả (Description)
+    private String Value;             // Giá trị (Value)
+    private String Date;         // Ngày diễn ra (Date)
+    private String AccountNo;         // Số tài khoản (Account Number)
+    private String RefCode;        // Mã tham chiếu (Reference Code)
+    private String Balance;               // Số dư (Balance)
+    private String VirtualAccountNo;       // Số tài khoản ảo (Virtual Account Number)
+    private String VirtualAccountName;      // Tên tài khoản ảo (Virtual Account Name)
+    private String ContraAccountNo;   // Số tài khoản đối ứng (Counter Account Number)
+    private String ContraAccountName;  // Tên tài khoản đối ứng (Counter Account Name)
+    private String ContraBankBin; // Mã BIN ngân hàng đối ứng (Counter Bank BIN)
+    private String ContraBankName; // Tên NH tài khoản đối ứng (Counter Bank Name)
+    private String PaymentChannel;      // Kênh thanh toán (Payment Channel)
 
-    public String getMaGD() {
-        return maGD;
+    public BankTransactionGGSheet() {
     }
 
-    public void setMaGD(String maGD) {
-        this.maGD = maGD;
+    public BankTransactionGGSheet(String id, String description, String value, String date, String accountNo, String refCode, String balance, String virtualAccountNo, String virtualAccountName, String contraAccountNo, String contraAccountName, String contraBankBin, String contraBankName, String paymentChannel) {
+        Id = id;
+        Description = description;
+        Value = value;
+        Date = date;
+        AccountNo = accountNo;
+        RefCode = refCode;
+        Balance = balance;
+        VirtualAccountNo = virtualAccountNo;
+        VirtualAccountName = virtualAccountName;
+        ContraAccountNo = contraAccountNo;
+        ContraAccountName = contraAccountName;
+        ContraBankBin = contraBankBin;
+        ContraBankName = contraBankName;
+        PaymentChannel = paymentChannel;
     }
 
-    public String getMoTa() {
-        return moTa;
+    public String getId() {
+        return Id;
     }
 
-    public void setMoTa(String moTa) {
-        this.moTa = moTa;
+    public void setId(String id) {
+        Id = id;
     }
 
-    public String getGiaTri() {
-        return giaTri;
+    public String getDescription() {
+        return Description;
     }
 
-    public void setGiaTri(String giaTri) {
-        this.giaTri = giaTri;
+    public void setDescription(String description) {
+        Description = description;
     }
 
-    public String getNgayDienRa() {
-        return ngayDienRa;
+    public String getValue() {
+        return Value;
     }
 
-    public void setNgayDienRa(String ngayDienRa) {
-        this.ngayDienRa = ngayDienRa;
+    public void setValue(String value) {
+        Value = value;
     }
 
-    public String getSoTaiKhoan() {
-        return soTaiKhoan;
+    public String getDate() {
+        return Date;
     }
 
-    public void setSoTaiKhoan(String soTaiKhoan) {
-        this.soTaiKhoan = soTaiKhoan;
+    public void setDate(String date) {
+        Date = date;
     }
 
-    public String getMaThamChieu() {
-        return maThamChieu;
+    public String getAccountNo() {
+        return AccountNo;
     }
 
-    public void setMaThamChieu(String maThamChieu) {
-        this.maThamChieu = maThamChieu;
+    public void setAccountNo(String accountNo) {
+        AccountNo = accountNo;
     }
 
-    public String getSoDu() {
-        return soDu;
+    public String getRefCode() {
+        return RefCode;
     }
 
-    public void setSoDu(String soDu) {
-        this.soDu = soDu;
+    public void setRefCode(String refCode) {
+        RefCode = refCode;
     }
 
-    public String getSoTaiKhoanAo() {
-        return soTaiKhoanAo;
+    public String getBalance() {
+        return Balance;
     }
 
-    public void setSoTaiKhoanAo(String soTaiKhoanAo) {
-        this.soTaiKhoanAo = soTaiKhoanAo;
+    public void setBalance(String balance) {
+        Balance = balance;
     }
 
-    public String getTenTaiKhoanAo() {
-        return tenTaiKhoanAo;
+    public String getVirtualAccountNo() {
+        return VirtualAccountNo;
     }
 
-    public void setTenTaiKhoanAo(String tenTaiKhoanAo) {
-        this.tenTaiKhoanAo = tenTaiKhoanAo;
+    public void setVirtualAccountNo(String virtualAccountNo) {
+        VirtualAccountNo = virtualAccountNo;
     }
 
-    public String getSoTaiKhoanDoiUng() {
-        return soTaiKhoanDoiUng;
+    public String getVirtualAccountName() {
+        return VirtualAccountName;
     }
 
-    public void setSoTaiKhoanDoiUng(String soTaiKhoanDoiUng) {
-        this.soTaiKhoanDoiUng = soTaiKhoanDoiUng;
+    public void setVirtualAccountName(String virtualAccountName) {
+        VirtualAccountName = virtualAccountName;
     }
 
-    public String getTenTaiKhoanDoiUng() {
-        return tenTaiKhoanDoiUng;
+    public String getContraAccountNo() {
+        return ContraAccountNo;
     }
 
-    public void setTenTaiKhoanDoiUng(String tenTaiKhoanDoiUng) {
-        this.tenTaiKhoanDoiUng = tenTaiKhoanDoiUng;
+    public void setContraAccountNo(String contraAccountNo) {
+        ContraAccountNo = contraAccountNo;
     }
 
-    public String getMaBinNganHangDoiUng() {
-        return maBinNganHangDoiUng;
+    public String getContraAccountName() {
+        return ContraAccountName;
     }
 
-    public void setMaBinNganHangDoiUng(String maBinNganHangDoiUng) {
-        this.maBinNganHangDoiUng = maBinNganHangDoiUng;
+    public void setContraAccountName(String contraAccountName) {
+        ContraAccountName = contraAccountName;
     }
 
-    public String getTenNHTaiKhoanDoiUng() {
-        return tenNHTaiKhoanDoiUng;
+    public String getContraBankBin() {
+        return ContraBankBin;
     }
 
-    public void setTenNHTaiKhoanDoiUng(String tenNHTaiKhoanDoiUng) {
-        this.tenNHTaiKhoanDoiUng = tenNHTaiKhoanDoiUng;
+    public void setContraBankBin(String contraBankBin) {
+        ContraBankBin = contraBankBin;
     }
 
-    public String getKenhThanhToan() {
-        return kenhThanhToan;
+    public String getContraBankName() {
+        return ContraBankName;
     }
 
-    public void setKenhThanhToan(String kenhThanhToan) {
-        this.kenhThanhToan = kenhThanhToan;
+    public void setContraBankName(String contraBankName) {
+        ContraBankName = contraBankName;
+    }
+
+    public String getPaymentChannel() {
+        return PaymentChannel;
+    }
+
+    public void setPaymentChannel(String paymentChannel) {
+        PaymentChannel = paymentChannel;
     }
 }
