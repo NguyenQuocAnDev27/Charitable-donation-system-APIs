@@ -71,6 +71,7 @@
                       <div class="col-5 mb-6">
                         <label  class="form-label">Email</label>
                         <input type="text" th:field="*{email}"     class="form-control" placeholder="Enter Email" />
+                        <div id="email-error" class="text-danger" style="display: none;">Wrong email format.</div>
                       </div>
                       <div class="col-5 mb-6">
                         <label  class="form-label">Password</label>
@@ -79,6 +80,7 @@
                       <div class="col-5 mb-6">
                         <label  class="form-label">Phone Number</label>
                         <input type="text"  th:field="*{phoneNumber}"  class="form-control" placeholder="Enter Phone Number" />
+                        <div id="phone-error" class="text-danger" style="display: none;">Wrong phone number format.</div>
                       </div>
                     </div>
                   </div>
@@ -225,6 +227,58 @@
       });
 
 
+      //Validation form
+      function isValidEmail(email) {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailPattern.test(email);
+      }
+      document.getElementById('email').addEventListener('input',function (){
+        const emailInput = this;
+        const emailValue= emailInput.value;
+        if(!isValidEmail(emailValue)){
+          document.getElementById('email-error').style.display='block';
+        }
+        else{
+          document.getElementById('email-error').style.display='none';
+        }
+      });
+      document.querySelector('form').addEventListener('submit', function (event) {
+        const emailInput = document.getElementById('email');
+        const emailValue = emailInput.value;
+
+        if (!isValidEmail(emailValue)) {
+          emailInput.classList.add('is-invalid');
+          document.getElementById('email-error').style.display = 'block';
+          event.preventDefault(); // Prevent form submission if the email is invalid
+        }
+      });
+
+
+      function isValidPhoneNumber(phoneNumber) {
+        const phonePattern = /^(03|05|07|08|09)\d{8}$/;
+        return phonePattern.test(phoneNumber);
+      }
+      document.getElementById('phoneNumber').addEventListener('input',function (){
+        const phone_numberInput= this;
+        const phone_numberValue=phone_numberInput.value
+
+        if(!isValidPhoneNumber(phone_numberValue)){
+          document.getElementById('phone-error').style.display='block';
+        }
+        else{
+          document.getElementById('phone-error').style.display='none';
+        }
+        document.querySelector('form').addEventListener('submit',function (event){
+          const phone_numberInput = document.getElementById('phoneNumber');
+          const phone_numberValue = phone_numberInput.value;
+
+          if (!isValidEmail(phone_numberValue)) {
+            phone_numberValue.classList.add('is-invalid');
+            document.getElementById('phone-error').style.display = 'block';
+            event.preventDefault(); // Prevent form submission if the email is invalid
+          }
+        });
+      });
     </script>
 
     <!-- Place this tag before closing body tag for github widget button. -->
