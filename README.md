@@ -12,6 +12,8 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 - **Jakarta EE** (JPA, Validation, etc.)
 - **SpringDoc OpenAPI** (for API documentation)
 - **Maven** (Dependency Management)
+- **Google Cloud**
+- **VietQR** (Payment)
 
 ## Folder Structure
 
