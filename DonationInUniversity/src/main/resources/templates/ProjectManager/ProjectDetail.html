@@ -55,9 +55,9 @@
 
           <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage : ${projectDetailImageList}">
             <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.orderNo -1}+'].orderNo'" th:value="${DetailImage.orderNo}">
-            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.orderNo -1}+'].pathImage'" th:value="${DetailImage.pathImage}">
+            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.orderNo -1}+'].file'">
             <div class="img-wrapper mt-2">
-              <img src="data:image/jpeg;base64,...(data image)" class="img-thumbnail" style="max-width: 250px;" th:value="${DetailImage.pathImage}">
+              <img th:src="@{/{filename}(filename=${DetailImage.pathImage})}" class="img-thumbnail" style="max-width: 250px;">
             </div>
             <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
           </div>
@@ -140,6 +140,15 @@
         inputElement = document.createElement('textarea');
         inputElement.placeholder = 'Enter your text here...';
         inputElement.classList.add('form-control', 'mt-2');
+
+        inputElement.style.overflow = 'hidden'; // Tắt cuộn dọc
+        inputElement.style.resize = 'none'; // Không cho phép thay đổi kích thước bằng cách kéo
+
+        // Tự động điều chỉnh chiều cao của textarea dựa trên nội dung
+        inputElement.addEventListener('input', function() {
+          this.style.height = 'auto'; // Đặt chiều cao ban đầu là 'auto' để tính lại
+          this.style.height = this.scrollHeight + 'px'; // Thiết lập chiều cao dựa trên scrollHeight
+        });
         hiddenInputElement.name = `newListText[${textareaCount}].orderNo`; // Số thứ tự cho textarea
         inputElement.name = `newListText[${textareaCount}].content`; // Nội dung của textarea
         inputElement.setAttribute('th:field', `*{newListText[${textareaCount}].content}`); // Thêm th:field cho textarea
@@ -149,8 +158,8 @@
         inputElement.accept = 'image/*';
         inputElement.classList.add('form-control', 'mt-2');
         hiddenInputElement.name = `newListImage[${fileInputCount}].orderNo`; // Số thứ tự cho hình ảnh
-        inputElement.name = `newListImage[${fileInputCount}].pathImage`; // Đường dẫn của hình ảnh
-        inputElement.setAttribute('th:field', `*{newListImage[${fileInputCount}].pathImage}`); // Thêm th:field cho hình ảnh
+        inputElement.name = `newListImage[${fileInputCount}].file`; // Đường dẫn của hình ảnh
+        inputElement.setAttribute('th:field', `*{newListImage[${fileInputCount}].file}`); // Thêm th:field cho hình ảnh
         // Thêm sự kiện để hiển thị hình ảnh sau khi chọn tệp
         inputElement.addEventListener('change', function(event) {
           const file = event.target.files[0];
@@ -246,8 +255,8 @@
       } else if (input && input.type === 'file') {
         // Cập nhật cho input file
         hiddenInput.name = `newListImage[${imageIndex}].orderNo`;
-        input.name = `newListImage[${imageIndex}].pathImage`;
-        input.setAttribute('th:field', `*{newListImage[${imageIndex}].pathImage}`);
+        input.name = `newListImage[${imageIndex}].file`;
+        input.setAttribute('th:field', `*{newListImage[${imageIndex}].file}`);
         imageIndex++;
       }
       if (input) {
@@ -255,7 +264,80 @@
       }
     });
   }
+  document.addEventListener('DOMContentLoaded', function () {
+    const dynamicInputsContainer = document.getElementById('dynamic-inputs');
+// Function to auto-resize the textarea
+    function autoResizeTextarea(textarea) {
+      textarea.style.height = 'auto'; // Reset height to auto
+      textarea.style.height = textarea.scrollHeight + 'px'; // Set height to scroll height
+      textarea.style.overflow = 'hidden';
+    }
+    // Apply the auto-resize function to all textareas on input event
+    dynamicInputsContainer.addEventListener('input', function (event) {
+      if (event.target.tagName.toLowerCase() === 'textarea') {
+        autoResizeTextarea(event.target); // Adjust height on user input
+      }
+    });
 
+    // Initial auto-resize for all existing textareas on page load
+    const textareas = dynamicInputsContainer.querySelectorAll('textarea');
+    textareas.forEach(function (textarea) {
+      autoResizeTextarea(textarea); // Adjust height initially based on content
+    });
+    // Sử dụng event delegation để gán sự kiện delete cho các phần tử ban đầu
+    dynamicInputsContainer.addEventListener('click', function (event) {
+      if (event.target.classList.contains('delete-btn')) {
+        const wrapper = event.target.closest('.input-wrapper');
+        if (wrapper) {
+          dynamicInputsContainer.removeChild(wrapper); // Xóa phần tử cha
+          updateInputIndexes(); // Cập nhật lại số thứ tự sau khi xóa
+        }
+      }
+    });
+
+    // Gán sự kiện drag and drop cho các div có sẵn
+    const wrappers = document.querySelectorAll('.input-wrapper');
+
+    wrappers.forEach(wrapper => {
+      // Gán sự kiện kéo thả cho phần tử có sẵn
+      wrapper.addEventListener('dragstart', function (event) {
+        event.dataTransfer.setData('text/plain', null); // Thiết lập dữ liệu khi bắt đầu kéo
+        event.dataTransfer.effectAllowed = 'move'; // Chỉ cho phép di chuyển
+        this.classList.add('dragging'); // Thêm lớp CSS cho phần tử đang kéo
+      });
+
+      wrapper.addEventListener('dragend', function () {
+        this.classList.remove('dragging'); // Xóa lớp khi kết thúc kéo
+        updateInputIndexes(); // Cập nhật lại số thứ tự sau khi kéo thả
+      });
+
+      wrapper.addEventListener('dragover', function (event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định
+        event.dataTransfer.dropEffect = 'move'; // Hiển thị hiệu ứng thả
+      });
+
+      wrapper.addEventListener('drop', function (event) {
+        event.preventDefault();
+        const draggingElement = document.querySelector('.dragging'); // Lấy phần tử đang kéo
+        if (draggingElement && draggingElement !== this) {
+          dynamicInputsContainer.insertBefore(draggingElement, this); // Chèn phần tử đang kéo trước phần tử thả
+          updateInputIndexes(); // Cập nhật lại số thứ tự sau khi thả
+        }
+      });
+    });
+
+    // Cập nhật lại số thứ tự cho các phần tử ban đầu
+    updateInputIndexes();
+
+    // Hàm cập nhật số thứ tự cho tất cả các input
+  });
+  window.onload = function() {
+    let textareas = document.querySelectorAll('textarea');
+    textareas.forEach(function(textarea) {
+      // Thay thế tất cả <br> thành \n
+      textarea.value = textarea.value.replace(/<br\s*\/?>/gi, '');
+    });
+  }
 </script>
 
 <!-- Place this tag before closing body tag for github widget button. -->

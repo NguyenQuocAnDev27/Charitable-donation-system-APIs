@@ -212,7 +212,7 @@ ADD COLUMN is_deleted TINYINT DEFAULT 1;
 ALTER TABLE users
 ADD COLUMN is_deleted TINYINT DEFAULT 1;
 
-CREATE TABLE ProjectDetailText (
+CREATE TABLE Project_Detail_Text (
     id INT AUTO_INCREMENT NOT NULL,
     project_id INT NOT NULL,
     content TEXT NOT NULL,
@@ -224,7 +224,7 @@ CREATE TABLE ProjectDetailText (
 );
 
 -- Table: ProjectDetailImage
-CREATE TABLE ProjectDetailImage (
+CREATE TABLE Project_Detail_Image (
     id INT AUTO_INCREMENT NOT NULL,
     project_id INT NOT NULL,
     path_image VARCHAR(255) NOT NULL,
@@ -234,3 +234,16 @@ CREATE TABLE ProjectDetailImage (
     PRIMARY KEY (id),
     FOREIGN KEY (project_id) REFERENCES Donation_Projects(project_id) ON DELETE CASCADE
 );
+
+CREATE TABLE `User_Bank_Info` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `bank_id` INT NOT NULL,
+    `account_no` VARCHAR(50) NOT NULL,
+    `user_id` INT NOT NULL,
+    `is_delete` BOOLEAN DEFAULT FALSE,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
+);
+

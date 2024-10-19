@@ -10,9 +10,9 @@ import java.util.List;
 
 @Repository
 public interface ProjectDetailTextAdminRepository extends JpaRepository<ProjectDetailTextAdmin,Integer>{
-    @Query(value = "SELECT * FROM projectdetailtext where project_id=?1 and is_delete=1",nativeQuery = true)
+    @Query(value = "SELECT * FROM project_detail_text where project_id=?1 and is_delete=1",nativeQuery = true)
     List<ProjectDetailTextAdmin> adminGetProjectDetailTextByProjectId(int id);
     @Modifying
-    @Query(value = "DELETE FROM projectdetailtext WHERE project_id = ?1", nativeQuery = true)
+    @Query(value = "DELETE FROM project_detail_text WHERE project_id = ?1", nativeQuery = true)
     void deleteProjectDetailTextByProjectId(int id);
 }

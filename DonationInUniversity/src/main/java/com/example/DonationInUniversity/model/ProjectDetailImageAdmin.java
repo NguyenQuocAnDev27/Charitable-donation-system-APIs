@@ -1,12 +1,13 @@
 package com.example.DonationInUniversity.model;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Projectdetailimage")
-public class ProjectDetailImageAdmin {
+@Table(name = "project_detail_image")
+public class ProjectDetailImageAdmin{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +29,17 @@ public class ProjectDetailImageAdmin {
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
+    @Transient
+    private MultipartFile file;
 
+    // Getters and Setters
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
     // Getters and Setters
 
     public Integer getId() {

@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/manager")
-public class ProjectDetailAdminController {
+public class ProjectDetailAdminController{
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
     @Autowired
@@ -108,32 +111,88 @@ public class ProjectDetailAdminController {
     public String addOrUpdateProjectDetail(@ModelAttribute("projectDetailForm") ProjectDetailForm projectDetailForm,
                                            @PathVariable int projectId) {
         DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(projectId);
-        //Xóa các detail cũ để cập nhật cũ và mới
+
+        // Xóa các detail cũ
         List<ProjectDetailTextAdmin> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
         List<ProjectDetailImageAdmin> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(projectId);
-        if(projectDetailTextList != null){
+
+        if (projectDetailTextList != null) {
             this.projectDetailTextServiceAdmin.deleteProjectDetailTextByProjectId(projectId);
         }
-        if(projectDetailImageList != null){
+        if (projectDetailImageList != null) {
             this.projectDetailImageServiceAdmin.deleteProjectDetailImageByProjectId(projectId);
         }
+
         if (projectDetailForm.getNewListImage() != null) {
             projectDetailForm.getNewListImage().forEach(projectDetailImage -> {
                 projectDetailImage.setDonationProject(donationProject);
                 projectDetailImage.setIsDelete(1);
                 projectDetailImage.setCreatedAt(LocalDateTime.now());
-                this.projectDetailImageServiceAdmin.saveProjectDetailImageAdmin(projectDetailImage);
+
+                MultipartFile file = projectDetailImage.getFile();
+                if (file != null && !file.isEmpty()) {
+                    try {
+                        // Tạo tên file theo định dạng mong muốn
+                        String fileExtension = getFileExtension(file.getOriginalFilename());
+                        String fileName = donationProject.getProjectId() + "_" + projectDetailImage.getOrderNo() + "." + fileExtension;
+
+                        // Lấy đường dẫn tới thư mục gốc của project
+                        String projectRootPath = System.getProperty("user.dir");
+
+                        // Tạo đường dẫn tới thư mục cùng cấp với src: images/project_detail
+                        String uploadDir = projectRootPath + "/images/project_detail/";
+                        File uploadFolder = new File(uploadDir);
+                        if (!uploadFolder.exists()) {
+                            uploadFolder.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+                        }
+
+                        // Lưu file vào thư mục
+                        File uploadFile = new File(uploadDir + fileName);
+                        file.transferTo(uploadFile);
+
+                        // Cập nhật trường pathImage
+                        projectDetailImage.setPathImage("images/project_detail/" + fileName);
+
+                        // Lưu thông tin vào database
+                        this.projectDetailImageServiceAdmin.saveProjectDetailImageAdmin(projectDetailImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        // Xử lý ngoại lệ nếu cần
+                    }
+                }
             });
         }
+
         if (projectDetailForm.getNewListText() != null) {
             projectDetailForm.getNewListText().forEach(projectDetailText -> {
+                String contentWithBr = replaceNewLinesWithBr(projectDetailText.getContent());
+                projectDetailText.setContent(contentWithBr); // Lưu nội dung đã thay thế vào entity
                 projectDetailText.setDonationProject(donationProject);
                 projectDetailText.setIsDelete(1);
                 projectDetailText.setCreatedAt(LocalDateTime.now());
                 this.projectDetailTextServiceAdmin.saveProjectDetailText(projectDetailText);
             });
-            return "redirect:/manager/"+projectId+"/ProjectDetail";
         }
-        return "redirect:/manager";
+
+        return "redirect:/manager/" + projectId + "/ProjectDetail";
+    }
+
+    public String getFileExtension(String fileName) {
+        if (fileName == null) {
+            return "";
+        }
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex >= 0) {
+            return fileName.substring(dotIndex + 1);
+        } else {
+            return "";
+        }
+    }
+    public String replaceNewLinesWithBr(String content) {
+        if (content != null) {
+            return content.replace("\n", "<br>");
+        }
+        return content;
     }
 }
+
