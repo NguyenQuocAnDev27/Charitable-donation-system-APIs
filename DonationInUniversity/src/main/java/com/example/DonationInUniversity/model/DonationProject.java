@@ -41,11 +41,11 @@ public class DonationProject {
     @Column(nullable = false)
     private int isDeleted;
 
-    @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDetailTextAdmin> projectDetailTexts;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectDetailText> projectDetailTexts;
 
-    @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDetailImageAdmin> projectDetailImages;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectDetailImage> projectDetailImages;
     // Getters and setters
 
     public Integer getProjectId() {

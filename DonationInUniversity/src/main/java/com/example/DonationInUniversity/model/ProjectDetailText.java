@@ -27,6 +27,7 @@ public class ProjectDetailText {
     @JoinColumn(name = "project_id", nullable = false)
     private DonationProject project;
 
+
     // Getters and setters
     public ProjectDetailText() {}
 

@@ -48,14 +48,14 @@
         <div id="dynamic-inputs" class="mt-3">
           <!-- Mỗi input sẽ được bọc trong div "input-wrapper" -->
           <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailText : ${projectDetailTextList}">
-            <input type="hidden" class="input-index" th:name="'newListText['+${DetailText.orderNo - 1}+'].orderNo'" th:value="${DetailText.orderNo}">
-            <textarea class="form-control mt-2" th:name="'newListText['+${DetailText.orderNo - 1}+'].content'" th:text="${DetailText.content}"></textarea>
+            <input type="hidden" class="input-index" th:name="'newListText['+${DetailText.display_order - 1}+'].display_order'" th:value="${DetailText.display_order}">
+            <textarea class="form-control mt-2" th:name="'newListText['+${DetailText.display_order - 1}+'].content'" th:text="${DetailText.content}"></textarea>
             <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
           </div>
 
           <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage : ${projectDetailImageList}">
-            <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.orderNo -1}+'].orderNo'" th:value="${DetailImage.orderNo}">
-            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.orderNo -1}+'].file'">
+            <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.display_order -1}+'].display_order'" th:value="${DetailImage.display_order}">
+            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.display_order -1}+'].file'">
             <div class="img-wrapper mt-2">
               <img th:src="@{/{filename}(filename=${DetailImage.pathImage})}" class="img-thumbnail" style="max-width: 250px;">
             </div>
@@ -149,7 +149,7 @@
           this.style.height = 'auto'; // Đặt chiều cao ban đầu là 'auto' để tính lại
           this.style.height = this.scrollHeight + 'px'; // Thiết lập chiều cao dựa trên scrollHeight
         });
-        hiddenInputElement.name = `newListText[${textareaCount}].orderNo`; // Số thứ tự cho textarea
+        hiddenInputElement.name = `newListText[${textareaCount}].display_order`; // Số thứ tự cho textarea
         inputElement.name = `newListText[${textareaCount}].content`; // Nội dung của textarea
         inputElement.setAttribute('th:field', `*{newListText[${textareaCount}].content}`); // Thêm th:field cho textarea
       } else if (this.textContent.includes("Add Image")) {
@@ -157,7 +157,7 @@
         inputElement.type = 'file';
         inputElement.accept = 'image/*';
         inputElement.classList.add('form-control', 'mt-2');
-        hiddenInputElement.name = `newListImage[${fileInputCount}].orderNo`; // Số thứ tự cho hình ảnh
+        hiddenInputElement.name = `newListImage[${fileInputCount}].display_order`; // Số thứ tự cho hình ảnh
         inputElement.name = `newListImage[${fileInputCount}].file`; // Đường dẫn của hình ảnh
         inputElement.setAttribute('th:field', `*{newListImage[${fileInputCount}].file}`); // Thêm th:field cho hình ảnh
         // Thêm sự kiện để hiển thị hình ảnh sau khi chọn tệp
@@ -248,13 +248,13 @@
       const hiddenInput = wrapper.querySelector('.input-index'); // Tìm input ẩn
       if (input && input.tagName.toLowerCase() === 'textarea') {
         // Cập nhật cho textarea
-        hiddenInput.name = `newListText[${textIndex}].orderNo`;
+        hiddenInput.name = `newListText[${textIndex}].display_order`;
         input.name = `newListText[${textIndex}].content`;
         input.setAttribute('th:field', `*{newListText[${textIndex}].content}`);
         textIndex++;
       } else if (input && input.type === 'file') {
         // Cập nhật cho input file
-        hiddenInput.name = `newListImage[${imageIndex}].orderNo`;
+        hiddenInput.name = `newListImage[${imageIndex}].display_order`;
         input.name = `newListImage[${imageIndex}].file`;
         input.setAttribute('th:field', `*{newListImage[${imageIndex}].file}`);
         imageIndex++;

@@ -34,16 +34,16 @@ public class ProjectDetailAdminController{
     @GetMapping("/{id}/ProjectDetail")
     public String getProjectDetail(Model model, @PathVariable int id) {
         try{
-            List<ProjectDetailTextAdmin> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(id);
-            List<ProjectDetailImageAdmin> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(id);
+            List<ProjectDetailText> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(id);
+            List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(id);
             model.addAttribute("projectDetailTextList", projectDetailTextList);
             model.addAttribute("projectDetailImageList", projectDetailImageList);
         }catch (Exception e){
            throw new RuntimeException(e);
         }
         Optional<DonationProject> donationProject= projectServiceAdmin.getProjectById(id);
-        List<ProjectDetailImageAdmin> newListImage = new ArrayList<ProjectDetailImageAdmin>();
-        List<ProjectDetailTextAdmin> newListText = new ArrayList<ProjectDetailTextAdmin>();
+        List<ProjectDetailImage> newListImage = new ArrayList<ProjectDetailImage>();
+        List<ProjectDetailText> newListText = new ArrayList<ProjectDetailText>();
         model.addAttribute("donationProject", donationProject);
         model.addAttribute("newListImage", newListImage);
         model.addAttribute("newListText", newListText);
@@ -84,7 +84,7 @@ public class ProjectDetailAdminController{
         // Nếu idText hợp lệ thì xóa ProjectDetailText
         if (textId != null) {
             try {
-                ProjectDetailTextAdmin projectDetailText = this.projectDetailTextServiceAdmin.findProjectDetailTextById(textId);
+                ProjectDetailText projectDetailText = this.projectDetailTextServiceAdmin.findProjectDetailTextById(textId);
                 this.projectDetailTextServiceAdmin.deleteProjectDetailText(projectDetailText);
             } catch (Exception e) {
                 logger.error("Lỗi khi xóa ProjectDetailText với idText: {}", textId, e);
@@ -96,7 +96,7 @@ public class ProjectDetailAdminController{
         // Nếu idImage hợp lệ thì xóa ProjectDetailImage
         if (imageId != null) {
             try {
-                ProjectDetailImageAdmin projectDetailImage = this.projectDetailImageServiceAdmin.findProjectDetailImageById(imageId);
+                ProjectDetailImage projectDetailImage = this.projectDetailImageServiceAdmin.findProjectDetailImageById(imageId);
                 this.projectDetailImageServiceAdmin.deleteProjectDetailImage(projectDetailImage);
             } catch (Exception e) {
                 logger.error("Lỗi khi xóa ProjectDetailImage với idImage: {}", imageId, e);
@@ -113,8 +113,8 @@ public class ProjectDetailAdminController{
         DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(projectId);
 
         // Xóa các detail cũ
-        List<ProjectDetailTextAdmin> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
-        List<ProjectDetailImageAdmin> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(projectId);
+        List<ProjectDetailText> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
+        List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(projectId);
 
         if (projectDetailTextList != null) {
             this.projectDetailTextServiceAdmin.deleteProjectDetailTextByProjectId(projectId);
@@ -125,7 +125,7 @@ public class ProjectDetailAdminController{
 
         if (projectDetailForm.getNewListImage() != null) {
             projectDetailForm.getNewListImage().forEach(projectDetailImage -> {
-                projectDetailImage.setDonationProject(donationProject);
+                projectDetailImage.setProject(donationProject);
                 projectDetailImage.setIsDelete(1);
                 projectDetailImage.setCreatedAt(LocalDateTime.now());
 
@@ -134,7 +134,7 @@ public class ProjectDetailAdminController{
                     try {
                         // Tạo tên file theo định dạng mong muốn
                         String fileExtension = getFileExtension(file.getOriginalFilename());
-                        String fileName = donationProject.getProjectId() + "_" + projectDetailImage.getOrderNo() + "." + fileExtension;
+                        String fileName = donationProject.getProjectId() + "_" + projectDetailImage.getDisplay_order() + "." + fileExtension;
 
                         // Lấy đường dẫn tới thư mục gốc của project
                         String projectRootPath = System.getProperty("user.dir");
@@ -154,7 +154,7 @@ public class ProjectDetailAdminController{
                         projectDetailImage.setPathImage("images/project_detail/" + fileName);
 
                         // Lưu thông tin vào database
-                        this.projectDetailImageServiceAdmin.saveProjectDetailImageAdmin(projectDetailImage);
+                        this.projectDetailImageServiceAdmin.saveProjectDetailImage(projectDetailImage);
                     } catch (IOException e) {
                         e.printStackTrace();
                         // Xử lý ngoại lệ nếu cần
@@ -167,7 +167,7 @@ public class ProjectDetailAdminController{
             projectDetailForm.getNewListText().forEach(projectDetailText -> {
                 String contentWithBr = replaceNewLinesWithBr(projectDetailText.getContent());
                 projectDetailText.setContent(contentWithBr); // Lưu nội dung đã thay thế vào entity
-                projectDetailText.setDonationProject(donationProject);
+                projectDetailText.setProject(donationProject);
                 projectDetailText.setIsDelete(1);
                 projectDetailText.setCreatedAt(LocalDateTime.now());
                 this.projectDetailTextServiceAdmin.saveProjectDetailText(projectDetailText);
