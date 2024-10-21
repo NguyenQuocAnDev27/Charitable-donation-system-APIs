@@ -34,7 +34,16 @@
       </nav>
 
       <!-- / Navbar -->
-
+      <div class="container mt-3">
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+          <span th:text="${successMessage}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${errorMessage}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
 
       <!--  Modal -->
       <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
@@ -172,7 +181,7 @@
                       ><i class="bx bx-edit-alt me-1"></i> Edit</button
                       >
                       <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
-                        <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
+                        <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này không?');">
                           <i class="bx bx-trash me-1"></i> Delete
                         </button>
                       </form>
@@ -185,6 +194,20 @@
           </div>
         </div>
       </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-3">
+          <li class="page-item" th:if="${currentPage > 1}">
+            <a class="page-link" th:href="@{'?page=' + ${currentPage - 1}}" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link" th:href="@{'?page=' + ${i}}" th:text="${i}"></a>
+          </li>
+          <li class="page-item" th:if="${currentPage < totalPages}">
+            <a class="page-link" th:href="@{'?page=' + ${currentPage + 1}}">Next</a>
+          </li>
+        </ul>
+      </nav>
+
       <!-- /Table -->
       <!-- Footer -->
       <footer class="content-footer footer bg-footer-theme" th:replace="~{Fragment/Footer :: footer}">
@@ -243,7 +266,7 @@
     document.querySelector('input[name="endDate"]').value = endDate;
     document.querySelector('input[name="description"]').value = projectDescription;
     document.querySelector('input[name="projectId"]').value = projectId;
-    document.querySelector('select[name="projectManager"]').value=projectManager;
+    document.querySelector('select[name="projectManager"]').value = projectManager;
 
   });
 

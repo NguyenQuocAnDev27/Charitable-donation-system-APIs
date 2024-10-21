@@ -4,7 +4,11 @@ import com.example.DonationInUniversity.model.Role;
 import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.repository.RoleRepository;
 import com.example.DonationInUniversity.repository.UserAdminRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +20,9 @@ public class UserAdminService {
     UserAdminRepository userAdminRepository;
     @Autowired
     RoleRepository roleRepository;
-    public List<User> getAllUsers() {
-        return userAdminRepository.findUsersByIsDeleted(1);
+    public Page<User> getAllUsers(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return userAdminRepository.findUsersByIsDeleted(1,pageable);
     }
     public Optional<User> getUserById(int id) {
         return  userAdminRepository.findById(id);

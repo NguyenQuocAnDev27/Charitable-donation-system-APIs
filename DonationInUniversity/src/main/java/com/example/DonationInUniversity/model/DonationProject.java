@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,10 +43,10 @@ public class DonationProject {
     private int isDeleted;
 
     @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDetailTextAdmin> projectDetailTexts;
+    private List<ProjectDetailTextAdmin> projectDetailTexts= new ArrayList<>();
 
     @OneToMany(mappedBy = "donationProject", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectDetailImageAdmin> projectDetailImages;
+    private List<ProjectDetailImageAdmin> projectDetailImages = new ArrayList<>();
     // Getters and setters
 
     public Integer getProjectId() {
