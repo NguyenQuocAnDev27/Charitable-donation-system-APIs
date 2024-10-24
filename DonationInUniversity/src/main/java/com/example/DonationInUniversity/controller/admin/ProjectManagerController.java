@@ -1,22 +1,11 @@
 package com.example.DonationInUniversity.controller.admin;
 
-
-import com.example.DonationInUniversity.model.CustomUserDetails;
-import com.example.DonationInUniversity.model.DonationProject;
-import com.example.DonationInUniversity.model.User;
-import com.example.DonationInUniversity.model.UserBankInfo;
-
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.ProjectTagRepository;
-
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.TagService;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
-
-import com.example.DonationInUniversity.service.admin.UserBankInfoAdminService;
-
 import com.example.DonationInUniversity.service.api.ProjectService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -48,12 +36,7 @@ public class ProjectManagerController {
     @Autowired
     private UserAdminService userAdminService;
 
-    @Autowired
-    private UserBankInfoAdminService userBankInfoAdminService;
-
-
     // Project Management Home Page
-
     @GetMapping("")
     public String projectHomePage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -87,35 +70,9 @@ public class ProjectManagerController {
 
     // Save or Update Project
     @PostMapping("/saveOrUpdateProject")
-    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project, RedirectAttributes redirectAttributes) {
+    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
-        User user=userAdminService.adminGetUserByUsername(username);
-        UserBankInfo bankInfo = userBankInfoAdminService.findByUser(user);
-        if (bankInfo == null || bankInfo.getAccount_no() == null || bankInfo.getAccount_no().isEmpty()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Bạn phải nhập thông tin tài khoản ngân hàng trước khi tạo dự án.");
-            return "redirect:/manager"; // Điều hướng người dùng về trang nhập thông tin tài khoản ngân hàng
-        }
-        if(project.getProjectId() == null){
-            try {
-                project.setIsDeleted(1);
-                project.setProjectManager(user);
-                projectServiceAdmin.addProject(project);
-            }
-            catch (Exception e){
-                throw new RuntimeException(e);
-            }
-        }
-        else {
-            try {
-                project.setIsDeleted(1);
-                project.setProjectManager(user);
-                projectServiceAdmin.updateProject(project);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
         User user = userAdminService.adminGetUserByUsername(username);
         project.setIsDeleted(1);
         project.setProjectManager(user);
@@ -124,7 +81,6 @@ public class ProjectManagerController {
             projectServiceAdmin.addProject(project);
         } else {
             projectServiceAdmin.updateProject(project);
-
         }
         return "redirect:/manager";
     }
