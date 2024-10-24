@@ -11,17 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
 @RequestMapping("/manager")
-public class ProjectDetailAdminController {
+public class ProjectDetailAdminController{
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
     @Autowired
@@ -31,16 +36,39 @@ public class ProjectDetailAdminController {
     @GetMapping("/{id}/ProjectDetail")
     public String getProjectDetail(Model model, @PathVariable int id) {
         try{
-            List<ProjectDetailTextAdmin> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(id);
-            List<ProjectDetailImageAdmin> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(id);
-            model.addAttribute("projectDetailTextList", projectDetailTextList);
-            model.addAttribute("projectDetailImageList", projectDetailImageList);
+            List<ProjectDetailText> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(id);
+            List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(id);
+            // Tạo danh sách gộp
+            List<ProjectDetailItem> mergedList = new ArrayList<>();
+            int textIndex = 0;  // Đếm chỉ mục cho text
+            int imageIndex = 0; // Đếm chỉ mục cho image
+            // Thêm các phần tử Text vào danh sách gộp
+            for (ProjectDetailText text : projectDetailTextList) {
+                ProjectDetailItem item = new ProjectDetailItem("text",text.getContent(),"", text.getDisplay_order());
+                item.setId(text.getId());
+                item.setIndex(textIndex++);
+                mergedList.add(item);
+            }
+
+            // Thêm các phần tử Image vào danh sách gộp
+            for (ProjectDetailImage image : projectDetailImageList) {
+                ProjectDetailItem item = new ProjectDetailItem("image","",image.getPathImage(),image.getDisplay_order());
+                item.setId(image.getId());
+                item.setIndex(imageIndex++);
+                mergedList.add(item);
+            }
+
+            // Sắp xếp danh sách gộp theo display_order
+            List<ProjectDetailItem> ListDetail = mergedList.stream()
+                    .sorted(Comparator.comparingInt(ProjectDetailItem::getDisplayOrder))
+                    .collect(Collectors.toList());
+            model.addAttribute("ListDetail", ListDetail);
         }catch (Exception e){
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         Optional<DonationProject> donationProject= projectServiceAdmin.getProjectById(id);
-        List<ProjectDetailImageAdmin> newListImage = new ArrayList<ProjectDetailImageAdmin>();
-        List<ProjectDetailTextAdmin> newListText = new ArrayList<ProjectDetailTextAdmin>();
+        List<ProjectDetailImage> newListImage = new ArrayList<ProjectDetailImage>();
+        List<ProjectDetailText> newListText = new ArrayList<ProjectDetailText>();
         model.addAttribute("donationProject", donationProject);
         model.addAttribute("newListImage", newListImage);
         model.addAttribute("newListText", newListText);
@@ -81,7 +109,7 @@ public class ProjectDetailAdminController {
         // Nếu idText hợp lệ thì xóa ProjectDetailText
         if (textId != null) {
             try {
-                ProjectDetailTextAdmin projectDetailText = this.projectDetailTextServiceAdmin.findProjectDetailTextById(textId);
+                ProjectDetailText projectDetailText = this.projectDetailTextServiceAdmin.findProjectDetailTextById(textId);
                 this.projectDetailTextServiceAdmin.deleteProjectDetailText(projectDetailText);
             } catch (Exception e) {
                 logger.error("Lỗi khi xóa ProjectDetailText với idText: {}", textId, e);
@@ -93,7 +121,7 @@ public class ProjectDetailAdminController {
         // Nếu idImage hợp lệ thì xóa ProjectDetailImage
         if (imageId != null) {
             try {
-                ProjectDetailImageAdmin projectDetailImage = this.projectDetailImageServiceAdmin.findProjectDetailImageById(imageId);
+                ProjectDetailImage projectDetailImage = this.projectDetailImageServiceAdmin.findProjectDetailImageById(imageId);
                 this.projectDetailImageServiceAdmin.deleteProjectDetailImage(projectDetailImage);
             } catch (Exception e) {
                 logger.error("Lỗi khi xóa ProjectDetailImage với idImage: {}", imageId, e);
@@ -108,32 +136,108 @@ public class ProjectDetailAdminController {
     public String addOrUpdateProjectDetail(@ModelAttribute("projectDetailForm") ProjectDetailForm projectDetailForm,
                                            @PathVariable int projectId) {
         DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(projectId);
-        //Xóa các detail cũ để cập nhật cũ và mới
-        List<ProjectDetailTextAdmin> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
-        List<ProjectDetailImageAdmin> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(projectId);
-        if(projectDetailTextList != null){
-            this.projectDetailTextServiceAdmin.deleteProjectDetailTextByProjectId(projectId);
-        }
-        if(projectDetailImageList != null){
-            this.projectDetailImageServiceAdmin.deleteProjectDetailImageByProjectId(projectId);
-        }
+
+
         if (projectDetailForm.getNewListImage() != null) {
             projectDetailForm.getNewListImage().forEach(projectDetailImage -> {
-                projectDetailImage.setDonationProject(donationProject);
+                projectDetailImage.setProject(donationProject);
                 projectDetailImage.setIsDelete(1);
                 projectDetailImage.setCreatedAt(LocalDateTime.now());
-                this.projectDetailImageServiceAdmin.saveProjectDetailImageAdmin(projectDetailImage);
+
+                MultipartFile file = projectDetailImage.getFile();
+                if (file != null && !file.isEmpty()) {
+                    try {
+                        // Tạo tên file tạm thời (chưa có imageId)
+                        String fileExtension = getFileExtension(file.getOriginalFilename());
+                        String tempFileName = donationProject.getProjectId() + "_" + projectDetailImage.getDisplay_order() + "_temp." + fileExtension;
+
+                        // Lấy đường dẫn tới thư mục gốc của project
+                        String projectRootPath = System.getProperty("user.dir");
+                        String uploadDir = projectRootPath + "/images/project_detail/";
+                        File uploadFolder = new File(uploadDir);
+                        if (!uploadFolder.exists()) {
+                            uploadFolder.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+                        }
+
+                        // Lưu file tạm thời
+                        File tempFile = new File(uploadDir + tempFileName);
+                        file.transferTo(tempFile);
+
+                        // Cập nhật đường dẫn tạm thời vào projectDetailImage
+                        projectDetailImage.setPathImage("images/project_detail/" + tempFileName);
+
+                        // Lưu bản ghi vào database (với pathImage tạm thời)
+                        ProjectDetailImage savedImage = this.projectDetailImageServiceAdmin.saveProjectDetailImage(projectDetailImage);
+                        int imageId = savedImage.getId(); // Lấy imageId sau khi lưu
+
+                        // Tạo tên file chính thức với imageId
+                        String fileName = donationProject.getProjectId() + "_" + projectDetailImage.getDisplay_order() + "_" + imageId + "." + fileExtension;
+
+                        // Đổi tên file tạm thời thành tên chính thức
+                        File newFile = new File(uploadDir + fileName);
+                        tempFile.renameTo(newFile);
+
+                        // Cập nhật lại đường dẫn file chính thức vào database
+                        savedImage.setPathImage("images/project_detail/" + fileName);
+                        this.projectDetailImageServiceAdmin.saveProjectDetailImage(savedImage);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        // Xử lý ngoại lệ nếu cần
+                    }
+                }
+                else {
+                    this.projectDetailImageServiceAdmin.saveProjectDetailImage(projectDetailImage);
+                }
             });
         }
+
+        else {
+            this.projectDetailImageServiceAdmin.deleteProjectDetailImageByProjectId(projectId);
+        }
         if (projectDetailForm.getNewListText() != null) {
+            List<ProjectDetailText> currentTexts = this.projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
+
+            // Lưu danh sách mới
             projectDetailForm.getNewListText().forEach(projectDetailText -> {
-                projectDetailText.setDonationProject(donationProject);
+                String contentWithBr = replaceNewLinesWithBr(projectDetailText.getContent());
+                projectDetailText.setContent(contentWithBr);
+                projectDetailText.setProject(donationProject);
                 projectDetailText.setIsDelete(1);
                 projectDetailText.setCreatedAt(LocalDateTime.now());
                 this.projectDetailTextServiceAdmin.saveProjectDetailText(projectDetailText);
             });
-            return "redirect:/manager/"+projectId+"/ProjectDetail";
+
+            // Xóa những bản ghi không tồn tại trong danh sách mới
+            currentTexts.forEach(existingText -> {
+                boolean existsInNewList = projectDetailForm.getNewListText().stream()
+                        .anyMatch(newText -> newText.getId() == existingText.getId());
+
+                if (!existsInNewList) {
+                    this.projectDetailTextServiceAdmin.deleteProjectDetailText(existingText);
+                }
+            });
         }
-        return "redirect:/manager";
+
+        return "redirect:/manager/" + projectId + "/ProjectDetail";
+    }
+
+    public String getFileExtension(String fileName) {
+        if (fileName == null) {
+            return "";
+        }
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex >= 0) {
+            return fileName.substring(dotIndex + 1);
+        } else {
+            return "";
+        }
+    }
+    public String replaceNewLinesWithBr(String content) {
+        if (content != null) {
+            return content.replace("\n", "<br>");
+        }
+        return content;
     }
 }
+

@@ -12,6 +12,8 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 - **Jakarta EE** (JPA, Validation, etc.)
 - **SpringDoc OpenAPI** (for API documentation)
 - **Maven** (Dependency Management)
+- **Google Cloud**
+- **VietQR** (Payment)
 
 ## Folder Structure
 
@@ -33,12 +35,17 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 │   │   │               ├── model          # JPA entities representing DB tables
 │   │   │               ├── repository     # Data access classes for interacting with DB
 │   │   │               ├── service        # Business logic implementation (service layer)
+│   │   │               │   ├── admin      # Controllers for web admin/dashboard
+│   │   │               │   ├── api        # REST APIs for backend services
+│   │   │               │   ├── google     # Google service
+│   │   │               │   └── schedule   # Schedule service
 │   │   │               ├── utils          # Utility classes
 │   │   │               ├── validation     # Custom validation classes
 │   │   │               └── security       # Security configuration (authentication, authorization)
 │   │   └── resources
 │   │       └── application.properties     # Basic configuration file
 │   │       └── env.properties             # Local configuration file
+│   │       └── credentials.json           # Get credentials google to use API
 │   │       └── logback-spring.xml         # Logs file configuration
 ├── pom.xml                                # Maven configuration file (dependencies, plugins, etc.)
 └── README.md                              # Project documentation

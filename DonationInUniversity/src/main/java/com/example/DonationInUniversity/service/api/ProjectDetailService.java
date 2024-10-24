@@ -40,7 +40,7 @@ public class ProjectDetailService {
 
         // Fetch images with their display order and add to projectContent
         imageRepository.findByProjectId(projectId).forEach(image -> {
-            String imageUrl = "http://localhost:8080/api/project_detail/image/" + image.getId();
+            String imageUrl = serverUrl + "/api/project_detail/image/" + image.getId();
             projectContent.add(new ProjectDetailItem("image", null, imageUrl, image.getDisplay_order()));
         });
 

@@ -1,11 +1,11 @@
 package com.example.DonationInUniversity.service.admin;
 
-import com.example.DonationInUniversity.model.ProjectDetailImageAdmin;
+import com.example.DonationInUniversity.model.ProjectDetailImage;
+import com.example.DonationInUniversity.repository.ProjectDetailImageAdminRepository;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaSystemException;
 
-
-import com.example.DonationInUniversity.repository.ProjectDetailImageAdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,12 @@ public class ProjectDetailImageServiceAdmin {
     private static final Logger logger = LoggerFactory.getLogger(ProjectDetailImageServiceAdmin.class);
     @Autowired
     private ProjectDetailImageAdminRepository projectDetailImageRepository;
-    public List<ProjectDetailImageAdmin> getProjectDetailImages() {
+
+    public List<ProjectDetailImage> getProjectDetailImages() {
         return projectDetailImageRepository.findAll();
     }
 
-    public ProjectDetailImageAdmin saveProjectDetailImageAdmin(ProjectDetailImageAdmin projectDetailImage) {
+    public ProjectDetailImage saveProjectDetailImage(ProjectDetailImage projectDetailImage) {
         try {
             return projectDetailImageRepository.save(projectDetailImage);
         } catch (DataIntegrityViolationException e) {
@@ -35,14 +36,17 @@ public class ProjectDetailImageServiceAdmin {
         }
     }
 
-    public List<ProjectDetailImageAdmin> getProjectDetailImageAdmin(int projectId) {
+    public List<ProjectDetailImage> getProjectDetailImageAdmin(int projectId) {
         return projectDetailImageRepository.adminGetProjectDetailImageByProjectId(projectId);
     }
-    public ProjectDetailImageAdmin findProjectDetailImageById(Integer imageId) {
+
+    public ProjectDetailImage findProjectDetailImageById(Integer imageId) {
         return projectDetailImageRepository.findById(imageId)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ProjectDetailImage với ID: " + imageId));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Không tìm thấy ProjectDetailImage với ID: " + imageId));
     }
-    public void deleteProjectDetailImage(ProjectDetailImageAdmin projectDetailImage) {
+
+    public void deleteProjectDetailImage(ProjectDetailImage projectDetailImage) {
         try {
             projectDetailImageRepository.delete(projectDetailImage);
         } catch (DataAccessException e) {
@@ -56,7 +60,12 @@ public class ProjectDetailImageServiceAdmin {
             throw new RuntimeException("Đã xảy ra lỗi không xác định.");
         }
     }
-    public void deleteProjectDetailImageByProjectId(int id){
+
+    public void deleteProjectDetailImageByProjectId(int id) {
         this.projectDetailImageRepository.deleteProjectDetailImageByProjectId(id);
+    }
+
+    public ProjectDetailImage updateProjectDetailImage(ProjectDetailImage projectDetailImage) {
+        return projectDetailImageRepository.save(projectDetailImage);
     }
 }

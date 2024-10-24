@@ -1,10 +1,12 @@
 package com.example.DonationInUniversity.model;
 
 public class ProjectDetailItem {
+    private int id;
     private String type; // "text" or "image"
     private String content; // Used for text content
     private String path; // Used for image URL
     private int displayOrder;
+    private int index;
 
     public ProjectDetailItem(String type, String content, String path, int displayOrder) {
         this.type = type;
@@ -13,7 +15,24 @@ public class ProjectDetailItem {
         this.displayOrder = displayOrder;
     }
 
+
     // Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public String getType() {
         return type;
