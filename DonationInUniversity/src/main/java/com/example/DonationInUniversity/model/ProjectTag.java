@@ -1,38 +1,45 @@
 package com.example.DonationInUniversity.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Project_Tags")
 public class ProjectTag {
-    private int projectTagId;
-    private int projectId;
-    private int tagId;
 
-    public ProjectTag(int projectTagId, int projectId, int tagId) {
-        this.projectTagId = projectTagId;
-        this.projectId = projectId;
-        this.tagId = tagId;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer projectTagId;
 
-    // Getters and Setters
-    public int getProjectTagId() {
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private DonationProject donationProject;
+
+    @ManyToOne
+    @JoinColumn(name = "tag_id", nullable = false)
+    private Tag tag;
+
+    // Getters and setters
+    public Integer getProjectTagId() {
         return projectTagId;
     }
 
-    public void setProjectTagId(int projectTagId) {
+    public void setProjectTagId(Integer projectTagId) {
         this.projectTagId = projectTagId;
     }
 
-    public int getProjectId() {
-        return projectId;
+    public DonationProject getDonationProject() {
+        return donationProject;
     }
 
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
+    public void setDonationProject(DonationProject donationProject) {
+        this.donationProject = donationProject;
     }
 
-    public int getTagId() {
-        return tagId;
+    public Tag getTag() {
+        return tag;
     }
 
-    public void setTagId(int tagId) {
-        this.tagId = tagId;
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 }
