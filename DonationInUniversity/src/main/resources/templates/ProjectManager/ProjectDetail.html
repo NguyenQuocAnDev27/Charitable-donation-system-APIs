@@ -47,15 +47,18 @@
         <button type="submit" class="btn btn-primary mx-2" >Save</button>
         <div id="dynamic-inputs" class="mt-3">
           <!-- Mỗi input sẽ được bọc trong div "input-wrapper" -->
-          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailText : ${projectDetailTextList}">
-            <input type="hidden" class="input-index" th:name="'newListText['+${DetailText.display_order - 1}+'].display_order'" th:value="${DetailText.display_order}">
-            <textarea class="form-control mt-2" th:name="'newListText['+${DetailText.display_order - 1}+'].content'" th:text="${DetailText.content}"></textarea>
+          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailText, iterStat : ${projectDetailTextList}">
+            <input type="hidden" class="id" th:name="'newListText['+${iterStat.index}+'].id'" th:value="${DetailText.id}">
+            <input type="hidden" class="input-index" th:name="'newListText['+${iterStat.index}+'].display_order'" th:value="${DetailText.display_order}">
+            <textarea class="form-control mt-2" th:name="'newListText['+${iterStat.index}+'].content'" th:text="${DetailText.content}"></textarea>
             <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
           </div>
 
-          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage : ${projectDetailImageList}">
-            <input type="hidden" class="input-index" th:name="'newListImage['+${DetailImage.display_order -1}+'].display_order'" th:value="${DetailImage.display_order}">
-            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${DetailImage.display_order -1}+'].file'">
+          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage, iterStat : ${projectDetailImageList}">
+            <input type="hidden" class="path_image" th:name="'newListImage['+${iterStat.index}+'].pathImage'" th:value="${DetailImage.pathImage}">
+            <input type="hidden" class="id" th:name="'newListImage['+${iterStat.index}+'].id'" th:value="${DetailImage.id}">
+            <input type="hidden" class="input-index" th:name="'newListImage['+${iterStat.index}+'].display_order'" th:value="${DetailImage.display_order}">
+            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${iterStat.index}+'].file'">
             <div class="img-wrapper mt-2">
               <img th:src="@{/{filename}(filename=${DetailImage.pathImage})}" class="img-thumbnail" style="max-width: 250px;">
             </div>

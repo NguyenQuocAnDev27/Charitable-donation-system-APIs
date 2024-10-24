@@ -60,4 +60,7 @@ public class ProjectDetailImageServiceAdmin {
     public void deleteProjectDetailImageByProjectId(int id){
         this.projectDetailImageRepository.deleteProjectDetailImageByProjectId(id);
     }
+    public ProjectDetailImage updateProjectDetailImage(ProjectDetailImage projectDetailImage) {
+        return projectDetailImageRepository.save(projectDetailImage);
+    }
 }

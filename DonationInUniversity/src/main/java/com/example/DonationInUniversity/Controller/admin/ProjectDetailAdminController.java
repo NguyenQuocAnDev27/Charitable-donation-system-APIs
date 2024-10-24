@@ -112,16 +112,6 @@ public class ProjectDetailAdminController{
                                            @PathVariable int projectId) {
         DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(projectId);
 
-        // Xóa các detail cũ
-        List<ProjectDetailText> projectDetailTextList = projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
-        List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(projectId);
-
-        if (projectDetailTextList != null) {
-            this.projectDetailTextServiceAdmin.deleteProjectDetailTextByProjectId(projectId);
-        }
-        if (projectDetailImageList != null) {
-            this.projectDetailImageServiceAdmin.deleteProjectDetailImageByProjectId(projectId);
-        }
 
         if (projectDetailForm.getNewListImage() != null) {
             projectDetailForm.getNewListImage().forEach(projectDetailImage -> {
@@ -132,47 +122,78 @@ public class ProjectDetailAdminController{
                 MultipartFile file = projectDetailImage.getFile();
                 if (file != null && !file.isEmpty()) {
                     try {
-                        // Tạo tên file theo định dạng mong muốn
+                        // Tạo tên file tạm thời (chưa có imageId)
                         String fileExtension = getFileExtension(file.getOriginalFilename());
-                        String fileName = donationProject.getProjectId() + "_" + projectDetailImage.getDisplay_order() + "." + fileExtension;
+                        String tempFileName = donationProject.getProjectId() + "_" + projectDetailImage.getDisplay_order() + "_temp." + fileExtension;
 
                         // Lấy đường dẫn tới thư mục gốc của project
                         String projectRootPath = System.getProperty("user.dir");
-
-                        // Tạo đường dẫn tới thư mục cùng cấp với src: images/project_detail
                         String uploadDir = projectRootPath + "/images/project_detail/";
                         File uploadFolder = new File(uploadDir);
                         if (!uploadFolder.exists()) {
                             uploadFolder.mkdirs(); // Tạo thư mục nếu chưa tồn tại
                         }
 
-                        // Lưu file vào thư mục
-                        File uploadFile = new File(uploadDir + fileName);
-                        file.transferTo(uploadFile);
+                        // Lưu file tạm thời
+                        File tempFile = new File(uploadDir + tempFileName);
+                        file.transferTo(tempFile);
 
-                        // Cập nhật trường pathImage
-                        projectDetailImage.setPathImage("images/project_detail/" + fileName);
+                        // Cập nhật đường dẫn tạm thời vào projectDetailImage
+                        projectDetailImage.setPathImage("images/project_detail/" + tempFileName);
 
-                        // Lưu thông tin vào database
-                        this.projectDetailImageServiceAdmin.saveProjectDetailImage(projectDetailImage);
+                        // Lưu bản ghi vào database (với pathImage tạm thời)
+                        ProjectDetailImage savedImage = this.projectDetailImageServiceAdmin.saveProjectDetailImage(projectDetailImage);
+                        int imageId = savedImage.getId(); // Lấy imageId sau khi lưu
+
+                        // Tạo tên file chính thức với imageId
+                        String fileName = donationProject.getProjectId() + "_" + projectDetailImage.getDisplay_order() + "_" + imageId + "." + fileExtension;
+
+                        // Đổi tên file tạm thời thành tên chính thức
+                        File newFile = new File(uploadDir + fileName);
+                        tempFile.renameTo(newFile);
+
+                        // Cập nhật lại đường dẫn file chính thức vào database
+                        savedImage.setPathImage("images/project_detail/" + fileName);
+                        this.projectDetailImageServiceAdmin.saveProjectDetailImage(savedImage);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         // Xử lý ngoại lệ nếu cần
                     }
                 }
+                else {
+                    this.projectDetailImageServiceAdmin.saveProjectDetailImage(projectDetailImage);
+                }
             });
         }
 
+        else {
+            this.projectDetailImageServiceAdmin.deleteProjectDetailImageByProjectId(projectId);
+        }
         if (projectDetailForm.getNewListText() != null) {
+            List<ProjectDetailText> currentTexts = this.projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
+
+            // Lưu danh sách mới
             projectDetailForm.getNewListText().forEach(projectDetailText -> {
                 String contentWithBr = replaceNewLinesWithBr(projectDetailText.getContent());
-                projectDetailText.setContent(contentWithBr); // Lưu nội dung đã thay thế vào entity
+                projectDetailText.setContent(contentWithBr);
                 projectDetailText.setProject(donationProject);
                 projectDetailText.setIsDelete(1);
                 projectDetailText.setCreatedAt(LocalDateTime.now());
                 this.projectDetailTextServiceAdmin.saveProjectDetailText(projectDetailText);
             });
+
+            // Xóa những bản ghi không tồn tại trong danh sách mới
+            currentTexts.forEach(existingText -> {
+                boolean existsInNewList = projectDetailForm.getNewListText().stream()
+                        .anyMatch(newText -> newText.getId() == existingText.getId());
+
+                if (!existsInNewList) {
+                    this.projectDetailTextServiceAdmin.deleteProjectDetailText(existingText);
+                }
+            });
         }
+        List<ProjectDetailImage> projectDetailImageList = projectDetailImageServiceAdmin.getProjectDetailImageAdmin(projectId);
 
         return "redirect:/manager/" + projectId + "/ProjectDetail";
     }
