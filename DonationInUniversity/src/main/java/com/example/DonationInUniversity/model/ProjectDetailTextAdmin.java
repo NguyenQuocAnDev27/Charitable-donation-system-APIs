@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Projectdetailtext")
+@Table(name = "project_detail_text")
 public class ProjectDetailTextAdmin {
 
     @Id
