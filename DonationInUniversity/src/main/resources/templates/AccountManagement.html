@@ -34,17 +34,6 @@
 
           <!-- / Navbar -->
 
-          <div class="container mt-3">
-            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
-              <span th:text="${successMessage}"></span>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
-              <span th:text="${errorMessage}"></span>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          </div>
-
 
     <!--  Modal -->
           <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
@@ -75,6 +64,10 @@
                           </option>
                         </select>
                       </div>
+<!--                      <div class="col-5 mb-6">-->
+<!--                        <label  class="form-label">Role</label>-->
+<!--                        <input type="text"  th:field="*{role}"  class="form-control" placeholder="Enter role of user" />-->
+<!--                      </div>-->
                       <div class="col-5 mb-6">
                         <label  class="form-label">Email</label>
                         <input type="text" th:field="*{email}"     class="form-control" placeholder="Enter Email" />
@@ -176,19 +169,6 @@
                 </div>
             </div>
               </div>
-          <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center mt-3">
-              <li class="page-item" th:if="${currentPage > 1}">
-                <a class="page-link" th:href="@{'?page=' + ${currentPage - 1}}" tabindex="-1">Previous</a>
-              </li>
-              <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{'?page=' + ${i}}" th:text="${i}"></a>
-              </li>
-              <li class="page-item" th:if="${currentPage < totalPages}">
-                <a class="page-link" th:href="@{'?page=' + ${currentPage + 1}}">Next</a>
-              </li>
-            </ul>
-          </nav>
           <!-- /Table -->
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme" th:replace="~{Fragment/Footer :: footer}">           
