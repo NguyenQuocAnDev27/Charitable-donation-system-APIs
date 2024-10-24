@@ -1,5 +1,8 @@
 package com.example.DonationInUniversity.service.admin;
 
+
+import com.example.DonationInUniversity.model.ProjectDetailText;
+
 import com.example.DonationInUniversity.repository.ProjectDetailTextAdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +20,15 @@ public class ProjectDetailTextServiceAdmin {
     private ProjectDetailTextAdminRepository projectDetailTextRepository;
     private static final Logger logger = LoggerFactory.getLogger(ProjectDetailTextServiceAdmin.class);
 
-    public List<ProjectDetailTextAdmin> getProjectDetailTextAdmin(int projectId) {
+    public List<ProjectDetailText> getProjectDetailTextAdmin(int projectId) {
         return projectDetailTextRepository.adminGetProjectDetailTextByProjectId(projectId);
     }
-    public List<ProjectDetailTextAdmin> getProjectDetailTexts() {
+
+    public List<ProjectDetailText> getProjectDetailTexts() {
         return projectDetailTextRepository.findAll();
     }
-    public ProjectDetailTextAdmin saveProjectDetailText(ProjectDetailTextAdmin projectDetailText) {
+
+    public ProjectDetailText saveProjectDetailText(ProjectDetailText projectDetailText) {
         try {
             return projectDetailTextRepository.save(projectDetailText);
         } catch (DataIntegrityViolationException e) {
@@ -34,11 +39,13 @@ public class ProjectDetailTextServiceAdmin {
             throw new RuntimeException("Lỗi không xác định khi lưu ProjectDetailText", e);
         }
     }
-    public ProjectDetailTextAdmin findProjectDetailTextById(Integer imageId) {
+
+    public ProjectDetailText findProjectDetailTextById(Integer imageId) {
         return projectDetailTextRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ProjectDetailText với ID: " + imageId));
     }
-    public void deleteProjectDetailText(ProjectDetailTextAdmin projectDetailText) {
+
+    public void deleteProjectDetailText(ProjectDetailText projectDetailText) {
         try {
             projectDetailTextRepository.delete(projectDetailText);
             logger.info("Đã xóa thành công ProjectDetailText với ID: {}", projectDetailText.getId());
@@ -53,6 +60,7 @@ public class ProjectDetailTextServiceAdmin {
             throw new RuntimeException("Đã xảy ra lỗi không xác định khi xóa ProjectDetailText.");
         }
     }
+
     public void deleteProjectDetailTextByProjectId(int id) {
         this.projectDetailTextRepository.deleteProjectDetailTextByProjectId(id);
     }

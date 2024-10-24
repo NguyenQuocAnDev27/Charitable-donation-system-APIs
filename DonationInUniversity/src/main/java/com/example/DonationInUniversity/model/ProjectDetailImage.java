@@ -1,6 +1,8 @@
 package com.example.DonationInUniversity.model;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,8 +29,21 @@ public class ProjectDetailImage {
     @JoinColumn(name = "project_id", nullable = false)
     private DonationProject project;
 
+    @Transient
+    private MultipartFile file;
+
+    // Getters and Setters
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
     // Getters and setters
-    public ProjectDetailImage() {}
+    public ProjectDetailImage() {
+    }
 
     public Integer getId() {
         return id;
@@ -77,5 +92,5 @@ public class ProjectDetailImage {
     public void setProject(DonationProject project) {
         this.project = project;
     }
-}
 
+}
