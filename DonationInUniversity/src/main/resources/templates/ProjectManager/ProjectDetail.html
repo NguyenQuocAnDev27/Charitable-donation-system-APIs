@@ -47,22 +47,24 @@
         <button type="submit" class="btn btn-primary mx-2" >Save</button>
         <div id="dynamic-inputs" class="mt-3">
           <!-- Mỗi input sẽ được bọc trong div "input-wrapper" -->
-          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailText, iterStat : ${projectDetailTextList}">
-            <input type="hidden" class="idText" th:name="'newListText['+${iterStat.index}+'].id'" th:value="${DetailText.id}">
-            <input type="hidden" class="input-index" th:name="'newListText['+${iterStat.index}+'].display_order'" th:value="${DetailText.display_order}">
-            <textarea class="form-control mt-2" th:name="'newListText['+${iterStat.index}+'].content'" th:text="${DetailText.content}"></textarea>
-            <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
-          </div>
+          <!-- Nếu là Text -->
+          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="item : ${ListDetail}">
+            <!-- Nếu là Text -->
+            <input th:if="${item.type == 'text'}" type="hidden" class="input-index" th:name="'newListText['+${item.index}+'].display_order'" th:value="${item.displayOrder}">
+            <input th:if="${item.type == 'text'}" type="hidden" class="idText" th:name="'newListText['+${item.index}+'].id'" th:value="${item.id}">
+            <textarea th:if="${item.type == 'text'}" class="form-control mt-2" th:name="'newListText['+${item.index}+'].content'" th:text="${item.content}"></textarea>
+            <button th:if="${item.type == 'text'}" type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
 
-          <div class="input-wrapper d-flex align-items-center mb-2" draggable="true" th:each="DetailImage, iterStat : ${projectDetailImageList}">
-            <input type="hidden" class="path_image" th:name="'newListImage['+${iterStat.index}+'].pathImage'" th:value="${DetailImage.pathImage}">
-            <input type="hidden" class="idImage" th:name="'newListImage['+${iterStat.index}+'].id'" th:value="${DetailImage.id}">
-            <input type="hidden" class="input-index" th:name="'newListImage['+${iterStat.index}+'].display_order'" th:value="${DetailImage.display_order}">
-            <input type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${iterStat.index}+'].file'">
-            <div class="img-wrapper mt-2">
-              <img th:src="@{/{filename}(filename=${DetailImage.pathImage})}" class="img-thumbnail" style="max-width: 250px;">
+            <!-- Nếu là Image -->
+
+            <input th:if="${item.type == 'image'}" type="hidden" class="input-index" th:name="'newListImage['+${item.index}+'].display_order'" th:value="${item.displayOrder}">
+            <input th:if="${item.type == 'image'}" type="hidden" class="path_image" th:name="'newListImage['+${item.index}+'].pathImage'" th:value="${item.path}">
+            <input th:if="${item.type == 'image'}" type="hidden" class="idImage" th:name="'newListImage['+${item.index}+'].id'" th:value="${item.id}">
+            <input th:if="${item.type == 'image'}" type="file" accept="image/*" class="form-control mt-2" th:name="'newListImage['+${item.index}+'].file'">
+            <div th:if="${item.type == 'image'}" class="img-wrapper mt-2">
+              <img th:src="@{/{filename}(filename=${item.path})}" class="img-thumbnail" style="max-width: 250px;">
             </div>
-            <button type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
+            <button th:if="${item.type == 'image'}" type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Delete</button>
           </div>
         </div>
       </form>
