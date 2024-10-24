@@ -13,7 +13,6 @@ public class ProjectDetailImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Column(name = "path_image", nullable = false)
     private String pathImage;
 
@@ -41,8 +40,10 @@ public class ProjectDetailImage {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
+
     // Getters and setters
-    public ProjectDetailImage() {}
+    public ProjectDetailImage() {
+    }
 
     public Integer getId() {
         return id;
@@ -93,4 +94,3 @@ public class ProjectDetailImage {
     }
 
 }
-

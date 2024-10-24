@@ -21,9 +21,11 @@ public class ProjectDetailTextServiceAdmin {
     public List<ProjectDetailText> getProjectDetailTextAdmin(int projectId) {
         return projectDetailTextRepository.adminGetProjectDetailTextByProjectId(projectId);
     }
+
     public List<ProjectDetailText> getProjectDetailTexts() {
         return projectDetailTextRepository.findAll();
     }
+
     public ProjectDetailText saveProjectDetailText(ProjectDetailText projectDetailText) {
         try {
             return projectDetailTextRepository.save(projectDetailText);
@@ -35,10 +37,12 @@ public class ProjectDetailTextServiceAdmin {
             throw new RuntimeException("Lỗi không xác định khi lưu ProjectDetailText", e);
         }
     }
+
     public ProjectDetailText findProjectDetailTextById(Integer imageId) {
         return projectDetailTextRepository.findById(imageId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ProjectDetailText với ID: " + imageId));
     }
+
     public void deleteProjectDetailText(ProjectDetailText projectDetailText) {
         try {
             projectDetailTextRepository.delete(projectDetailText);
@@ -54,6 +58,7 @@ public class ProjectDetailTextServiceAdmin {
             throw new RuntimeException("Đã xảy ra lỗi không xác định khi xóa ProjectDetailText.");
         }
     }
+
     public void deleteProjectDetailTextByProjectId(int id) {
         this.projectDetailTextRepository.deleteProjectDetailTextByProjectId(id);
     }

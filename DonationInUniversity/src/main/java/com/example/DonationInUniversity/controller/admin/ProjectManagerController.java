@@ -68,15 +68,4 @@ public class ProjectManagerController {
         this.projectServiceAdmin.deleteProject(id);
         return "redirect:/manager";
     }
-    @GetMapping("/{id}/profile")
-    public String profile(@PathVariable int id, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user=userAdminService.adminGetUserByUsername(username);
-        if (user == null) {
-            return "redirect:/admin/login";
-        }
-        return "ProjectManager/Profile";
-    }
-
 }

@@ -24,6 +24,7 @@ CREATE TABLE `Users` (
 	`password_hash` VARCHAR(255) NOT NULL,
 	`phone_number` VARCHAR(15),
 	`role_id` INT,
+    `is_delete` BOOLEAN DEFAULT FALSE,
 	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`user_id`),
@@ -42,6 +43,7 @@ CREATE TABLE `Donation_Projects` (
 	`end_date` DATE NOT NULL,
 	`status` VARCHAR(50) CHECK (`status` IN ('stopped', 'completed', 'pending')),
 	`project_manager_id` INT,
+    `is_delete` BOOLEAN DEFAULT FALSE,
 	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`project_id`),
@@ -122,24 +124,6 @@ CREATE TABLE `Reports` (
 	FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`)
 );
 
-use sgu_charity;
-
--- Insert 10 example users into Users table
-INSERT INTO `users` (`full_name`, `email`, `password_hash`, `phone_number`, `role_id`, `created_at`, `updated_at`)
-VALUES
-('John Doe', 'john.doe@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0123456789', 1, NOW(), NOW()),
-('Jane Smith', 'jane.smith@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0987654321', 2, NOW(), NOW()),
-('Alice Johnson', 'alice.johnson@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0123467890', 3, NOW(), NOW()),
-('Bob Brown', 'bob.brown@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0987612345', 4, NOW(), NOW()),
-('Charlie Davis', 'charlie.davis@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0987123456', 1, NOW(), NOW()),
-('Emily Wilson', 'emily.wilson@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0987123489', 2, NOW(), NOW()),
-('Frank Thomas', 'frank.thomas@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0987654398', 3, NOW(), NOW()),
-('Grace Lee', 'grace.lee@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0123498765', 4, NOW(), NOW()),
-('Henry Miller', 'henry.miller@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0123987654', 1, NOW(), NOW()),
-('Isabella Walker', 'isabella.walker@example.com', 'b3f1e4d69c9475a714b36d4ab53d5d4042abc5ce15062efe5f01766dbcd8781d', '0987123897', 2, NOW(), NOW());
-
-use sgu_charity;
-
 CREATE TABLE SPRING_SESSION (
 	PRIMARY_ID CHAR(36) NOT NULL,
 	SESSION_ID CHAR(36) NOT NULL,
@@ -172,5 +156,42 @@ CREATE TABLE `Refresh_Tokens` (
     `isEnable` BOOLEAN NOT NULL DEFAULT TRUE,  -- New column added
     PRIMARY KEY (`token_id`),
     UNIQUE (`token`),
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
+);
+
+-- Table: ProjectDetailText
+CREATE TABLE `Project_Detail_Text` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `project_id` INT NOT NULL,
+    `content` TEXT NOT NULL,
+    `IsDelete` BOOLEAN DEFAULT FALSE,
+     `display_order` INT DEFAULT 0,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
+);
+
+-- Table: ProjectDetailImage
+CREATE TABLE `Project_Detail_Image` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `project_id` INT NOT NULL,
+    `pathImage` VARCHAR(255) NOT NULL,
+    `IsDelete` BOOLEAN DEFAULT FALSE,
+     `display_order` INT DEFAULT 0,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
+);
+
+-- Table: User_Bank_Info
+CREATE TABLE `User_Bank_Info` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `bank_id` INT NOT NULL,
+    `account_no` VARCHAR(50) NOT NULL,
+    `user_id` INT NOT NULL,
+    `is_delete` BOOLEAN DEFAULT FALSE,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
 );

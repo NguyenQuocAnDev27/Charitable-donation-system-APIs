@@ -76,8 +76,10 @@
               <!-- /Logo -->
               <h4 class="mb-1">Welcome to SGU - Donation 👋</h4>
               <p class="mb-6">Please sign in to your account and start the adventure</p>
-
-              <form id="formAuthentication" class="mb-6"  th:action="@{/admin/login}" method="post">
+              <div th:if="${error}" class="alert alert-danger" role="alert">
+                Invalid username or password. Please try again.
+              </div>
+              <form id="formAuthentication" class="mb-6"  th:action="@{/admin/doLogin}" method="post">
                 <div class="mb-6">
                   <label for="email" class="form-label">Email</label>
                   <input
@@ -86,7 +88,7 @@
                     id="email"
                     name="email"
                     placeholder="Enter your email"
-                    autofocus />
+                    autofocus required/>
                 </div>
                 <div class="mb-6 form-password-toggle">
                   <label class="form-label" for="password">Password</label>
@@ -97,7 +99,7 @@
                       class="form-control"
                       name="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                      aria-describedby="password" />
+                      aria-describedby="password" required/>
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
@@ -109,7 +111,10 @@
           </div>
         </div>
       </div>
+
     </div>
+    <!-- Modal thông báo lỗi -->
+
 
     <!-- / Content -->
 
@@ -127,7 +132,6 @@
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-
     <!-- Main JS -->
     <script src="../assets/js/main.js"></script>
 
