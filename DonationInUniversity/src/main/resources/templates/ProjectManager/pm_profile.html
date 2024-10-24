@@ -1,0 +1,139 @@
+<!doctype html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+        class="light-style layout-menu-fixed layout-compact"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="./static/assets"
+        data-template="vertical-menu-template-free"
+        data-style="light">
+<head th:replace="~{ProjectManager/Head :: head}"></head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{ProjectManager/Menu :: menu}">
+            <!--  DashBoard in menu  -->
+        </aside>>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+
+            <nav
+                    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                    id="layout-navbar"
+                    th:replace="~{ProjectManager/Navbar :: navbar}"
+            >
+            </nav>
+
+            <!-- / Navbar -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
+                    <div  class="row align-items-center">
+                        <div class = "col-3">
+                            <h5 class="card-header">Profile</h5>
+                        </div>
+                    </div>
+                    <form  th:action="@{/manager/saveOrUpdateProfile}" method="post">
+
+                        <div class="row">
+                            <div class="col-5 mb-6">
+                                <label class="form-label">Project Manager</label>
+                                <select id="bankList" class="form-select" name="bank_id" required>
+                                    <option value="" disabled selected>-- Choose Bank --</option>
+                                    <!-- Danh sách các ngân hàng sẽ được thêm qua JavaScript -->
+                                </select>
+                            </div>
+                            <div class="col-5 mb-6">
+                                <label class="form-label">Banking Number</label>
+                                <input type="text" class="form-control" name="account_no" placeholder="Enter Banking Number" th:value="${profile.account_no}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="submit" class="btn btn-primary mx-2">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme" th:replace="~{Fragment/Footer :: footer}">
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+</div>
+
+<!-- Overlay -->
+<div class="layout-overlay layout-menu-toggle"></div>
+<!-- / Layout wrapper -->
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- Page JS -->
+<script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+<script>
+    // Gán giá trị bank_id từ Thymeleaf vào JavaScript, sử dụng giá trị mặc định nếu không có
+    const selectedBankId = [[${bank_id != null ? bank_id : 'null'}]];  // Gán `bank_id` hoặc null nếu không có giá trị
+
+    // Gọi API để lấy danh sách các ngân hàng
+    fetch('https://api.vietqr.io/v2/banks')
+        .then(response => response.json())
+        .then(data => {
+            const bankSelect = document.getElementById('bankList');
+
+            // Xóa các tùy chọn cũ nếu có
+            bankSelect.innerHTML = '<option value="" disabled>-- Choose Bank --</option>';
+
+            if (data && data.data && Array.isArray(data.data)) {
+                data.data.forEach(bank => {
+                    const option = document.createElement('option');
+                    option.value = bank.id;
+                    option.textContent = bank.short_name;
+
+                    // Nếu `bank_id` hiện tại không null và bằng với tùy chọn hiện tại, chọn nó
+                    if (selectedBankId !== 'null' && bank.id === selectedBankId) {
+                        option.selected = true; // Đánh dấu tùy chọn đã lưu
+                    }
+
+                    bankSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy danh sách ngân hàng:', error);
+        });
+</script>
+
+
+<!-- Place this tag before closing body tag for github widget button. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+</html>
