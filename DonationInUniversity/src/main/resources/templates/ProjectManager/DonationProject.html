@@ -55,27 +55,39 @@
                     <input type="hidden" th:field="*{projectId}" class="form-control" />
                     <div class="col-5 mb-6">
                       <label  class="form-label">Project Name</label>
-                      <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" />
+                      <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" required/>
                     </div>
                     <div class="col-5 mb-6">
                       <label  class="form-label">Goal Amount</label>
-                      <input type="text" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" />
+                      <input type="text" id="goalAmount" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" required/>
+                      <div id="goal-error" class="text-danger" style="display: none;">Goal Amount must be a valid number.</div>
                     </div>
                     <div class="col-5 mb-6">
                       <label  class="form-label">Current Amount</label>
-                      <input type="text"  th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" />
+                      <input type="text" id="currentAmount" th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" required/>
+                      <div id="amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div> <!-- Thông báo lỗi không phải là số -->
+                      <div id="amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
                     </div>
                     <div class="col-5 mb-6">
                       <label  class="form-label">Start Date</label>
-                      <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" />
+                      <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" required/>
                     </div>
                     <div class="col-5 mb-6">
                       <label  class="form-label">End Date</label>
-                      <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" />
+                      <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" required/>
+                      <div id="date-error" class="text-danger" style="display: none;">Start Date must be earlier than End Date.</div>
                     </div>
                     <div class="col mb-6">
                       <label  class="form-label">Project Description</label>
-                      <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" />
+                      <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" required/>
+                    </div>
+                    <div class="col-5 mb-6">
+                      <label class="form-label">Status</label>
+                      <select class="form-select" th:field="*{status}">
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="stopped">Stopped</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -175,6 +187,7 @@
                                       th:data-start-date="${project.startDate}"
                                       th:data-end-date="${project.endDate}"
                                       th:data-description="${project.description}"
+                                      th:data-status="${project.status}"
                                 ><i class="bx bx-edit-alt me-1"></i>Edit</button
                               >
                               <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
@@ -255,8 +268,9 @@
         const endDate = button.getAttribute('data-end-date');
         const projectDescription = button.getAttribute('data-description');
         const projectId = button.getAttribute('data-project-id');
+        const status = button.getAttribute('data-status'); // Lấy giá trị status
 
-
+        // Set các giá trị cho form
         document.querySelector('input[name="projectName"]').value = projectName;
         document.querySelector('input[name="goalAmount"]').value = goalAmount;
         document.querySelector('input[name="currentAmount"]').value = currentAmount;
@@ -264,9 +278,10 @@
         document.querySelector('input[name="endDate"]').value = endDate;
         document.querySelector('input[name="description"]').value = projectDescription;
         document.querySelector('input[name="projectId"]').value = projectId;
-        document.querySelector('select[name="projectManager"]').value=projectManager;
-
+        document.querySelector('select[name="status"]').value = status; // Gán giá trị cho select status
+        document.querySelector('select[name="projectManager"]').value = projectManager;
       });
+
 
       // Hàm kiểm tra xem một giá trị có phải là số hợp lệ không
       function isNumber(value) {
