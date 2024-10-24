@@ -1,6 +1,5 @@
 package com.example.DonationInUniversity.service.admin;
 
-import com.example.DonationInUniversity.model.ProjectDetailTextAdmin;
 import com.example.DonationInUniversity.repository.ProjectDetailTextAdminRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
