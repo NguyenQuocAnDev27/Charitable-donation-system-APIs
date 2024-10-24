@@ -1,6 +1,5 @@
 package com.example.DonationInUniversity.service.admin;
 
-import com.example.DonationInUniversity.model.ProjectDetailImageAdmin;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaSystemException;
 
