@@ -59,41 +59,19 @@ public class ProjectServiceAdmin {
         return this.projectRepository.getDonationProjectByProjectId(id);
     }
 
-    public List<ProjectTagDisplayTable> getAllProjectTags() {
-        List<Object[]> results = projectRepository.findAllProjectTags();
-        List<ProjectTagDisplayTable> projectTagDisplayTableList = new ArrayList<>();
-
-        for (Object[] result : results) {
-            DonationProject project = (DonationProject) result[0];
-            Tag tag = (Tag) result[1];
-
-            ProjectTagDisplayTable dto = new ProjectTagDisplayTable(
-                    project.getProjectId(),
-                    project.getProjectName(),
-                    tag.getTagName()
-            );
-
-            projectTagDisplayTableList.add(dto);
-        }
-
-        return projectTagDisplayTableList;
-    }
-
-    public List<ProjectTagDisplayTable> getAllProjectTagsByManager(int managerId, Pageable pageable) {
+    public List<ProjectTagDisplayTable> getAllProjectTagsByManager(int managerId) {
         // Fetch all project and tag data for the given manager ID
-        List<Object[]> results = projectRepository.findAllProjectTagsByManager(managerId, pageable);
+        List<Object[]> results = projectRepository.findAllProjectTagsByManager(managerId);
 
         List<ProjectTagDisplayTable> projectTagDisplayTableList = new ArrayList<>();
 
         for (Object[] result : results) {
-            DonationProject project = (DonationProject) result[0];
-            Tag tag = (Tag) result[1];
+            Integer projectId = (Integer) result[0];
+            String projectName = (String) result[1];
+            Integer tagId = (Integer) result[2];
+            String tagName = (String) result[3];
 
-            ProjectTagDisplayTable displayTable = new ProjectTagDisplayTable(
-                    project.getProjectId(),
-                    project.getProjectName(),
-                    tag.getTagName()
-            );
+            ProjectTagDisplayTable displayTable = new ProjectTagDisplayTable(projectId, projectName, tagId, tagName);
 
             projectTagDisplayTableList.add(displayTable);
         }

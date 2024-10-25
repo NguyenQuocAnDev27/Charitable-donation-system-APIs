@@ -202,7 +202,6 @@ public class ProjectDetailAdminController{
             projectDetailForm.getNewListText().forEach(projectDetailText -> {
                 String contentWithBr = replaceNewLinesWithBr(projectDetailText.getContent());
                 projectDetailText.setContent(contentWithBr);
-                projectDetailText.setProject(donationProject);
                 projectDetailText.setIsDelete(1);
                 projectDetailText.setCreatedAt(LocalDateTime.now());
                 this.projectDetailTextServiceAdmin.saveProjectDetailText(projectDetailText);
