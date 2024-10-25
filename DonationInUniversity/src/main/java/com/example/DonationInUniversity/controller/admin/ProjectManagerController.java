@@ -83,31 +83,26 @@ public class ProjectManagerController {
 
         return "ProjectManager/DonationProject";
     }
-
-
     // Save or Update Project
     @PostMapping("/saveOrUpdateProject")
     public String addOrUpdateProject(@ModelAttribute("project") DonationProject project, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
-        User user=userAdminService.adminGetUserByUsername(username);
+        User user = userAdminService.adminGetUserByUsername(username);
         UserBankInfo bankInfo = userBankInfoAdminService.findByUser(user);
         if (bankInfo == null || bankInfo.getAccount_no() == null || bankInfo.getAccount_no().isEmpty()) {
             redirectAttributes.addFlashAttribute("errorMessage", "Bạn phải nhập thông tin tài khoản ngân hàng trước khi tạo dự án.");
             return "redirect:/manager"; // Điều hướng người dùng về trang nhập thông tin tài khoản ngân hàng
         }
-        if(project.getProjectId() == null){
+        if (project.getProjectId() == null) {
             try {
                 project.setIsDeleted(1);
                 project.setProjectManager(user);
                 projectServiceAdmin.addProject(project);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        }
-        else {
+        } else {
             try {
                 project.setIsDeleted(1);
                 project.setProjectManager(user);
@@ -115,31 +110,17 @@ public class ProjectManagerController {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
-        User user = userAdminService.adminGetUserByUsername(username);
-        project.setIsDeleted(1);
-        project.setProjectManager(user);
-
-        if (project.getProjectId() == null) {
-            projectServiceAdmin.addProject(project);
-        } else {
-            projectServiceAdmin.updateProject(project);
-
         }
         return "redirect:/manager";
     }
-
-    // Delete Project
     @PostMapping("/deleteProject/{id}")
-    public String deleteProject(@PathVariable int id) {
+    public String deleteProject ( @PathVariable int id){
         projectServiceAdmin.deleteProject(id);
         return "redirect:/manager";
     }
-
-    // Tags Management Page
     // Tags Management Page
     @GetMapping("/TagsManagement")
-    public String tagsManagementPage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    public String tagsManagementPage (Model model,@RequestParam(name = "page", defaultValue = "1") int pageNo){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userAdminService.adminGetUserByUsername(username);
@@ -176,9 +157,9 @@ public class ProjectManagerController {
 
     // Save or Update Tag
     @PostMapping("/saveOrUpdateTag")
-    public String addOrUpdateTag(
+    public String addOrUpdateTag (
             @ModelAttribute("tag") Tag tag,
-            @RequestParam("projectId") Integer projectId) {
+            @RequestParam("projectId") Integer projectId){
 
         // Fetch the selected project by ID
         DonationProject project = projectService.getProjectById(projectId);
@@ -196,7 +177,7 @@ public class ProjectManagerController {
 
     // Delete Tag
     @PostMapping("/deleteTag/{id}")
-    public String deleteTag(@PathVariable int id) {
+    public String deleteTag ( @PathVariable int id){
         tagService.deleteTag(id);
         return "redirect:/manager/TagsManagement";
     }
