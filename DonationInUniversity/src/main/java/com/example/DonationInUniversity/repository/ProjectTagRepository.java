@@ -17,4 +17,12 @@ public interface ProjectTagRepository extends JpaRepository<ProjectTag, Integer>
     @Query("SELECT pt.tag FROM ProjectTag pt WHERE pt.donationProject.projectId = :projectId")
     List<Tag> findTagsByProjectId(@Param("projectId") Integer projectId);
 
+    @Query("SELECT CASE WHEN COUNT(pt) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM ProjectTag pt " +
+            "JOIN pt.donationProject dp " +
+            "JOIN pt.tag t " +
+            "WHERE dp.projectId = :projectId AND t.tagName = :tagName")
+    boolean existsByProjectIdAndTagName(@Param("projectId") Integer projectId, @Param("tagName") String tagName);
+
+
 }

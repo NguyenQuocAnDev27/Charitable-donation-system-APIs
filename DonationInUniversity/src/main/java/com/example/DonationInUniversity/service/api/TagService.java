@@ -1,19 +1,16 @@
-package com.example.DonationInUniversity.service.admin;
+package com.example.DonationInUniversity.service.api;
 
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.Tag;
 import com.example.DonationInUniversity.model.ProjectTag;
-import com.example.DonationInUniversity.repository.DonationProjectRepository;
 import com.example.DonationInUniversity.repository.TagRepository;
 import com.example.DonationInUniversity.repository.ProjectTagRepository;
-import com.example.DonationInUniversity.service.api.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,7 +46,7 @@ public class TagService {
         tagRepository.deleteById(tagId);
     }
 
-    public void saveTagWithProject(Tag tag, Integer projectId) {
+    public void saveTagWithProjectTag(Tag tag, Integer projectId) {
         // Fetch the DonationProject by its ID
         DonationProject project = projectService.getProjectById(projectId);
 
@@ -67,5 +64,16 @@ public class TagService {
 
         // Save the project-tag association (in Project_Tags table)
         projectTagRepository.save(projectTag);
+    }
+
+    public Tag findOrCreateByName(String tagName) {
+        Optional<Tag> existingTag = tagRepository.findByTagName(tagName);
+        if (existingTag.isPresent()) {
+            return existingTag.get();
+        } else {
+            Tag newTag = new Tag();
+            newTag.setTagName(tagName);
+            return tagRepository.save(newTag);
+        }
     }
 }

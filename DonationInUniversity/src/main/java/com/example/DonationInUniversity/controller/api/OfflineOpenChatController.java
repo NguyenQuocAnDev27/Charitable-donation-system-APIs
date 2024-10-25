@@ -126,7 +126,7 @@ public class OfflineOpenChatController {
                 }
 
                 logger.debug("Translated tags to Vietnamese: {}", translatedTags);
-                return CompletableFuture.completedFuture(new MyCustomResponse<>(200, "Success message here", translatedTags));
+                return CompletableFuture.completedFuture(new MyCustomResponse<>(200, "Success create tags", translatedTags));
             } else {
                 logger.warn("Failed to extract tags from response");
                 return CompletableFuture.completedFuture(new MyCustomResponse<>(500, "Failed to extract tags from response", null));
