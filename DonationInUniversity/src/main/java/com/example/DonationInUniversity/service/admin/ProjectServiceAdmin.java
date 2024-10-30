@@ -1,7 +1,6 @@
 package com.example.DonationInUniversity.service.admin;
 
 import com.example.DonationInUniversity.model.ProjectTagDisplayTable;
-import com.example.DonationInUniversity.model.Tag;
 import com.example.DonationInUniversity.repository.ProjectAdminRepository;
 import com.example.DonationInUniversity.model.DonationProject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +23,17 @@ public class ProjectServiceAdmin {
     public Optional<DonationProject> getProjectById(int id) {
         return projectRepository.findById(id);
     }
-    public DonationProject addProject(DonationProject donationProject) {
+    public void addProject(DonationProject donationProject) {
         try {
-            return projectRepository.save(donationProject);
+            projectRepository.save(donationProject);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public DonationProject updateProject( DonationProject donationProject) {
+    public void updateProject(DonationProject donationProject) {
         try{
-            return projectRepository.save(donationProject);
+            projectRepository.save(donationProject);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
