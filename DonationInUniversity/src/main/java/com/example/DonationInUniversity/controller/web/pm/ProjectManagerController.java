@@ -59,7 +59,7 @@ public class ProjectManagerController {
     }
 
     // Project Management Home Page
-    @GetMapping({"", "/", "projects"})
+    @GetMapping({ "", "/", "projects" })
     public String projectHomePage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -70,8 +70,9 @@ public class ProjectManagerController {
 
         try {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            Page<DonationProject> pageDonation = projectServiceAdmin.getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
-
+            Page<DonationProject> pageDonation = projectServiceAdmin
+                    .getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
+            model.addAttribute("role", "project_manager");
             model.addAttribute("currentUrl", "DonationProject");
             model.addAttribute("totalPage", pageDonation.getTotalPages());
             model.addAttribute("listProjects", pageDonation);
@@ -81,14 +82,13 @@ public class ProjectManagerController {
         } catch (Exception e) {
             // Log the error
             System.err.println("Error fetching projects for manager: " + e.getMessage());
-            model.addAttribute("listProjects", Page.empty());  // Return an empty page
+            model.addAttribute("role", "project_manager");
+            model.addAttribute("listProjects", Page.empty()); // Return an empty page
             model.addAttribute("totalPage", 0);
-            model.addAttribute("currentPage", 1);
+            model.addAttribute("currentPage", 0);
         }
-
-        return "ProjectManager/DonationProject";
+        return "pages/projectsManagementPage/project_management";
     }
-
 
     // Save or Update Project
     @PostMapping("/saveOrUpdateProject")
@@ -110,7 +110,12 @@ public class ProjectManagerController {
     // Delete Project
     @PostMapping("/deleteProject/{id}")
     public String deleteProject(@PathVariable int id) {
-        projectServiceAdmin.deleteProject(id);
+        try {
+            projectServiceAdmin.deleteProject(id);
+        } catch (Exception e) {
+            System.err.println("Error deleting project: " + e.getMessage());
+            return "pages/errorPage/404";
+        }
         return "redirect:/manager";
     }
 }
