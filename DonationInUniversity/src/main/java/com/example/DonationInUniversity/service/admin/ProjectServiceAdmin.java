@@ -52,7 +52,7 @@ public class ProjectServiceAdmin {
     }
     public Page<DonationProject> getAllDonationProjectByManager(int id,int pageNo) {
         Pageable pageable= PageRequest.of(pageNo-1, 5);
-        return this.projectRepository.findAll(pageable);
+        return this.projectRepository.findAllByManagerId(id,pageable);
     }
     public DonationProject getDonationProjectById(int id) {
         return this.projectRepository.getDonationProjectByProjectId(id);

@@ -6,5 +6,78 @@
 </head>
 <body>
 
+<div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" th:fragment="project_form_create(role)">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form th:object="${project}" th:action="@{${role == 'admin' ? '/admin/saveOrUpdateProject' : '/manager/saveOrUpdateProject'}}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            style="background-color: red"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" th:field="*{projectId}" class="form-control" required/>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Project Name</label>
+                            <input type="text" th:field="*{projectName}" class="form-control" placeholder="Enter Project Name" required/>
+                        </div>
+
+                        <!-- Conditionally Render Fields Based on Role -->
+                        <div class="col-5 mb-6" th:if="${role == 'admin'}">
+                            <label class="form-label">Project Manager</label>
+                            <select class="form-select" th:field="*{projectManager}" required>
+                                <option value="" disabled selected>-- Choose Project Manager --</option>
+                                <option th:each="manager : ${projectManagers}" th:value="${manager.userId}" th:text="${manager.fullName}"></option>
+                            </select>
+                        </div>
+
+
+                        <!-- Common Fields -->
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Goal Amount</label>
+                            <input type="text" id="goalAmount" th:field="*{goalAmount}" class="form-control" placeholder="Enter Goal Amount" required/>
+                            <div id="goal-error" class="text-danger" style="display: none;">Goal Amount must be a valid number.</div>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Current Amount</label>
+                            <input type="text" id="currentAmount" th:field="*{currentAmount}" class="form-control" placeholder="Enter Current Amount" required/>
+                            <div id="amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div>
+                            <div id="amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" th:field="*{startDate}" class="form-control" placeholder="Enter Start Date" required/>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">End Date</label>
+                            <input type="date" th:field="*{endDate}" class="form-control" placeholder="Enter End Date" required/>
+                            <div id="date-error" class="text-danger" style="display: none;">Start Date must be earlier than End Date.</div>
+                        </div>
+                        <div class="col mb-6">
+                            <label class="form-label">Project Description</label>
+                            <input type="text" th:field="*{description}" class="form-control" placeholder="Enter Project Description" required/>
+                        </div>
+                    </div>
+                    <div class="col-5 mb-6" th:if="${role == 'project_manager'}">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" th:field="*{status}">
+                            <option value="pending" selected>Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="stopped">Stopped</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary mx-2">Save</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
