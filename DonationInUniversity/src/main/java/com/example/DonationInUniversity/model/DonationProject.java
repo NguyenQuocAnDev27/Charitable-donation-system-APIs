@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -41,14 +40,11 @@ public class DonationProject {
     private User projectManager;
     @Column(nullable = false)
     private int isDeleted;
-
-
     @OneToMany(mappedBy = "project")
     private List<ProjectDetailText> projectDetailTexts;
 
     @OneToMany(mappedBy = "project")
     private List<ProjectDetailImage> projectDetailImages;
-
     // Getters and setters
 
     public Integer getProjectId() {
