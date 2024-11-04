@@ -46,11 +46,11 @@ public class OfflineOpenChatController {
     @Async
     @PostMapping("/create_tags")
     public CompletableFuture<MyCustomResponse<String>> callOpenChatApi(@RequestBody Map<String, String> requestBody) {
-        logger.debug("Received request to /create_tags");
+        logger.info("Received request to /create_tags");
 
         // Extract the blog content from the incoming request body
         String blogContent = requestBody.get("content");
-        logger.debug("Extracted blog content: {}", blogContent);
+        logger.info("Extracted blog content: {}", blogContent);
 
         // Check if the blog content is empty or null
         if (blogContent == null || blogContent.trim().isEmpty()) {
@@ -71,7 +71,7 @@ public class OfflineOpenChatController {
             );
         }
 
-        logger.debug("Translated content: {}", translatedContent);
+        logger.info("Translated content: {}", translatedContent);
 
         // Continue with the logic for calling the OpenChat API using the translated content
         Map<String, Object> openChatRequestBody = new HashMap<>();
@@ -89,18 +89,18 @@ public class OfflineOpenChatController {
         openChatRequestBody.put("messages", List.of(systemMessage, userMessage));
         openChatRequestBody.put("stream", false);
 
-        logger.debug("Constructed OpenChat request body: {}", openChatRequestBody);
+        logger.info("Constructed OpenChat request body: {}", openChatRequestBody);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(openChatRequestBody, headers);
-        logger.debug("Prepared HTTP entity: {}", entity);
+        logger.info("Prepared HTTP entity: {}", entity);
 
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            logger.debug("Calling external API: {}", BASE_URL + "/api/chat");
+            logger.info("Calling external API: {}", BASE_URL + "/api/chat");
             ResponseEntity<OpenChatResponse> response = restTemplate.exchange(
                     BASE_URL + "/api/chat",
                     HttpMethod.POST,
@@ -108,11 +108,11 @@ public class OfflineOpenChatController {
                     OpenChatResponse.class
             );
 
-            logger.debug("Received response from OpenChat API: {}", response);
+            logger.info("Received response from OpenChat API: {}", response);
 
             if (response.getBody() != null && response.getBody().getMessage() != null) {
                 String tags = response.getBody().getMessage().getContent();
-                logger.debug("Extracted tags: {}", tags);
+                logger.info("Extracted tags: {}", tags);
 
                 // Translate the extracted tags to Vietnamese
                 String translatedTags;
@@ -125,7 +125,7 @@ public class OfflineOpenChatController {
                     );
                 }
 
-                logger.debug("Translated tags to Vietnamese: {}", translatedTags);
+                logger.info("Translated tags to Vietnamese: {}", translatedTags);
                 return CompletableFuture.completedFuture(new MyCustomResponse<>(200, "Success create tags", translatedTags));
             } else {
                 logger.warn("Failed to extract tags from response");
@@ -140,7 +140,7 @@ public class OfflineOpenChatController {
 
 
     private String translateContent(String content, String targetLang) throws Exception {
-        logger.debug("Translating content: {} to language: {}", content, targetLang);
+        logger.info("Translating content: {} to language: {}", content, targetLang);
 
         // Create the request body for the translation service
         Map<String, String> translateRequestBody = new HashMap<>();
@@ -156,7 +156,7 @@ public class OfflineOpenChatController {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            logger.debug("Calling translation API: {}", TRANSLATE_URL + "/translate");
+            logger.info("Calling translation API: {}", TRANSLATE_URL + "/translate");
             ResponseEntity<Map> response = restTemplate.exchange(
                     TRANSLATE_URL + "/translate",
                     HttpMethod.POST,
@@ -164,12 +164,12 @@ public class OfflineOpenChatController {
                     Map.class
             );
 
-            logger.debug("Received response from translation API: {}", response);
+            logger.info("Received response from translation API: {}", response);
 
             // Extract the translated text from the response
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 String translatedText = (String) response.getBody().get("translatedText");
-                logger.debug("Translated text: {}", translatedText);
+                logger.info("Translated text: {}", translatedText);
                 return translatedText;
             } else {
                 logger.warn("Translation API returned an error: {}", response);

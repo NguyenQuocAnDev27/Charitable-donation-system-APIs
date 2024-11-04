@@ -167,9 +167,11 @@ public class TagsController {
     @ResponseBody
     public StringBuilder getContent(@PathVariable("projectId") Integer projectId) {
         List<ProjectDetailText> result = projectDetailTextRepository.findByProjectId(projectId);
+
         StringBuilder content = new StringBuilder();
         for (ProjectDetailText p: result) {
-            content.append(p.getContent());
+            logger.info("list:" + p.getContent());
+            content.append(' ').append(p.getContent());
         }
         return content;
     }
