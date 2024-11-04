@@ -1,5 +1,6 @@
 package com.example.DonationInUniversity.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

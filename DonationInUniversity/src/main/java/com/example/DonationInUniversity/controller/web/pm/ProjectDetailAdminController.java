@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.controller.web.pm;
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.admin.ProjectDetailImageServiceAdmin;
@@ -72,7 +72,7 @@ public class ProjectDetailAdminController{
         model.addAttribute("donationProject", donationProject);
         model.addAttribute("newListImage", newListImage);
         model.addAttribute("newListText", newListText);
-        return "ProjectManager/ProjectDetail";
+        return "pages/projectsManagementPage/project_detail";
     }
     @PostMapping("/{id}/ProjectDetail")
     public String deleteProjectDetail(@PathVariable int id,

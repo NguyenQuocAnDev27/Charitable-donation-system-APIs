@@ -1,0 +1,153 @@
+<!doctype html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        lang="en"
+        class="light-style layout-menu-fixed layout-compact"
+        dir="ltr"
+        data-theme="theme-default"
+        data-assets-path="./static/assets"
+        data-template="vertical-menu-template-free"
+        data-style="light">
+<head th:replace="~{ProjectManager/Head :: head}"></head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <!-- Menu -->
+    <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{ProjectManager/Menu :: menu}">
+      <!-- DashBoard in menu -->
+    </aside>
+    <!-- / Menu -->
+
+    <!-- Layout container -->
+    <div class="layout-page">
+      <!-- Navbar -->
+      <nav
+              class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+              id="layout-navbar"
+              th:replace="~{ProjectManager/Navbar :: navbar}">
+      </nav>
+      <!-- / Navbar -->
+
+      <!-- Table -->
+      <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="card">
+          <div class="row align-items-center">
+            <div class="col-3">
+              <h5 class="card-header">Donation Projects</h5>
+            </div>
+            <div class="col-8">
+              <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
+                <button type="button" class="btn btn-secondary add-new btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                  <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+                  <span class="d-none d-sm-inline-block">Donation Project</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive text-nowrap">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Project-ID</th>
+                <th>Project Name</th>
+                <th>Current Amount</th>
+                <th>Process</th>
+                <th>Days Remaining</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody class="table-border-bottom-0 align-items-center">
+              <tr th:each="project : ${listProjects}">
+                <td th:text="${project.projectId}"></td>
+                <td>
+                  <span th:if="${project.status == 'stopped'}" th:text="${project.projectName}" class="text-danger text-decoration-line-through"></span>
+                  <span th:if="${project.status == 'completed'}" th:text="${project.projectName}" class="text-success"></span>
+                  <span th:if="${project.status == 'pending'}" th:text="${project.projectName}" class="text-warning"></span>
+                  <span th:if="${project.status != 'stopped' && project.status != 'completed' && project.status != 'pending'}" th:text="${project.projectName}"></span>
+                </td>
+                <td th:text="${project.currentAmount}"></td>
+                <td>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="width: 150px; background-color: #e0e0e0; border-radius: 5px; margin: 0 10px;">
+                      <div th:style="'width: ' + (${project.currentAmount} > ${project.goalAmount} ? 100 : (${project.currentAmount} / ${project.goalAmount} * 100)) + '%; background-color: #76c7c0; height: 20px; border-radius: 5px;'"
+                           title="Current: ${project.currentAmount} / Goal: ${project.goalAmount}">
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), project.endDate)} + ' ngày còn lại'"></td>
+                <td>
+                  <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" th:href="@{/manager/{id}/ProjectDetail(id=${project.projectId})}" data-bs-toggle="tooltip" data-bs-placement="right" title="Xem chi tiết">
+                        <i class="bx bx-show-alt me-1"></i>Detail
+                      </a>
+                      <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#basicModal" th:data-project-id="${project.projectId}" th:data-project-name="${project.projectName}" th:data-goal-amount="${project.goalAmount}" th:data-current-amount="${project.currentAmount}" th:data-start-date="${project.startDate}" th:data-end-date="${project.endDate}" th:data-description="${project.description}" th:data-status="${project.status}">
+                        <i class="bx bx-edit-alt me-1"></i>Edit
+                      </button>
+                      <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                        <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
+                          <i class="bx bx-trash me-1"></i> Delete
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-3">
+          <li class="page-item" th:if="${currentPage > 1}">
+            <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage )}" th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link" th:href="@{'?page='+${i}}" th:text="${i}"></a>
+          </li>
+          <li class="page-item" th:if="${currentPage < totalPage}">
+            <a class="page-link" th:href="@{'?page='+${currentPage + 1}}">Next</a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /Table -->
+
+      <!-- Footer -->
+      <footer class="content-footer footer bg-footer-theme" th:replace="~{ProjectManager/Footer :: footer}">
+      </footer>
+      <!-- / Footer -->
+
+      <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+  </div>
+</div>
+<!-- / Layout wrapper -->
+
+<!-- Core JS -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- Page JS -->
+<script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+
+<!-- Place this tag before closing body tag for GitHub widget button. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+</body>
+</html>

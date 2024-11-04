@@ -1,26 +1,31 @@
 package com.example.DonationInUniversity.model;
 
-import java.util.Date;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "Tags")
 public class Tag {
-    private int tagId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer tagId;
+
+    @Column(nullable = false, unique = true)
     private String tagName;
-    private Date createdAt;
-    private Date updatedAt;
 
-    public Tag(int tagId, String tagName, Date createdAt, Date updatedAt) {
-        this.tagId = tagId;
-        this.tagName = tagName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Getters and Setters
-    public int getTagId() {
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    // Getters and setters
+    public Integer getTagId() {
         return tagId;
     }
 
-    public void setTagId(int tagId) {
+    public void setTagId(Integer tagId) {
         this.tagId = tagId;
     }
 
@@ -32,19 +37,19 @@ public class Tag {
         this.tagName = tagName;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
