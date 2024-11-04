@@ -1,7 +1,13 @@
-- đổi encoder từ sha256 -> bcrypt 
-- thay đổi file sha256encoder thành JwtUtils trong folder utils
-- file JwtUtils chỉ liên quan tới JWT chứ ko còn encoder nữa
-- đã sửa các đường dẫn có liên quan tới file JwtUtils (trong file ApiRequestFilter)
-- seucurity config chia làm 2 hàm config khác nhau
-- Order(1) sẽ được ưu tiên trước, dành cho api
-- Order(1)  dành cho admin
+s(s(NP, VP)) --> np(NP), vp(VP).
+np(np(NN, C, NNP)) --> nn_nha(NN), c(C), nnp(NNP).  
+np(np(NN)) --> nn_nha(NN).                           
+vp(vp(P, AdjP)) --> p(P), adjp(AdjP).             
+vp(vp(P)) --> p(P).                                 
+adjp(adjp(Adj, NN)) --> adj(Adj), nn_truong(NN).      
+adjp(adjp(Adj)) --> adj(Adj).                         
+nn_nha(nn('nha')) --> ['nha'].
+nn_truong(nn('truong')) --> ['truong'].
+nnp(nnp('Nam')) --> ['Nam'].
+p(p('o')) --> [o].
+adj(adj('gan')) --> [gan].
+c(c('cua')) --> ['cua'].

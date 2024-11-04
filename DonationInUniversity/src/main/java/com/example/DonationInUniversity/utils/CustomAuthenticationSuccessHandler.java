@@ -19,7 +19,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException, ServletException {
         // Lấy các quyền (roles) của người dùng
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-
+        request.getSession().setAttribute("user", authentication.getPrincipal());
         // Kiểm tra quyền và chuyển hướng
         if (roles.contains("admin")) {
             response.sendRedirect("/admin/"); // Chuyển hướng đến /admin nếu là admin

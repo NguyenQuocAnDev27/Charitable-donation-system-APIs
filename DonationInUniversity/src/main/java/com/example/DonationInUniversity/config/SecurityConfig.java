@@ -115,8 +115,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
 
                 )
-
-
                 .formLogin(form -> form
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/doLogin")
