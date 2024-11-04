@@ -7,8 +7,30 @@
       data-assets-path="./static/assets"
       data-template="vertical-menu-template-free"
       data-style="light">
+<ul class="menu-inner py-1" th:fragment="sidebar_admin">
+    <li class="menu-item"  th:classappend="${currentUrl == 'AccountManagement'} ? ' active'">
+        <a th:href="@{/admin/AccountManagement}" class="menu-link">
+            <span class="text-truncate" >Account Management</span>
+        </a>
+    </li>
+    <li class="menu-item"  th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
 
-<ul class="menu-inner py-1" th:fragment="dashboards">
+        <a th:href="@{/admin/DonationProject}" class="menu-link">
+            <span class="text-truncate" >Project Management</span>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a
+                href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
+                target="_blank"
+                class="menu-link">
+            <i class="menu-icon tf-icons bx bx-file"></i>
+            <span class="text-truncate" data-i18n="Documentation">Report</span>
+        </a>
+    </li>
+</ul>
+
+<ul class="menu-inner py-1" th:fragment="sidebar_pm">
     <!-- Project Management Menu Item -->
     <li class="menu-item" th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
         <a th:href="@{/manager}" class="menu-link">
@@ -30,5 +52,4 @@
         </a>
     </li>
 </ul>
-
 </html>

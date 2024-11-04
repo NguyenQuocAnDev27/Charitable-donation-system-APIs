@@ -1,18 +1,17 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.controller.web.pm;
+
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.ProjectDetailTextRepository;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
-import com.example.DonationInUniversity.service.api.TagService;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
 import com.example.DonationInUniversity.service.api.ProjectService;
 import com.example.DonationInUniversity.service.api.ProjectTagService;
+import com.example.DonationInUniversity.service.api.TagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,9 +29,8 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/manager")
-public class ProjectManagerController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProjectManagerController.class);
+public class TagsController {
+    private static final Logger logger = LoggerFactory.getLogger(TagsController.class);
 
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
@@ -54,82 +53,47 @@ public class ProjectManagerController {
     @Value("${server.url}")
     private String serverUrl;
 
-    // Project Management Home Page
-    @GetMapping("")
-    public String projectHomePage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    private static String getUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Assuming the user has only one role
+            return authentication.getAuthorities()
+                    .stream()
+                    .findFirst()
+                    .map(GrantedAuthority::getAuthority)
+                    .orElse(null); // Returns the role name or null if no roles are found
+        }
+
+        return null; // User is not authenticated
+    }
+
+    private CustomUserDetails getAuth() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
+
         User user = userAdminService.adminGetUserByUsername(username);
-        if (user == null) {
-            return "redirect:/admin/login";
-        }
 
-        try {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            Page<DonationProject> pageDonation = projectServiceAdmin.getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
-
-            model.addAttribute("currentUrl", "DonationProject");
-            model.addAttribute("totalPage", pageDonation.getTotalPages());
-            model.addAttribute("listProjects", pageDonation);
-            model.addAttribute("currentPage", pageNo);
-            model.addAttribute("project", new DonationProject());
-
-        } catch (Exception e) {
-            // Log the error
-            System.err.println("Error fetching projects for manager: " + e.getMessage());
-            model.addAttribute("listProjects", Page.empty());  // Return an empty page
-            model.addAttribute("totalPage", 0);
-            model.addAttribute("currentPage", 1);
-        }
-
-        return "ProjectManager/DonationProject";
+        if (user == null) {return null;}
+        return (CustomUserDetails) authentication.getPrincipal();
     }
 
-
-    // Save or Update Project
-    @PostMapping("/saveOrUpdateProject")
-    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userAdminService.adminGetUserByUsername(username);
-        project.setIsDeleted(1);
-        project.setProjectManager(user);
-
-        if (project.getProjectId() == null) {
-            projectServiceAdmin.addProject(project);
-        } else {
-            projectServiceAdmin.updateProject(project);
-        }
-        return "redirect:/manager";
-    }
-
-    // Delete Project
-    @PostMapping("/deleteProject/{id}")
-    public String deleteProject(@PathVariable int id) {
-        projectServiceAdmin.deleteProject(id);
-        return "redirect:/manager";
-    }
-
-    // Tags Management Page
-    // Tags Management Page
     @GetMapping("/TagsManagement")
     public String tagsManagementPage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userAdminService.adminGetUserByUsername(username);
-
-        if (user == null) {
-            return "redirect:/admin/login";
-        }
-
         try {
+            if (getAuth() == null) {
+                return "redirect:/admin/login";
+            }
+
+            CustomUserDetails userDetails = getAuth();
+
             // Fetch tags with associated projects for the current manager
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             List<ProjectTagDisplayTable> projectTagDisplayTableList = projectServiceAdmin.getAllProjectTagsByManager(userDetails.getUserModel().getUserId());
 
             // Fetch all available projects for the dropdown
             List<DonationProject> projects = projectServiceAdmin.getAllProjectsForManager(userDetails.getUserModel().getUserId());
 
+            model.addAttribute("role", "project_manager");
             model.addAttribute("currentUrl", "TagsManagement");
             model.addAttribute("totalPage", projectTagDisplayTableList.size()); // Assuming pagination
             model.addAttribute("projectTagDisplayTableList", projectTagDisplayTableList); // The combined data for display
@@ -140,13 +104,15 @@ public class ProjectManagerController {
 
         } catch (Exception e) {
             System.err.println("Error fetching tags: " + e.getMessage());
+            model.addAttribute("role", "project_manager");
             model.addAttribute("projectTagDisplayTableList", List.of());  // Return an empty list
             model.addAttribute("totalPage", 0);
             model.addAttribute("currentPage", 1);
             model.addAttribute("serverUrl", serverUrl);
         }
 
-        return "ProjectManager/TagsManagement";
+        // return "ProjectManager/TagsManagement";
+        return "pages/tagsManagementPage/tags_management";
     }
 
 

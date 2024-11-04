@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.controller.web.global;
 
 import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.model.VerifiedUser;
@@ -19,16 +19,20 @@ public class RegisterController {
     @GetMapping("register")
     public String register(Model model) {
         model.addAttribute("user", new User());
-        return "register";
+        return "pages/authPage/register";
     }
     @PostMapping("register")
-    public String register(@ModelAttribute("user") User user, Model model) {
-        VerifiedUser newUser =new VerifiedUser();
-        newUser.setFullName(user.getFullName());
-        newUser.setEmail(user.getEmail());
-        newUser.setPasswordHash(user.getPasswordHash());
-        newUser.setPhoneNumber(user.getPhoneNumber());
-        userService.saveUser(newUser,"admin");
-        return "redirect:login";
+    public String register(@ModelAttribute("user") User user) {
+        try {
+            VerifiedUser newUser =new VerifiedUser();
+            newUser.setFullName(user.getFullName());
+            newUser.setEmail(user.getEmail());
+            newUser.setPasswordHash(user.getPasswordHash());
+            newUser.setPhoneNumber(user.getPhoneNumber());
+            userService.saveUser(newUser,"admin");
+            return "redirect:pages/login";
+        } catch (Exception e) {
+            return "pages/errorPage/404";
+        }
     }
 }

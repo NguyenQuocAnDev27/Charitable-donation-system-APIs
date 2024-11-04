@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.controller.web.pm;
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.admin.ProjectDetailImageServiceAdmin;
