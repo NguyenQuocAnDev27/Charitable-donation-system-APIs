@@ -163,18 +163,30 @@ public class TagsController {
         return "redirect:/manager/TagsManagement";
     }
 
-    @GetMapping("/getProjectDetails/{projectId}")
+    @GetMapping(value = "/getProjectDetails/{projectId}", produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public StringBuilder getContent(@PathVariable("projectId") Integer projectId) {
+    public ResponseEntity<Map<String, String>> getContent(@PathVariable("projectId") Integer projectId) {
         List<ProjectDetailText> result = projectDetailTextRepository.findByProjectId(projectId);
 
         StringBuilder content = new StringBuilder();
-        for (ProjectDetailText p: result) {
-            logger.info("list:" + p.getContent());
+        for (ProjectDetailText p : result) {
             content.append(' ').append(p.getContent());
         }
-        return content;
+
+        logger.info("<<>> Content: {}", content);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Content-Encoding", "UTF-8");
+
+        // Create a JSON-compatible map
+        Map<String, String> response = new HashMap<>();
+        response.put("content", content.toString());
+
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
+
+
     @Value("${server.url}")
     private String BASE_URL;
 
