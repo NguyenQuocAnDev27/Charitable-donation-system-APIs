@@ -16,7 +16,7 @@
     <div class="layout-container">
         <!-- Menu -->
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{components/menu :: menu}">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{components/menu :: menu(${role})}">
             <!--  DashBoard in menu  -->
         </aside>
         <!-- / Menu -->
@@ -25,11 +25,8 @@
         <div class="layout-page">
             <!-- Navbar -->
 
-            <nav
-                    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-                    id="layout-navbar"
-                    th:replace="~{components/navbar :: navbar}"
-            >
+            <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                 id="layout-navbar" th:replace="~{components/navbar :: navbar}">
             </nav>
 
             <!-- / Navbar -->
@@ -73,7 +70,7 @@
                                             <div class="card-title d-flex align-items-start justify-content-between mb-4">
                                                 <div class="avatar flex-shrink-0">
                                                     <img
-                                                            th:src="/assets/img/icons/unicons/chart-success.png"
+                                                            th:src="@{/assets/img/icons/unicons/chart-success.png}"
                                                             alt="chart success"
                                                             class="rounded" />
                                                 </div>
@@ -105,7 +102,7 @@
                                             <div class="card-title d-flex align-items-start justify-content-between mb-4">
                                                 <div class="avatar flex-shrink-0">
                                                     <img
-                                                            th:src="/assets/img/icons/unicons/wallet-info.png"
+                                                            th:src="@{/assets/img/icons/unicons/wallet-info.png}"
                                                             alt="wallet info"
                                                             class="rounded" />
                                                 </div>
@@ -233,7 +230,7 @@
                                         <div class="card-body">
                                             <div class="card-title d-flex align-items-start justify-content-between mb-4">
                                                 <div class="avatar flex-shrink-0">
-                                                    <img th:src="/assets/img/icons/unicons/paypal.png" alt="paypal" class="rounded" />
+                                                    <img th:src="@{/assets/img/icons/unicons/paypal.png}" alt="paypal" class="rounded" />
                                                 </div>
                                                 <div class="dropdown">
                                                     <button
@@ -262,7 +259,7 @@
                                         <div class="card-body">
                                             <div class="card-title d-flex align-items-start justify-content-between mb-4">
                                                 <div class="avatar flex-shrink-0">
-                                                    <img th:src="/assets/img/icons/unicons/cc-primary.png" alt="Credit Card" class="rounded" />
+                                                    <img th:src="@{/assets/img/icons/unicons/cc-primary.png}" alt="Credit Card" class="rounded" />
                                                 </div>
                                                 <div class="dropdown">
                                                     <button

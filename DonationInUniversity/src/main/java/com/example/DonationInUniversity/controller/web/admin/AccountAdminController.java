@@ -32,6 +32,7 @@ public class AccountAdminController {
         List<Role> roles= userAdminService.getAllRole();
         model.addAttribute("listUsers", users);
         model.addAttribute("listRoles", roles);
+        model.addAttribute("role", "admin");
         model.addAttribute("currentUrl", "AccountManagement");
         model.addAttribute("users", new User());
         // return "AccountManagement";
