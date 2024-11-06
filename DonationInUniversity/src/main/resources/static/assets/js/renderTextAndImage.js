@@ -16,9 +16,9 @@ document.querySelectorAll('.btn-primary').forEach(button => {
         hiddenInputElement.type = 'hidden'; // Đặt loại là hidden
         hiddenInputElement.classList.add('input-index'); // Thêm lớp cho dễ dàng quản lý
 
-        if (this.textContent.includes("Add Text")) {
+        if (this.textContent.includes("Thêm văn bản")) {
             inputElement = document.createElement('textarea');
-            inputElement.placeholder = 'Enter your text here...';
+            inputElement.placeholder = 'Nhập nội dung chiến dịch...';
             inputElement.classList.add('form-control', 'mt-2');
 
             inputElement.style.overflow = 'hidden'; // Tắt cuộn dọc
@@ -32,7 +32,7 @@ document.querySelectorAll('.btn-primary').forEach(button => {
             hiddenInputElement.name = `newListText[${textareaCount}].display_order`; // Số thứ tự cho textarea
             inputElement.name = `newListText[${textareaCount}].content`; // Nội dung của textarea
             inputElement.setAttribute('th:field', `*{newListText[${textareaCount}].content}`); // Thêm th:field cho textarea
-        } else if (this.textContent.includes("Add Image")) {
+        } else if (this.textContent.includes("Thêm ảnh")) {
             inputElement = document.createElement('input');
             inputElement.type = 'file';
             inputElement.accept = 'image/*';
@@ -67,7 +67,7 @@ document.querySelectorAll('.btn-primary').forEach(button => {
 
         // Tạo nút Delete
         const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
+        deleteButton.textContent = 'Xóa';
         deleteButton.classList.add('btn', 'btn-sm', 'btn-danger', 'ms-2'); // Thêm kiểu Bootstrap
 
         // Xử lý sự kiện xóa input
