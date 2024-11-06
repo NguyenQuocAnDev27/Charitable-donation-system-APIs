@@ -10,24 +10,24 @@
 <ul class="menu-inner py-1" th:fragment="sidebar_admin">
     <li class="menu-item"  th:classappend="${currentUrl == 'AccountManagement'} ? ' active'">
         <a th:href="@{/admin/AccountManagement}" class="menu-link">
-            <span class="text-truncate" >Account Management</span>
+            <span class="text-truncate" >Quản lý tài khoản</span>
         </a>
     </li>
     <li class="menu-item"  th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
 
         <a th:href="@{/admin/DonationProject}" class="menu-link">
-            <span class="text-truncate" >Project Management</span>
+            <span class="text-truncate" >Quản lý chiến dịch</span>
         </a>
     </li>
-    <li class="menu-item">
-        <a
-                href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                target="_blank"
-                class="menu-link">
-            <i class="menu-icon tf-icons bx bx-file"></i>
-            <span class="text-truncate" data-i18n="Documentation">Report</span>
-        </a>
-    </li>
+<!--    <li class="menu-item">-->
+<!--        <a-->
+<!--                href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"-->
+<!--                target="_blank"-->
+<!--                class="menu-link">-->
+<!--            <i class="menu-icon tf-icons bx bx-file"></i>-->
+<!--            <span class="text-truncate" data-i18n="Documentation">Report</span>-->
+<!--        </a>-->
+<!--    </li>-->
 </ul>
 
 <ul class="menu-inner py-1" th:fragment="sidebar_pm">
@@ -44,6 +44,5 @@
             <span class="text-truncate">Quản lý Tags</span>
         </a>
     </li>
-
 </ul>
 </html>

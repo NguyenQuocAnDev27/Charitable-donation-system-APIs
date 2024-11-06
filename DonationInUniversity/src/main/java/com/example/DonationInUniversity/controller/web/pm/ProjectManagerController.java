@@ -106,16 +106,15 @@ public class ProjectManagerController {
         }
         return "redirect:/manager";
     }
-
     // Delete Project
     @PostMapping("/deleteProject/{id}")
     public String deleteProject(@PathVariable int id) {
         try {
             projectServiceAdmin.deleteProject(id);
+            return "redirect:/manager";
         } catch (Exception e) {
             System.err.println("Error deleting project: " + e.getMessage());
             return "pages/errorPage/404";
         }
-        return "redirect:/manager";
     }
 }

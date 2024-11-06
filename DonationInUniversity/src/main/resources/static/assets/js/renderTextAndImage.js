@@ -150,16 +150,16 @@ function updateInputIndexes() {
         }
     });
 }
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const dynamicInputsContainer = document.getElementById('dynamic-inputs');
-// Function to auto-resize the textarea
+    // Function to auto-resize the textarea
     function autoResizeTextarea(textarea) {
         textarea.style.height = 'auto'; // Reset height to auto
         textarea.style.height = textarea.scrollHeight + 'px'; // Set height to scroll height
         textarea.style.overflow = 'hidden';
     }
     // Apply the auto-resize function to all textareas on input event
-    dynamicInputsContainer.addEventListener('input', function (event) {
+    dynamicInputsContainer.addEventListener('input', function(event) {
         if (event.target.tagName.toLowerCase() === 'textarea') {
             autoResizeTextarea(event.target); // Adjust height on user input
         }
@@ -167,11 +167,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial auto-resize for all existing textareas on page load
     const textareas = dynamicInputsContainer.querySelectorAll('textarea');
-    textareas.forEach(function (textarea) {
+    textareas.forEach(function(textarea) {
         autoResizeTextarea(textarea); // Adjust height initially based on content
     });
     // Sử dụng event delegation để gán sự kiện delete cho các phần tử ban đầu
-    dynamicInputsContainer.addEventListener('click', function (event) {
+    dynamicInputsContainer.addEventListener('click', function(event) {
         if (event.target.classList.contains('delete-btn')) {
             const wrapper = event.target.closest('.input-wrapper');
             if (wrapper) {
@@ -186,23 +186,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     wrappers.forEach(wrapper => {
         // Gán sự kiện kéo thả cho phần tử có sẵn
-        wrapper.addEventListener('dragstart', function (event) {
+        wrapper.addEventListener('dragstart', function(event) {
             event.dataTransfer.setData('text/plain', null); // Thiết lập dữ liệu khi bắt đầu kéo
             event.dataTransfer.effectAllowed = 'move'; // Chỉ cho phép di chuyển
             this.classList.add('dragging'); // Thêm lớp CSS cho phần tử đang kéo
         });
 
-        wrapper.addEventListener('dragend', function () {
+        wrapper.addEventListener('dragend', function() {
             this.classList.remove('dragging'); // Xóa lớp khi kết thúc kéo
             updateInputIndexes(); // Cập nhật lại số thứ tự sau khi kéo thả
         });
 
-        wrapper.addEventListener('dragover', function (event) {
+        wrapper.addEventListener('dragover', function(event) {
             event.preventDefault(); // Ngăn chặn hành động mặc định
             event.dataTransfer.dropEffect = 'move'; // Hiển thị hiệu ứng thả
         });
 
-        wrapper.addEventListener('drop', function (event) {
+        wrapper.addEventListener('drop', function(event) {
             event.preventDefault();
             const draggingElement = document.querySelector('.dragging'); // Lấy phần tử đang kéo
             if (draggingElement && draggingElement !== this) {
