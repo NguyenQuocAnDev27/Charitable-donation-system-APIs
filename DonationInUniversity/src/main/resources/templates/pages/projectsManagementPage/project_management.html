@@ -51,7 +51,7 @@
                                         data-bs-toggle="modal"
                                         data-bs-target="#basicModal">
                                     <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-                                    <span class="d-none d-sm-inline-block">Donation Project</span>
+                                    <span class="d-none d-sm-inline-block">Thêm chiến dịch</span>
                                 </button>
                             </div>
                         </div>
@@ -60,18 +60,18 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Project-ID</th>
-                                <th>Project Name</th>
-                                <th>Current Amount</th>
-                                <th>Process</th>
-                                <th>Days Remaining</th>
-                                <th>Action</th>
+                                <th>ID-Chiến dịch</th>
+                                <th>Tên chiến dịch</th>
+                                <th>Tiền hiện tại</th>
+                                <th>Tiến trình</th>
+                                <th>Ngày còn lại</th>
+                                <th>Hành động</th>
                             </tr>
                             </thead>
                             <tbody class="table-border-bottom-0 align-items-center">
                             <tr th:each="project : ${listProjects}">
                                 <td th:text="${project.projectId}"></td>
-                                <td>
+                                <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
                           <span th:if="${project.status == 'stopped'}"
                                 th:text="${project.projectName}"
                                 class="text-danger text-decoration-line-through"></span>
@@ -106,7 +106,7 @@
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="right"
                                                title="Xem chi tiết">
-                                                <i class="bx bx-show-alt me-1"></i>Detail
+                                                <i class="bx bx-show-alt me-1"></i>Chi tiết
                                             </a>
                                             <button class="dropdown-item" type="button"
                                                     data-bs-toggle="modal"
@@ -119,11 +119,11 @@
                                                     th:data-end-date="${project.endDate}"
                                                     th:data-description="${project.description}"
                                                     th:data-status="${project.status}"
-                                            ><i class="bx bx-edit-alt me-1"></i>Edit</button
+                                            ><i class="bx bx-edit-alt me-1"></i>Chỉnh sửa</button
                                             >
                                             <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
                                                 <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
-                                                    <i class="bx bx-trash me-1"></i> Delete
+                                                    <i class="bx bx-trash me-1"></i>Xóa
                                                 </button>
                                             </form>
                                         </div>
