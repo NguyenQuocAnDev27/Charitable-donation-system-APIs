@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.controller.web.pm;
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.admin.ProjectDetailImageServiceAdmin;
@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/manager")
 public class ProjectDetailAdminController{
+    private static final Logger logger = LoggerFactory.getLogger(ProjectDetailAdminController.class);
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
     @Autowired
@@ -72,7 +73,7 @@ public class ProjectDetailAdminController{
         model.addAttribute("donationProject", donationProject);
         model.addAttribute("newListImage", newListImage);
         model.addAttribute("newListText", newListText);
-        return "ProjectManager/ProjectDetail";
+        return "pages/projectsManagementPage/project_detail";
     }
     @PostMapping("/{id}/ProjectDetail")
     public String deleteProjectDetail(@PathVariable int id,
@@ -136,8 +137,7 @@ public class ProjectDetailAdminController{
     public String addOrUpdateProjectDetail(@ModelAttribute("projectDetailForm") ProjectDetailForm projectDetailForm,
                                            @PathVariable int projectId) {
         DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(projectId);
-
-
+    try {
         if (projectDetailForm.getNewListImage() != null) {
             projectDetailForm.getNewListImage().forEach(projectDetailImage -> {
                 projectDetailImage.setProject(donationProject);
@@ -191,12 +191,11 @@ public class ProjectDetailAdminController{
                 }
             });
         }
-
         else {
             this.projectDetailImageServiceAdmin.deleteProjectDetailImageByProjectId(projectId);
         }
+        List<ProjectDetailText> currentTexts = this.projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
         if (projectDetailForm.getNewListText() != null) {
-            List<ProjectDetailText> currentTexts = this.projectDetailTextServiceAdmin.getProjectDetailTextAdmin(projectId);
 
             // Lưu danh sách mới
             projectDetailForm.getNewListText().forEach(projectDetailText -> {
@@ -218,8 +217,17 @@ public class ProjectDetailAdminController{
                 }
             });
         }
-
+        else {
+            currentTexts.forEach(existingText ->{
+                this.projectDetailTextServiceAdmin.deleteProjectDetailText(existingText);
+            });
+        }
         return "redirect:/manager/" + projectId + "/ProjectDetail";
+    }
+    catch (Exception e){
+        logger.error(e.getMessage());
+        return "pages/errorPage/404";
+        }
     }
 
     public String getFileExtension(String fileName) {

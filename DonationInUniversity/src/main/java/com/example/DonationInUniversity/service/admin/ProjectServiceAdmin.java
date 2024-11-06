@@ -1,7 +1,6 @@
 package com.example.DonationInUniversity.service.admin;
 
 import com.example.DonationInUniversity.model.ProjectTagDisplayTable;
-import com.example.DonationInUniversity.model.Tag;
 import com.example.DonationInUniversity.repository.ProjectAdminRepository;
 import com.example.DonationInUniversity.model.DonationProject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +23,17 @@ public class ProjectServiceAdmin {
     public Optional<DonationProject> getProjectById(int id) {
         return projectRepository.findById(id);
     }
-    public DonationProject addProject(DonationProject donationProject) {
+    public void addProject(DonationProject donationProject) {
         try {
-            return projectRepository.save(donationProject);
+            projectRepository.save(donationProject);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public DonationProject updateProject( DonationProject donationProject) {
+    public void updateProject(DonationProject donationProject) {
         try{
-            return projectRepository.save(donationProject);
+            projectRepository.save(donationProject);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -53,47 +52,25 @@ public class ProjectServiceAdmin {
     }
     public Page<DonationProject> getAllDonationProjectByManager(int id,int pageNo) {
         Pageable pageable= PageRequest.of(pageNo-1, 5);
-        return this.projectRepository.findAll(pageable);
+        return this.projectRepository.findAllByManagerId(id,pageable);
     }
     public DonationProject getDonationProjectById(int id) {
         return this.projectRepository.getDonationProjectByProjectId(id);
     }
 
-    public List<ProjectTagDisplayTable> getAllProjectTags() {
-        List<Object[]> results = projectRepository.findAllProjectTags();
-        List<ProjectTagDisplayTable> projectTagDisplayTableList = new ArrayList<>();
-
-        for (Object[] result : results) {
-            DonationProject project = (DonationProject) result[0];
-            Tag tag = (Tag) result[1];
-
-            ProjectTagDisplayTable dto = new ProjectTagDisplayTable(
-                    project.getProjectId(),
-                    project.getProjectName(),
-                    tag.getTagName()
-            );
-
-            projectTagDisplayTableList.add(dto);
-        }
-
-        return projectTagDisplayTableList;
-    }
-
-    public List<ProjectTagDisplayTable> getAllProjectTagsByManager(int managerId, Pageable pageable) {
+    public List<ProjectTagDisplayTable> getAllProjectTagsByManager(int managerId) {
         // Fetch all project and tag data for the given manager ID
-        List<Object[]> results = projectRepository.findAllProjectTagsByManager(managerId, pageable);
+        List<Object[]> results = projectRepository.findAllProjectTagsByManager(managerId);
 
         List<ProjectTagDisplayTable> projectTagDisplayTableList = new ArrayList<>();
 
         for (Object[] result : results) {
-            DonationProject project = (DonationProject) result[0];
-            Tag tag = (Tag) result[1];
+            Integer projectId = (Integer) result[0];
+            String projectName = (String) result[1];
+            Integer tagId = (Integer) result[2];
+            String tagName = (String) result[3];
 
-            ProjectTagDisplayTable displayTable = new ProjectTagDisplayTable(
-                    project.getProjectId(),
-                    project.getProjectName(),
-                    tag.getTagName()
-            );
+            ProjectTagDisplayTable displayTable = new ProjectTagDisplayTable(projectId, projectName, tagId, tagName);
 
             projectTagDisplayTableList.add(displayTable);
         }

@@ -1,0 +1,189 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      class="light-style layout-menu-fixed layout-compact"
+      dir="ltr" data-theme="theme-default" data-assets-path="./static/assets"
+      data-template="vertical-menu-template-free" data-style="light">
+<head th:replace="~{components/header :: head}"></head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{components/menu :: menu(${role})}">
+            <!-- DashBoard in menu -->
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                 id="layout-navbar" th:replace="~{components/navbar :: navbar}">
+            </nav>
+            <!-- / Navbar -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form th:object="${users}" th:action="@{/admin/saveOrUpdateAccount}" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <input type="hidden" th:field="*{userId}" class="form-control"/>
+                                    <div class="col-5 mb-6">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" th:field="*{fullName}" class="form-control" placeholder="Enter Full Name"/>
+                                    </div>
+                                    <div class="col-5 mb-6">
+                                        <label class="form-label">Role</label>
+                                        <select class="form-select" th:field="*{role}">
+                                            <option th:each="roles : ${listRoles}" th:value="${roles.roleId}"
+                                                    th:text="${roles.roleName}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-5 mb-6">
+                                        <label class="form-label">Email</label>
+                                        <input id="email" type="text" th:field="*{email}" class="form-control" placeholder="Enter Email"/>
+                                        <div id="email-error" class="text-danger" style="display: none;">Wrong email format.</div>
+                                    </div>
+                                    <div class="col-5 mb-6">
+                                        <label class="form-label">Password</label>
+                                        <input type="text" th:field="*{passwordHash}" class="form-control" placeholder="Enter Password"/>
+                                    </div>
+                                    <div class="col-5 mb-6">
+                                        <label class="form-label">Phone Number</label>
+                                        <input id="phoneNumber" type="text" th:field="*{phoneNumber}" class="form-control" placeholder="Enter Phone Number"/>
+                                        <div id="phone-error" class="text-danger" style="display: none;">Wrong phone number format.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary mx-2">Save</button>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- / Modal -->
+
+            <!-- Table -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            <h5 class="card-header">Account Management</h5>
+                        </div>
+                        <div class="col-8">
+                            <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
+                                <button type="button" class="btn btn-secondary add-new btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#basicModal">
+                                    <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+                                    <span class="d-none d-sm-inline-block">Add New Account</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Account-ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                            <tr th:each="user : ${listUsers}">
+                                <td th:text="${user.userId}"></td>
+                                <td th:text="${user.fullName}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td th:text="${user.phoneNumber}"></td>
+                                <td th:text="${user.role.roleName}"></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#basicModal" th:data-user-id="${user.userId}"
+                                                    th:data-user-fullname="${user.fullName}"
+                                                    th:data-user-email="${user.email}"
+                                                    th:data-user-phonenumber="${user.phoneNumber}"
+                                                    th:data-user-role="${user.role.roleId}">
+                                                <i class="bx bx-edit-alt me-1"></i> Edit
+                                            </button>
+                                            <form th:action="@{/admin/deleteUser/{id}(id=${user.userId})}" method="post" style="display:inline;">
+                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không?');">
+                                                    <i class="bx bx-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /Table -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme" th:replace="~{components/Footer :: footer}"></footer>
+            <!-- / Footer -->
+        </div>
+        <!-- / Layout container -->
+    </div>
+</div>
+
+<!-- Core JS -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<!-- Page JS -->
+<script>
+    const editProjectModal = document.getElementById('basicModal');
+    editProjectModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        document.querySelector('input[name="fullName"]').value = button.getAttribute('data-user-fullname') || '';
+        document.querySelector('input[name="email"]').value = button.getAttribute('data-user-email') || '';
+        document.querySelector('input[name="passwordHash"]').value = '';
+        document.querySelector('input[name="phoneNumber"]').value = button.getAttribute('data-user-phonenumber') || '';
+        document.querySelector('input[name="userId"]').value = button.getAttribute('data-user-id') || '';
+        document.querySelector('select[name="role"]').value = button.getAttribute('data-user-role') || '';
+    });
+
+    function isValidEmail(email) {
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    }
+    document.getElementById('email').addEventListener('input', function () {
+        const emailError = document.getElementById('email-error');
+        emailError.style.display = isValidEmail(this.value) ? 'none' : 'block';
+    });
+
+    function isValidPhoneNumber(phoneNumber) {
+        return /^(03|05|07|08|09)\d{8}$/.test(phoneNumber);
+    }
+    document.getElementById('phoneNumber').addEventListener('input', function () {
+        const phoneError = document.getElementById('phone-error');
+        phoneError.style.display = isValidPhoneNumber(this.value) ? 'none' : 'block';
+    });
+</script>
+
+</body>
+</html>

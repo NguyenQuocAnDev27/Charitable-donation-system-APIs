@@ -92,15 +92,15 @@ public class UserService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) {
-        Optional<VerifiedUser> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
+        User user = loginService.loginAdmin(email);
+        if (user == null) {
             logger.error("User not found with email: {}", email);
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
         Collection<GrantedAuthority> authorities = new HashSet<>();
-        Role role = user.get().getRole();
+        Role role = user.getRole();
         authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-        return new CustomUserDetails(user.get(), authorities);
+        return new CustomUserDetails(user, authorities);
     }
 
     /**

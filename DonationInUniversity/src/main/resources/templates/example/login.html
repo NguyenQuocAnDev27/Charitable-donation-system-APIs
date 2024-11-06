@@ -136,29 +136,6 @@
     <script src="../assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script>
-      document.getElementById("formAuthentication").addEventListener("submit", async function(event) {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const response = await fetch('/api/authenticate', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email: email, password: password })
-        });
-        const data = await response.json();
-        if (response.ok) {
-
-          console.log("Response data:", data);
-          localStorage.setItem("accessToken", data.data.accessToken);
-          localStorage.setItem("refreshToken", data.data.refreshToken);
-        } else {
-          console.log("Response data:", data);
-          alert("Invalid username or password!");
-        }
-      });
-    </script>
 
     <!-- Place this tag before closing body tag for github widget button. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

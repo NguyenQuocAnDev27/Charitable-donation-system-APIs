@@ -18,4 +18,12 @@ public interface ProjectRepository extends JpaRepository<DonationProject,Integer
             @Param("projectManagerId") int projectManagerId,
             @Param("searchString") String searchString,
             Pageable pageable);
+
+    @Query("SELECT p.projectId, p.projectName, t.tagId, t.tagName " +
+            "FROM DonationProject p " +
+            "JOIN ProjectTag pt ON p.projectId = pt.donationProject.projectId " +
+            "JOIN Tag t ON pt.tag.tagId = t.tagId " +
+            "WHERE p.projectManager.userId = :managerId " +
+            "AND p.isDeleted = 0")
+    List<Object[]> findAllProjectTagsByManager(int managerId);
 }

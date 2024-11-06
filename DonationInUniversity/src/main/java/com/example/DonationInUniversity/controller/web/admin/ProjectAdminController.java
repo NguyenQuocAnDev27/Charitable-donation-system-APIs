@@ -1,4 +1,4 @@
-package com.example.DonationInUniversity.controller.admin;
+package com.example.DonationInUniversity.controller.web.admin;
 
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.User;
@@ -25,14 +25,15 @@ public class ProjectAdminController {
         model.addAttribute("currentUrl", "DonationProject");
         model.addAttribute("listProjects", projectServiceAdmin.getAllProjects());
         model.addAttribute("projectManagers", projectManagers);
+        model.addAttribute("role", "admin");
         model.addAttribute("project", new DonationProject());
-        return "DonationProject";
+        return "pages/projectsManagementPage/project_management";
     }
     @GetMapping("DonationProject/{id}")
     public String getDonationProject(Model model, @PathVariable int id) {
         Optional<DonationProject> project = projectServiceAdmin.getProjectById(id);
         model.addAttribute("project",project);
-        return "DonationProject";
+        return "pages/projectsManagementPage/project_management";
     }
     @PostMapping("saveOrUpdateProject")
     public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {

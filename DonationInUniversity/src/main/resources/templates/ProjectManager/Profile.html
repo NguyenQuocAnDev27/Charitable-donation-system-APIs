@@ -40,7 +40,7 @@
                     <!-- Your content goes here -->
 
                     <!-- Form for bank details -->
-                    <form id="bankDetailsForm">
+                    <form id="bankDetailsForm"  th:action="@{/manager/saveOrUpdateProfile}" method="post">
                         <div class="row">
                             <!-- Bank Account Type -->
                             <div class="col mb-3">
@@ -54,12 +54,19 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Bank</label>
+                                <select id="bankList" class="form-select" name="bank_id" required>
+                                    <option value="" disabled selected>-- Choose Bank --</option>
+                                </select>
+                            </div>
+                        </div>
                         <!-- Bank Account Number -->
                         <div class="row">
                             <div class="col mb-3">
                                 <label for="accountNumber" class="form-label">Bank Account Number</label>
-                                <input type="text" id="accountNumber" name="accountNumber" class="form-control" placeholder="Enter your bank account number" />
+                                <input type="text" id="accountNumber"  name="account_no" class="form-control" placeholder="Enter your bank account number" />
                             </div>
                         </div>
 
@@ -112,7 +119,38 @@
 
 <!-- Page JS -->
 <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
+<script>
+    // Gán giá trị bank_id từ Thymeleaf vào JavaScript, sử dụng giá trị mặc định nếu không có
+    const selectedBankId = [[${bank_id != null ? bank_id : 'null'}]];  // Gán `bank_id` hoặc null nếu không có giá trị
 
+    // Gọi API để lấy danh sách các ngân hàng
+    fetch('https://api.vietqr.io/v2/banks')
+        .then(response => response.json())
+        .then(data => {
+            const bankSelect = document.getElementById('bankList');
+
+            // Xóa các tùy chọn cũ nếu có
+            bankSelect.innerHTML = '<option value="" disabled>-- Choose Bank --</option>';
+
+            if (data && data.data && Array.isArray(data.data)) {
+                data.data.forEach(bank => {
+                    const option = document.createElement('option');
+                    option.value = bank.id;
+                    option.textContent = bank.short_name;
+
+                    // Nếu `bank_id` hiện tại không null và bằng với tùy chọn hiện tại, chọn nó
+                    if (selectedBankId !== 'null' && bank.id === selectedBankId) {
+                        option.selected = true; // Đánh dấu tùy chọn đã lưu
+                    }
+
+                    bankSelect.appendChild(option);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi khi lấy danh sách ngân hàng:', error);
+        });
+</script>
 <!-- Place this tag before closing body tag for github widget button. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>

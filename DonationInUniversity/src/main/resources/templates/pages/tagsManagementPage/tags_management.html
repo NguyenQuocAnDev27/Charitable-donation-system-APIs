@@ -1,0 +1,493 @@
+<!doctype html>
+<html class="light-style layout-menu-fixed layout-compact"
+      data-assets-path="./static/assets"
+      data-style="light"
+      data-template="vertical-menu-template-free"
+      data-theme="theme-default"
+      dir="ltr"
+      lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{components/header :: head}"></head>
+
+<body>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
+        <aside class="layout-menu menu-vertical menu bg-menu-theme"
+               th:replace="~{components/menu :: menu(role=role)}">
+        </aside>
+
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+            <nav
+                    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                    id="layout-navbar"
+                    th:replace="~{components/navbar :: navbar}">
+            </nav>
+            <!-- / Navbar -->
+
+            <!-- Success/Error Message Display -->
+            <div class="alert alert-success" id="successMessage" role="alert" th:if="${successMessage}">
+                <span th:text="${successMessage}"></span>
+            </div>
+            <div class="alert alert-danger" id="errorMessage" role="alert" th:if="${errorMessage}">
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <!-- Modal for Auto Create Tags -->
+            <div aria-hidden="true" class="modal fade" id="autoCreateTagsModal" tabindex="-1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Tự động tạo Tags</h5>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label" id="projectSelectLabel">Chọn chiến dịch</label>
+                                <select class="form-control" id="projectSelect">
+                                    <option disabled selected value="">Chọn chiến dịch</option>
+                                    <option th:each="project : ${projects}" th:text="${project.projectName}"
+                                            th:value="${project.projectId}"></option>
+                                </select>
+                            </div>
+
+                            <div class="text-center" id="loadingMessage" style="display: none;">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Đang tải...</span>
+                                </div>
+                                <p>Quá trình tạo tags sẽ mất nhiều thời gian. Vui lòng không đóng cửa sổ.</p>
+                            </div>
+
+                            <div class="center" id="createTagsButton" style="display: none;">
+                                <button class="btn btn-primary" onclick="createTags()" type="button">Tiến hành tự động
+                                    tạo Tags
+                                </button>
+                            </div>
+
+                            <!-- Table for Tags (Initially Hidden) -->
+                            <div class="mt-8" id="tagsTableContainer" style="display: none;">
+                                <div class="table-responsive">
+                                    <table class="table" id="tagsTable">
+                                        <thead>
+                                        <tr>
+                                            <th>Tag</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tagsTableBody">
+                                        <!-- Rows will be dynamically added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Save Button (Initially Hidden) -->
+                                <div style="width: 100%; display:flex; align-items: center; justify-content: center;">
+                                    <button class="btn btn-success mt-3" id="saveButton" style="display: none;">Lưu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Form for Adding/Editing Tag -->
+            <div aria-hidden="true" class="modal fade" id="basicModal" tabindex="-1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form method="post" th:action="@{/manager/saveOrUpdateTag}">
+                            <div class="modal-header">
+                                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                        type="button"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <input class="form-control" name="tagId" th:value="${tag.tagId}" type="hidden"/>
+
+                                    <!-- Project Dropdown -->
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Chiến dịch</label>
+                                        <select class="form-control" name="projectId" required>
+                                            <option disabled selected value="">Chọn chiến dịch</option>
+                                            <option th:each="project : ${projects}" th:text="${project.projectName}"
+                                                    th:value="${project.projectId}"></option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Tag Name Input -->
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Tag</label>
+                                        <input class="form-control" name="tagName" placeholder="Nhập tag vào" required
+                                               th:value="${tag.tagName}" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" style="margin-right: 10px!important;" type="submit">
+                                    Lưu
+                                </button>
+                                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Đóng
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table and Buttons for Tags Management -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            <h5 class="card-header">Quản lý Tags</h5>
+                        </div>
+                        <div class="col-8">
+                            <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
+                                <!-- Add New Tag Button -->
+                                <button class="btn btn-secondary add-new btn-primary" data-bs-target="#basicModal"
+                                        data-bs-toggle="modal" type="button">
+                                    <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
+                                    <span class="d-none d-sm-inline-block">Thêm Tag mới</span>
+                                </button>
+
+                                <!-- Auto Create Tags Button -->
+                                <button class="btn btn-secondary add-new btn-primary"
+                                        data-bs-target="#autoCreateTagsModal"
+                                        data-bs-toggle="modal" onclick="resetAutoCreateTagsForm()"
+                                        type="button">
+                                    <i class="bx bx-refresh bx-sm me-0 me-sm-2"></i>
+                                    <span class="d-none d-sm-inline-block">Tự động tạo Tags</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags Table -->
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Chiến dịch</th>
+                                <th>Tag</th>
+                                <th>Hành động</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0 align-items-center">
+                            <tr th:each="tag : ${projectTagDisplayTableList}">
+                                <td th:text="${tag.projectName}"></td>
+                                <td th:text="${tag.tagName}"></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                                                type="button">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button class="dropdown-item" data-bs-target="#basicModal"
+                                                    data-bs-toggle="modal"
+                                                    th:data-project-name="${tag.projectName}"
+                                                    th:data-tag-id="${tag.tagId}"
+                                                    th:data-tag-name="${tag.tagName}"
+                                                    type="button">
+                                                <i class="bx bx-edit-alt me-1"></i>Sửa
+                                            </button>
+                                            <form method="post" style="display:inline;"
+                                                  th:action="@{/manager/deleteTag/{id}(id=${tag.tagId})}">
+                                                <button class="dropdown-item"
+                                                        onclick="return confirm('Tag này bị xoá bỏ vĩnh viễn!');"
+                                                        type="submit">
+                                                    <i class="bx bx-trash me-1"></i> Xoá
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- / Container -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme" th:replace="~{components/footer::footer}">
+            </footer>
+            <!-- / Footer -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+</div>
+
+<!-- Core JS -->
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<!-- Vendors JS -->
+<script th:src="@{/assets/vendor/libs/apex-charts/apexcharts.js}"></script>
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+<!-- JavaScript to handle project selection and loading content -->
+<script>
+    let DetailText = "";
+
+    document.getElementById('projectSelect').addEventListener('change', function () {
+        const projectId = this.value;
+        const loadingMessage = document.getElementById('loadingMessage');
+        const createTagsButton = document.getElementById('createTagsButton');
+
+        loadingMessage.style.display = 'block';
+        createTagsButton.style.display = 'none';
+
+        fetch(`/manager/getProjectDetails/${projectId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                loadingMessage.style.display = 'none';
+                if (data.length > 0) {
+                    createTagsButton.style.display = 'block';
+                }
+                console.log(data);
+
+                DetailText = data.trim();
+
+            }).catch(error => {
+            loadingMessage.innerHTML = 'Error loading project details.';
+            console.error('Error fetching project details:', error);
+        });
+
+    });
+
+    function resetAutoCreateTagsForm() {
+        document.getElementById("projectSelectLabel").style.display = 'block';
+        document.getElementById("projectSelect").style.display = 'block';
+        document.getElementById("createTagsButton").style.display = 'block';
+        selectedTags = [];
+        document.getElementById("tagsTableContainer").style.display = 'none';
+    }
+
+    function normalizeStrings(inputList) {
+        return inputList
+            .map(str => str.trim())
+            .filter(str => str.length > 0)
+            .map(str => str.toLowerCase());
+    }
+
+    function handleText(input) {
+        // Step 1: Remove unwanted characters
+        let cleanedInput = input.replace(/[{}"'\/]/g, '');
+        console.log("Step 1:" + cleanedInput);
+        // Step 2: Extract the content of the "Tags" array
+        let tagsString = cleanedInput.match(/Tags:\s*\[([^\]]+)\]/)[1];
+        console.log("Step 2:" + tagsString);
+        // Step 3: Split by comma to create individual phrases
+        let tagsArray = tagsString.split(',');
+
+        // Step 4: Trim any leading/trailing spaces from each tag
+        tagsArray = tagsArray.map(tag => tag.trim());
+
+        return normalizeStrings(tagsArray);
+    }
+
+    let selectedTags = []; // To store selected tags
+
+    // Populate the table with tags
+    // Populate the table with tags
+    function populateTable(tags) {
+        const tbody = document.getElementById('tagsTableBody');
+        tbody.innerHTML = ''; // Clear existing rows
+        selectedTags = tags;
+        tags.forEach(tag => {
+            const row = document.createElement('tr');
+
+            // Tag name column
+            const tagCell = document.createElement('td');
+            tagCell.textContent = tag;
+            row.appendChild(tagCell);
+
+            // Action button column
+            const actionCell = document.createElement('td');
+            const addButton = document.createElement('button');
+
+            // Check if the tag is already in the selectedTags array
+            if (selectedTags.includes(tag)) {
+                addButton.textContent = 'Xoá';
+                addButton.classList.add('btn', 'btn-danger');
+            } else {
+                addButton.textContent = 'Thêm';
+                addButton.classList.add('btn', 'btn-primary');
+            }
+
+            // Toggle functionality for add/remove
+            addButton.addEventListener('click', function () {
+                if (addButton.textContent === 'Add') {
+                    addButton.textContent = 'Remove';
+                    addButton.classList.remove('btn-primary');
+                    addButton.classList.add('btn-danger');
+                    selectedTags.push(tag); // Add to selected tags
+                } else {
+                    addButton.textContent = 'Add';
+                    addButton.classList.remove('btn-danger');
+                    addButton.classList.add('btn-primary');
+                    // Remove from selected tags
+                    const index = selectedTags.indexOf(tag);
+                    if (index > -1) {
+                        selectedTags.splice(index, 1);
+                    }
+                }
+            });
+
+            actionCell.appendChild(addButton);
+            row.appendChild(actionCell);
+
+            tbody.appendChild(row);
+        });
+    }
+
+
+    // Save button click handler
+    document.getElementById('saveButton').addEventListener('click', function () {
+        const projectId = document.getElementById('projectSelect').value; // Get selected project ID
+
+        if (!projectId) {
+            alert('No project selected');
+            return;
+        }
+
+        if (selectedTags.length === 0) {
+            alert('No tags selected');
+            return;
+        }
+
+        // Prepare the payload for saving the project and tags
+        const payload = {
+            projectId: projectId,
+            tags: selectedTags
+        };
+
+        // Send the selected project and tags to the backend
+        fetch('/manager/saveProjectTags', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        }).then(response => {
+            console.log("1 - Raw response: " + JSON.stringify(response));
+
+            // Check if the response is ok (status 200-299)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Parse the JSON body of the response
+            return response.json();
+        })
+            .then(data => {
+                // Handle success response
+                alert(data.message);
+                console.log("2 - Parsed response data: " + JSON.stringify(data));
+                // You can optionally reload the page or reset the form here
+                window.location.reload();
+            })
+            .catch(error => {
+                // Handle error response
+                console.error('Error saving project tags:', error);
+                alert('An error occurred while saving project tags: ' + error.message);
+            });
+    });
+
+
+    // Function to fetch and populate tags
+    function createTags() {
+        const serverUrl = "http://192.168.100.124:8080"; // Replace this with the actual server URL
+        const content = DetailText; // Assuming DetailText contains the content
+        console.log(content);
+        // Check if the content exists
+        if (!content) {
+            alert('Content is empty!');
+            return;
+        }
+
+        // Show the loading message while fetching data
+        document.getElementById('loadingMessage').style.display = 'block';
+        const createTagsButton = document.getElementById('createTagsButton');
+        createTagsButton.style.display = 'none'; // Hide the create tags button while loading
+
+        // Prepare the POST request
+        fetch(`${serverUrl}/api/offline_open_chat/create_tags`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({content: content}) // Send the content as JSON in the body
+        })
+            .then(response => {
+                // Check if the response status is OK
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response JSON
+            })
+            .then(data => {
+                // Hide loading message
+                document.getElementById('loadingMessage').style.display = 'none';
+
+                // Show the create tags button again
+                createTagsButton.style.display = 'block';
+
+                // Check if the status is 200 (Success)
+                if (data.status === 200) {
+                    alert(data.message); // Show success message
+                    const tags = handleText(data.data); // handleText should extract the tags from the response
+
+                    // Hide button
+                    document.getElementById("projectSelectLabel").style.display = 'none';
+                    document.getElementById("projectSelect").style.display = 'none';
+                    document.getElementById("createTagsButton").style.display = 'none';
+
+                    // Populate the table with tags
+                    populateTable(tags);
+
+                    // Show the table and save button
+                    document.getElementById('tagsTableContainer').style.display = 'block';
+                    document.getElementById('saveButton').style.display = 'block';
+                } else {
+                    alert('Error: ' + data.message); // Handle error
+                }
+            })
+            .catch(error => {
+                // Hide loading message and show create tags button again
+                document.getElementById('loadingMessage').style.display = 'none';
+                createTagsButton.style.display = 'block';
+
+                console.error('Error:', error);
+                alert('An error occurred while creating tags: ' + error.message);
+            });
+    }
+
+</script>
+</body>
+</html>
+
+<style>
+    @keyframes spinner-border {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>

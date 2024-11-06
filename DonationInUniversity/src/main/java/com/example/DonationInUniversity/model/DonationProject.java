@@ -40,6 +40,7 @@ public class DonationProject {
     private User projectManager;
     @Column(nullable = false)
     private int isDeleted;
+
     @OneToMany(mappedBy = "project")
     private List<ProjectDetailText> projectDetailTexts;
 

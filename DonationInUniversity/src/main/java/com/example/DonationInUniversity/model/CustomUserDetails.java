@@ -5,28 +5,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Optional;
 
 
 public class CustomUserDetails implements UserDetails, Serializable {
 
-    private VerifiedUser user;
+    private User user;
     private Collection<? extends GrantedAuthority> authorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
-    public CustomUserDetails(Optional<VerifiedUser> user, Collection<GrantedAuthority> authorities) {
+    public CustomUserDetails() {
         super();
     }
-    public VerifiedUser getUserModel() {
+    public User getUserModel() {
         return user;
     }
-    public void setAccountEntity(VerifiedUser user) {
+    public void setAccountEntity(User user) {
         this.user = user;
     }
-    public CustomUserDetails(VerifiedUser user, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(User user, Collection<? extends GrantedAuthority> authorities) {
         super();
         this.user = user;
         this.authorities = authorities;

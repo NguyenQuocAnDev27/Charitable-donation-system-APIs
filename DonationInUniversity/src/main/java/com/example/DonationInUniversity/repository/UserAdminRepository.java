@@ -12,6 +12,7 @@ public interface UserAdminRepository extends JpaRepository<User,Integer> {
     @Query(value = "SELECT * FROM users   where  is_deleted =?1",nativeQuery = true)
     List<User> findUsersByIsDeleted(int isDeleted);
 
+    @Query("SELECT u FROM User u WHERE u.email = ?1")
     User findByEmail(String email);
 
     List<User> findByRole(Role role);
