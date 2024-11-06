@@ -34,7 +34,7 @@
     <!-- Project Management Menu Item -->
     <li class="menu-item" th:classappend="${currentUrl == 'DonationProject'} ? ' active'">
         <a th:href="@{/manager}" class="menu-link">
-            <span class="text-truncate">Quản lý dự án</span>
+            <span class="text-truncate">Quản lý chiến dịch</span>
         </a>
     </li>
 
@@ -42,13 +42,6 @@
     <li class="menu-item" th:classappend="${currentUrl == 'TagsManagement'} ? ' active'">
         <a th:href="@{/manager/TagsManagement}" class="menu-link">
             <span class="text-truncate">Quản lý Tags</span>
-        </a>
-    </li>
-
-    <!-- Tags Management Menu Item -->
-    <li class="menu-item" th:classappend="${currentUrl == 'donation_project_v2'} ? ' active'">
-        <a th:href="@{/manager/donation_project_v2}" class="menu-link">
-            <span class="text-truncate">Quản lý chiến dịch</span>
         </a>
     </li>
 </ul>

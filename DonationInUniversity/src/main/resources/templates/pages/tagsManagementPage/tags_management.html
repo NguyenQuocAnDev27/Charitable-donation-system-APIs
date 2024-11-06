@@ -1,4 +1,5 @@
 <!doctype html>
+<meta charset="UTF-8">
 <html class="light-style layout-menu-fixed layout-compact"
       data-assets-path="./static/assets"
       data-style="light"
@@ -249,21 +250,25 @@
         loadingMessage.style.display = 'block';
         createTagsButton.style.display = 'none';
 
-        fetch(`/manager/getProjectDetails/${projectId}`)
+        fetch(`/manager/getProjectDetails/${projectId}`, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.text();
+                return response.json();
             })
             .then(data => {
                 loadingMessage.style.display = 'none';
-                if (data.length > 0) {
+                if (data.content && data.content.length > 0) {
                     createTagsButton.style.display = 'block';
                 }
-                console.log(data);
+                console.log(data.content);
 
-                DetailText = data.trim();
+                DetailText = data.content.trim();
 
             }).catch(error => {
             loadingMessage.innerHTML = 'Error loading project details.';
@@ -414,7 +419,7 @@
 
     // Function to fetch and populate tags
     function createTags() {
-        const serverUrl = "http://192.168.100.124:8080"; // Replace this with the actual server URL
+        const serverUrl = "http://192.168.1.148:8080"; // Replace this with the actual server URL
         const content = DetailText; // Assuming DetailText contains the content
         console.log(content);
         // Check if the content exists

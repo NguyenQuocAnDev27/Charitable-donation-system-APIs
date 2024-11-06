@@ -175,7 +175,7 @@ CREATE TABLE `Project_Detail_Text` (
 CREATE TABLE `Project_Detail_Image` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `project_id` INT NOT NULL,
-    `pathImage` VARCHAR(255) NOT NULL,
+    `path_Image` VARCHAR(255) NOT NULL,
     `IsDelete` BOOLEAN DEFAULT FALSE,
      `display_order` INT DEFAULT 0,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
