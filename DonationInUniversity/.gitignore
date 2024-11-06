@@ -33,15 +33,4 @@ build/
 .vscode/
 
 ### EVN ###
-/DonationInUniversity/src/main/resources/env.properties
-/DonationInUniversity/src/main/resources/credentials.json
-/DonationInUniversity/logs/spring.log
-
-.metadata
-.vscode
-.idea
-
-/DonationInUniversity/logs/
-/DonationInUniversity/src/main/resources/secret.json
-/DonationInUniversity/src/main/token
-/DonationInUniversity/tokens/StoredCredential
+/src/main/resources/env.properties
