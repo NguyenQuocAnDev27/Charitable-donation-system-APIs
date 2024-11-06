@@ -29,7 +29,10 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 │   │   │               ├── cache          # Caching mechanism classes
 │   │   │               ├── constants      # Constant defined classes
 │   │   │               ├── controller
-│   │   │               │   ├── admin      # Controllers for web admin/dashboard
+│   │   │               │   ├── web        # Controllers for web
+│   │   │               │   │   ├── admin         # Controllers for admin
+│   │   │               │   │   ├── global        # Controllers for global functions
+│   │   │               │   │   └── pm            # Controllers for project manager
 │   │   │               │   └── api        # REST APIs for backend services
 │   │   │               ├── exception      # Custom exception classes
 │   │   │               ├── model          # JPA entities representing DB tables
