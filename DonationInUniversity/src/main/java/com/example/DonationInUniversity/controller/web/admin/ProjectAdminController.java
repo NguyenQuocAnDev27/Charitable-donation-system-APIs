@@ -25,7 +25,7 @@ public class ProjectAdminController {
         model.addAttribute("currentUrl", "DonationProject");
         model.addAttribute("listProjects", projectServiceAdmin.getAllProjects());
         model.addAttribute("projectManagers", projectManagers);
-//        model.addAttribute("role", "admin");
+        model.addAttribute("role", "admin");
         model.addAttribute("project", new DonationProject());
         return "pages/projectsManagementPage/project_admin_management";
     }
