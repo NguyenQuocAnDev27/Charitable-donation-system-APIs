@@ -5,6 +5,7 @@ import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,16 @@ public class ProjectAdminController {
     @Autowired
     private UserAdminService userAdminService;
     @GetMapping("DonationProject")
-    public String projectHomePage(Model model) {
+    public String projectHomePage(Model model,@RequestParam(name = "page", defaultValue = "1") int pageNo) {
         List<User> projectManagers = userAdminService.getProjectManager();
+        Page<DonationProject> projects = projectServiceAdmin.getAllProjects(pageNo);
         model.addAttribute("currentUrl", "DonationProject");
-        model.addAttribute("listProjects", projectServiceAdmin.getAllProjects());
+        model.addAttribute("listProjects",projects );
         model.addAttribute("projectManagers", projectManagers);
         model.addAttribute("role", "admin");
         model.addAttribute("project", new DonationProject());
+        model.addAttribute("totalPage", projects.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
         return "pages/projectsManagementPage/project_admin_management";
     }
     @GetMapping("DonationProject/{id}")

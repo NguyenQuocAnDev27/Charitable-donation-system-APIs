@@ -21,8 +21,9 @@ public class ProjectServiceAdmin {
     private static final Logger logger = LoggerFactory.getLogger(ProjectServiceAdmin.class);
     @Autowired
     private ProjectAdminRepository projectRepository;
-    public List<DonationProject> getAllProjects() {
-        return projectRepository.findProjectAdminByIsDeleted(1);
+    public Page<DonationProject> getAllProjects(int pageNo) {
+        Pageable pageable= PageRequest.of(pageNo-1, 5);
+        return projectRepository.findProjectAdminByIsDeleted(1,pageable);
     }
     public Optional<DonationProject> getProjectById(int id) {
         return projectRepository.findById(id);

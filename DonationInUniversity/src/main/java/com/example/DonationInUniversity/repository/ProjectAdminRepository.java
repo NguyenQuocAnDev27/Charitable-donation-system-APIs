@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProjectAdminRepository extends JpaRepository<DonationProject, Integer> {
     @Query(value = "SELECT * FROM donation_projects  where  is_deleted =?1", nativeQuery = true)
-    List<DonationProject> findProjectAdminByIsDeleted(int isDeleted);
+    Page<DonationProject> findProjectAdminByIsDeleted(int isDeleted,Pageable pageable);
 
     @Query("SELECT u FROM DonationProject  u where  u.projectManager =?1")
     DonationProject findProjectAdminByProjectManagerId(int id);
