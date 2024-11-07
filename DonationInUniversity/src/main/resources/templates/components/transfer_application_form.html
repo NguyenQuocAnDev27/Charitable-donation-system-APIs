@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true" th:fragment="transfer_application_form">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form th:object="${transfer}" th:action="@{/manager/saveOrUpdateProject}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Yêu cầu chuyển tiền</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            style="background-color: red"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" th:field="*{projectId}" class="form-control" required/>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Tên chiến dich</label>
+                            <input type="text" class="form-control" placeholder="Nhập tên chiến dịch" required readonly/>
+                        </div>
+
+                        <!-- Common Fields -->
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Mức tiền chuyển</label>
+                            <input type="text" id="goalAmount" th:field="*{amount}" class="form-control" placeholder="Nhập mức tiền mục tiêu" required/>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Thêm file PDF:</label>
+                            <input type="file" th:field="*{documentPath}" accept="application/pdf" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary mx-2">Lưu</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

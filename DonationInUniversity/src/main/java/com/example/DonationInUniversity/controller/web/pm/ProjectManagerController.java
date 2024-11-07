@@ -78,6 +78,7 @@ public class ProjectManagerController {
             model.addAttribute("listProjects", pageDonation);
             model.addAttribute("currentPage", pageNo);
             model.addAttribute("project", new DonationProject());
+            model.addAttribute("transfer", new TransferApplication());
 
         } catch (Exception e) {
             // Log the error
@@ -86,6 +87,8 @@ public class ProjectManagerController {
             model.addAttribute("listProjects", Page.empty()); // Return an empty page
             model.addAttribute("totalPage", 0);
             model.addAttribute("currentPage", 0);
+            model.addAttribute("project", new DonationProject());
+            model.addAttribute("transfer", new TransferApplication());
         }
         return "pages/projectsManagementPage/project_management";
     }
@@ -93,18 +96,23 @@ public class ProjectManagerController {
     // Save or Update Project
     @PostMapping("/saveOrUpdateProject")
     public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        User user = userAdminService.adminGetUserByUsername(username);
-        project.setIsDeleted(1);
-        project.setProjectManager(user);
-
-        if (project.getProjectId() == null) {
-            projectServiceAdmin.addProject(project);
-        } else {
-            projectServiceAdmin.updateProject(project);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userAdminService.adminGetUserByUsername(username);
+            project.setIsDeleted(1);
+            project.setProjectManager(user);
+            if (project.getProjectId() == null) {
+                projectServiceAdmin.addProject(project);
+            } else {
+                projectServiceAdmin.updateProject(project);
+            }
+            return "redirect:/manager";
         }
-        return "redirect:/manager";
+        catch (Exception e){
+            logger.error(e.getMessage());
+            return "pages/errorPage/404";
+        }
     }
     // Delete Project
     @PostMapping("/deleteProject/{id}")

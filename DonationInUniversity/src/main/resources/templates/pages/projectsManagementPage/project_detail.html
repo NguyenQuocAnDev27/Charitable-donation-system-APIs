@@ -30,21 +30,22 @@
                     th:replace="~{components/navbar :: navbar}"
             >
             </nav>
-            <div th:if="${donationProject.isPresent()}">
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
+                        <div th:if="${donationProject.isPresent()}" class="row ms-3 mt-3">
                 <!-- Hiển thị các thuộc tính của donationProject -->
-                <h4 th:text="${donationProject.get().projectName}"></h4>
-                <p th:text="${donationProject.get().description}"></p>
-                <p>Start Date: <span th:text="${donationProject.get().startDate}"></span></p>
-                <p>End Date: <span th:text="${donationProject.get().endDate}"></span></p>
-                <h4>Chi tiết chiến dịch</h4>
-            </div>
+                            <h4 th:text="${donationProject.get().projectName}"></h4>
+                        <p th:text="${donationProject.get().description}"></p>
+                        <p>Ngày bắt đầu: <span th:text="${donationProject.get().startDate}"></span></p>
+                        <p>Ngày kết thúc: <span th:text="${donationProject.get().endDate}"></span></p>
+                        <h4>Chi tiết chiến dịch</h4>
+                    </div>
 
             <!-- Nếu không có project -->
             <div th:if="${!donationProject.isPresent()}">
                 <p>Tìm không thấy chiến dịch</p>
             </div>
-            <form th:action="@{/manager/{projectId}/saveOrUpdateProjectDetail(projectId=${donationProject.get().projectId})}" method="post" enctype="multipart/form-data" th:object="${projectDetailForm}">
-                <button type="submit" class="btn btn-primary mx-2" >Lưu</button>
+            <form th:action="@{/manager/{projectId}/saveOrUpdateProjectDetail(projectId=${donationProject.get().projectId})}" method="post" enctype="multipart/form-data" th:object="${projectDetailForm}" class="ms-3 mb-3">
                 <div id="dynamic-inputs" class="mt-3">
                     <!-- Mỗi input sẽ được bọc trong div "input-wrapper" -->
                     <!-- Nếu là Text -->
@@ -67,7 +68,7 @@
                         <button th:if="${item.type == 'image'}" type="button" class="btn btn-sm btn-danger ms-2 delete-btn">Xóa</button>
                     </div>
                 </div>
-            </form>
+
             <div class="d-flex justify-content-center">
                 <button
                         type="button"
@@ -84,6 +85,8 @@
                     <span class="d-none d-sm-inline-block">Thêm ảnh</span>
                 </button>
             </div>
+                <button type="submit" class="btn btn-primary mx-2 mt-3" >Lưu</button>
+            </form>
 
 
             <!-- Footer -->
@@ -97,7 +100,8 @@
     </div>
     <!-- / Layout page -->
 </div>
-
+    </div>
+</div>
 <!-- Overlay -->
 <div class="layout-overlay layout-menu-toggle"></div>
 <!-- / Layout wrapper -->
