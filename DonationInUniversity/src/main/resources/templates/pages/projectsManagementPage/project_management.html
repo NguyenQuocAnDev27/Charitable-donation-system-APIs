@@ -1,7 +1,7 @@
 <!doctype html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-        lang="en"
+        lang="vn"
         class="light-style layout-menu-fixed layout-compact"
         dir="ltr"
         data-theme="theme-default"
@@ -35,13 +35,14 @@
             <!-- / Navbar -->
 
             <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_create :: project_form_create(role=${role})}"></div>
+            <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true" th:replace="~{components/transfer_application_form ::transfer_application_form}"></div>
 
             <!-- Table -->
             <div class="container-xxl flex-grow-1 container-p-y">
                 <div class="card">
                     <div  class="row align-items-center">
                         <div class = "col-3">
-                            <h5 class="card-header">Donation Projects</h5>
+                            <h5 class="card-header">Chiến dịch từ thiện</h5>
                         </div>
                         <div class = "col-8 ">
                             <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
@@ -60,7 +61,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>ID-Chiến dịch</th>
+                                <th>ID</th>
                                 <th>Tên chiến dịch</th>
                                 <th>Tiền hiện tại</th>
                                 <th>Tiến trình</th>
@@ -94,7 +95,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), project.endDate)} + ' ngày còn lại'"></td>
+                                <td th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), project.endDate) > 0 ? T(java.time.temporal.ChronoUnit).DAYS.between(T(java.time.LocalDate).now(), project.endDate) : 0} + ' ngày còn lại'"></td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -120,6 +121,15 @@
                                                     th:data-description="${project.description}"
                                                     th:data-status="${project.status}"
                                             ><i class="bx bx-edit-alt me-1"></i>Chỉnh sửa</button
+                                            >
+                                            <button class="dropdown-item" type="button"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#transferModal"
+                                                    th:data-project-id="${project.projectId}"
+                                                    th:data-project-name="${project.projectName}"
+                                                    th:data-current-amount="${project.currentAmount}"
+                                                    th:data-status="${project.status}"
+                                            ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
                                             <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
                                                 <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
@@ -213,6 +223,16 @@
         document.querySelector('select[name="projectManager"]').value = projectManager;
     });
 
+    const transferProjectModal = document.getElementById('transferModal');
+    transferProjectModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Nút đã nhấn để mở modal
+        const projectName = button.getAttribute('data-project-name');
+        const projectId = button.getAttribute('data-project-id');
+
+        // Set các giá trị cho form
+        document.querySelector('input[name="projectName"]').value = projectName;
+        document.querySelector('input[name="projectId"]').value = projectId;
+    });
 
     const myModal = document.getElementById('basicModal');
         // Khi modal bị ẩn (đóng), đặt lại thông báo lỗi

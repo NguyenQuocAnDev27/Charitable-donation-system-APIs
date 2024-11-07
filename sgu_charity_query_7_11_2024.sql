@@ -195,3 +195,17 @@ CREATE TABLE `User_Bank_Info` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
 );
+CREATE TABLE `Transfer_Application` (
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `project_id` INT NOT NULL,
+    `amount` DECIMAL(10, 2) NOT NULL,
+    `user_id` INT NOT NULL,
+    `document_path` VARCHAR(255) NULL,
+	`bill_path` VARCHAR(255) NULL,
+	`status` VARCHAR(50) CHECK (`status` IN ('waiting', 'accept', 'decline')),
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
+);
