@@ -29,43 +29,47 @@
                     <div class="modal-content">
                         <form th:object="${users}" th:action="@{/admin/saveOrUpdateAccount}" method="post">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
+                                <h5 class="modal-title" id="exampleModalLabel1">Tài khoản</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="row">
                                     <input type="hidden" th:field="*{userId}" class="form-control"/>
                                     <div class="col-5 mb-6">
-                                        <label class="form-label">Full Name</label>
-                                        <input type="text" th:field="*{fullName}" class="form-control" placeholder="Enter Full Name"/>
+                                        <label class="form-label">Họ tên</label>
+                                        <input type="text" th:field="*{fullName}" class="form-control" placeholder="Nhập họ và tên" required/>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label class="form-label">Role</label>
+                                        <label class="form-label">Quyền</label>
                                         <select class="form-select" th:field="*{role}">
-                                            <option th:each="roles : ${listRoles}" th:value="${roles.roleId}"
-                                                    th:text="${roles.roleName}"></option>
+                                            <option value="" disabled>-- Chọn quyền --</option>
+                                            <option th:each="role : ${listRoles}"
+                                                    th:value="${role.roleId}"
+                                                    th:text="${role.roleName}">
+                                            </option>
                                         </select>
                                     </div>
+
                                     <div class="col-5 mb-6">
                                         <label class="form-label">Email</label>
-                                        <input id="email" type="text" th:field="*{email}" class="form-control" placeholder="Enter Email"/>
-                                        <div id="email-error" class="text-danger" style="display: none;">Wrong email format.</div>
+                                        <input id="email" type="text" th:field="*{email}" class="form-control" placeholder="Nhập Email" required/>
+                                        <div id="email-error" class="text-danger" style="display: none;">Sai định dạng</div>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label class="form-label">Password</label>
-                                        <input type="text" th:field="*{passwordHash}" class="form-control" placeholder="Enter Password"/>
+                                        <label class="form-label">Mật khẩu</label>
+                                        <input type="text" th:field="*{passwordHash}" class="form-control" placeholder="Nhập mật khẩu"/>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label class="form-label">Phone Number</label>
-                                        <input id="phoneNumber" type="text" th:field="*{phoneNumber}" class="form-control" placeholder="Enter Phone Number"/>
-                                        <div id="phone-error" class="text-danger" style="display: none;">Wrong phone number format.</div>
+                                        <label class="form-label">Số điện thoại</label>
+                                        <input id="phoneNumber" type="text" th:field="*{phoneNumber}" class="form-control" placeholder="Nhập số điện thoại"/>
+                                        <div id="phone-error" class="text-danger" style="display: none;">Sai định dạng.</div>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary mx-2">Save</button>
+                                <button type="submit" class="btn btn-primary mx-2">Lưu</button>
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                    Close
+                                    Thoát
                                 </button>
                             </div>
                         </form>
@@ -79,14 +83,14 @@
                 <div class="card">
                     <div class="row align-items-center">
                         <div class="col-3">
-                            <h5 class="card-header">Account Management</h5>
+                            <h5 class="card-header">Quản lý tài khoản</h5>
                         </div>
                         <div class="col-8">
                             <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
                                 <button type="button" class="btn btn-secondary add-new btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#basicModal">
+                                        data-bs-target="#basicModal" >
                                     <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-                                    <span class="d-none d-sm-inline-block">Add New Account</span>
+                                    <span class="d-none d-sm-inline-block">Thêm tài khoản</span>
                                 </button>
                             </div>
                         </div>
@@ -95,12 +99,12 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Account-ID</th>
-                                <th>Full Name</th>
+                                <th>ID</th>
+                                <th>Họ tên</th>
                                 <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Role</th>
-                                <th>Actions</th>
+                                <th>Số điện thoa</th>
+                                <th>Quyền</th>
+                                <th>Hành động</th>
                             </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
@@ -122,11 +126,11 @@
                                                     th:data-user-email="${user.email}"
                                                     th:data-user-phonenumber="${user.phoneNumber}"
                                                     th:data-user-role="${user.role.roleId}">
-                                                <i class="bx bx-edit-alt me-1"></i> Edit
+                                                <i class="bx bx-edit-alt me-1"></i> Chỉnh sửa
                                             </button>
                                             <form th:action="@{/admin/deleteUser/{id}(id=${user.userId})}" method="post" style="display:inline;">
                                                 <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa tài khoản này không?');">
-                                                    <i class="bx bx-trash me-1"></i> Delete
+                                                    <i class="bx bx-trash me-1"></i> Xóa
                                                 </button>
                                             </form>
                                         </div>
@@ -138,6 +142,20 @@
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    <li class="page-item"  th:if="${currentPage > 1}">
+                        <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage )}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{'?page='+${i}}" th:text="${i}"></a>
+                    </li>
+
+                    <li class="page-item" th:if="${currentPage < totalPage}">
+                        <a class="page-link" th:href="@{'?page='+${currentPage + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
             <!-- /Table -->
 
             <!-- Footer -->
@@ -156,7 +174,28 @@
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 
 <!-- Page JS -->
-<script>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const editProjectModal = document.getElementById('basicModal');
+
+        // Lấy username của người dùng hiện tại từ Thymeleaf vào JavaScript
+
+        editProjectModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Nút đã nhấn để mở modal
+            const currentUsername = /*[[${currentUsername}]]*/ ''; // Thymeleaf sẽ thay thế giá trị này khi render trang
+            console.log('Current Username:', currentUsername);
+            const selectedEmail = button.getAttribute('data-user-email'); // Lấy email từ nút để so sánh
+            console.log('Selected Email:', selectedEmail); // Hiển thị email tài khoản đang chỉnh sửa
+            // Lấy select element và kiểm tra xem có phải là tài khoản của chính người dùng không
+            const roleSelect = editProjectModal.querySelector('select[name="role"]');
+            if (selectedEmail === currentUsername) {  // So sánh email của người dùng hiện tại với email của tài khoản đang chỉnh sửa
+                roleSelect.disabled = true; // Vô hiệu hóa nếu đang chỉnh sửa chính tài khoản của mình
+            } else {
+                roleSelect.disabled = false; // Kích hoạt nếu là tài khoản khác
+            }
+        });
+    });
+
     const editProjectModal = document.getElementById('basicModal');
     editProjectModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
@@ -166,6 +205,8 @@
         document.querySelector('input[name="phoneNumber"]').value = button.getAttribute('data-user-phonenumber') || '';
         document.querySelector('input[name="userId"]').value = button.getAttribute('data-user-id') || '';
         document.querySelector('select[name="role"]').value = button.getAttribute('data-user-role') || '';
+
+
     });
 
     function isValidEmail(email) {

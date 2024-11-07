@@ -17,8 +17,9 @@ import java.util.Optional;
 public class ProjectServiceAdmin {
     @Autowired
     private ProjectAdminRepository projectRepository;
-    public List<DonationProject> getAllProjects() {
-        return projectRepository.findProjectAdminByIsDeleted(1);
+    public Page<DonationProject> getAllProjects(int pageNo) {
+        Pageable pageable= PageRequest.of(pageNo-1, 5);
+        return projectRepository.findProjectAdminByIsDeleted(1,pageable);
     }
     public Optional<DonationProject> getProjectById(int id) {
         return projectRepository.findById(id);
