@@ -1,14 +1,14 @@
 <!doctype html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-        lang="en"
+        lang="vn"
         class="light-style layout-menu-fixed layout-compact"
         dir="ltr"
         data-theme="theme-default"
         data-assets-path="./static/assets"
         data-template="vertical-menu-template-free"
         data-style="light">
-<head th:replace="~{ProjectManager/Head :: head}"></head>
+<head th:replace="~{components/header :: head}"></head>
 
 <body>
 <!-- Layout wrapper -->
@@ -16,7 +16,7 @@
     <div class="layout-container">
         <!-- Menu -->
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{ProjectManager/Menu :: menu}">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme" th:replace="~{components/menu :: menu(role)}">
             <!--  DashBoard in menu  -->
         </aside>
         <!-- / Menu -->
@@ -28,13 +28,15 @@
             <nav
                     class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar"
-                    th:replace="~{ProjectManager/Navbar :: navbar}"
+                    th:replace="~{components/navbar :: navbar}"
             >
             </nav>
 
             <!-- / Navbar -->
 
             <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="card">
             <div class="content-wrapper">
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <!-- Your content goes here -->
@@ -43,45 +45,27 @@
                     <form id="bankDetailsForm"  th:action="@{/manager/saveOrUpdateProfile}" method="post">
                         <div class="row">
                             <!-- Bank Account Type -->
-                            <div class="col mb-3">
-                                <label for="accountType" class="form-label">Bank Account Type</label>
-                                <select id="accountType" name="accountType" class="form-select">
-                                    <option value="">-- Select Account Type --</option>
-                                    <option value="savings">Savings Account</option>
-                                    <option value="current">Current Account</option>
-                                    <option value="business">Business Account</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col mb-3">
-                                <label class="form-label">Bank</label>
+                                <label class="form-label">Ngân hàng</label>
                                 <select id="bankList" class="form-select" name="bank_id" required>
-                                    <option value="" disabled selected>-- Choose Bank --</option>
+                                    <option value="" disabled selected>-- Chọn ngân hàng --</option>
                                 </select>
                             </div>
                         </div>
                         <!-- Bank Account Number -->
                         <div class="row">
                             <div class="col mb-3">
-                                <label for="accountNumber" class="form-label">Bank Account Number</label>
-                                <input type="text" id="accountNumber"  name="account_no" class="form-control" placeholder="Enter your bank account number" />
-                            </div>
-                        </div>
-
-                        <!-- Bank ID -->
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="bankId" class="form-label">Bank ID</label>
-                                <input type="text" id="bankId" name="bankId" class="form-control" placeholder="Enter your bank's ID" />
+                                <label for="accountNumber" class="form-label">Số tài khoản ngân hàng</label>
+                                <input type="text" id="accountNumber"  name="account_no" class="form-control" placeholder="Nhập số tài khoản ngân hàng" />
                             </div>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="row">
                             <div class="col mb-3">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
                             </div>
                         </div>
                     </form>
@@ -89,7 +73,7 @@
             </div>
 
             <!-- Footer -->
-            <footer class="content-footer footer bg-footer-theme" th:replace="~{ProjectManager/Footer :: footer}">
+            <footer class="content-footer footer bg-footer-theme" th:replace="~{components/footer :: footer}">
             </footer>
             <!-- / Footer -->
 
@@ -99,7 +83,8 @@
     </div>
     <!-- / Layout page -->
 </div>
-
+    </div>
+</div>
 <!-- Overlay -->
 <div class="layout-overlay layout-menu-toggle"></div>
 <!-- / Layout wrapper -->
@@ -130,7 +115,7 @@
             const bankSelect = document.getElementById('bankList');
 
             // Xóa các tùy chọn cũ nếu có
-            bankSelect.innerHTML = '<option value="" disabled>-- Choose Bank --</option>';
+            bankSelect.innerHTML = '<option value="" disabled>-- Chọn ngân hàng --</option>';
 
             if (data && data.data && Array.isArray(data.data)) {
                 data.data.forEach(bank => {

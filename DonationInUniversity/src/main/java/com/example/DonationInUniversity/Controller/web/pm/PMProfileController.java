@@ -55,8 +55,8 @@ public class PMProfileController {
         } else {
             model.addAttribute("profile", new UserBankInfo()); // Nếu không có, tạo mới đối tượng rỗng
         }
-
-        return "ProjectManager/Profile"; // Trả về trang Thymeleaf
+        model.addAttribute("role","project_manager");
+        return "pages/userManagementPage/Profile"; // Trả về trang Thymeleaf
     }
     @PostMapping("saveOrUpdateProfile")
     public String saveOrUpdateProfile(UserBankInfo profile) {
