@@ -48,9 +48,9 @@
 
                 <!-- Dropdown Menu Items -->
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li class="dropdown-divider my-1"></li>
+<!--                    <li class="dropdown-divider my-1"></li>-->
 
-                    <li>
+                    <li sec:authorize="hasAuthority('project_manager')">
                         <a class="dropdown-item" th:href="@{/manager/profile}">
                             <i class="bx bx-user bx-md me-3"></i>
                             <span>My Profile</span>

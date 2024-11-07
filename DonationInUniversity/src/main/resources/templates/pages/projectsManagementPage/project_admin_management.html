@@ -42,7 +42,7 @@
                     <div class="modal-content">
                         <form th:object="${project}" th:action="@{/admin/saveOrUpdateProject}" method="post">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel1">Donation Project</h5>
+                                <h5 class="modal-title" id="exampleModalLabel1">Chiến dịch từ thiện</h5>
                                 <button
                                         type="button"
                                         class="btn-close"
@@ -53,13 +53,13 @@
                                 <div class="row">
                                     <input type="hidden" th:field="*{projectId}" class="form-control" required/>
                                     <div class="col-5 mb-6">
-                                        <label  class="form-label">Project Name</label>
-                                        <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Enter Project Name" required/>
+                                        <label  class="form-label">Tên chiến dịch</label>
+                                        <input type="text"  th:field="*{projectName}"  class="form-control" placeholder="Nhập tên chiến dịch" required/>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label  class="form-label">Project Manager</label>
+                                        <label  class="form-label">Phụ trách</label>
                                         <select class="form-select"  th:field="*{projectManager}" required>
-                                            <option value="" disabled selected>-- Choose Project Manager --</option>
+                                            <option value="" disabled selected>-- Chọn người phụ trách --</option>
                                             <option th:each="manager : ${projectManagers}"
                                                     th:value="${manager.userId}"
                                                     th:text="${manager.fullName}">
@@ -67,35 +67,36 @@
                                         </select>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label  class="form-label">Goal Amount</label>
-                                        <input type="text" id="goalAmount" th:field="*{goalAmount}"     class="form-control" placeholder="Enter Goal Amount" required/>
-                                        <div id="goal-error" class="text-danger" style="display: none;">Goal Amount must be a valid number.</div>
+                                        <label  class="form-label">Số tiền mục tiêu </label>
+                                        <input type="text" id="goalAmount" th:field="*{goalAmount}"     class="form-control" placeholder="Nhâp số tiền mục tiêu" required/>
+                                        <div id="goal-error" class="text-danger" style="display: none;">Số tiền mục tiêu phải là số</div> <!-- Thông báo lỗi không phải là số -->
+
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label  class="form-label">Current Amount</label>
-                                        <input type="text" id="currentAmount" th:field="*{currentAmount}"  class="form-control" placeholder="Enter Current Amount" required/>
-                                        <div id="amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div> <!-- Thông báo lỗi không phải là số -->
-                                        <div id="amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
+                                        <label  class="form-label">Số tiền hiện tại</label>
+                                        <input type="text" id="currentAmount" th:field="*{currentAmount}"  class="form-control" placeholder="Nhập số tiền hiện tại" required/>
+                                        <div id="amount-number-error" class="text-danger" style="display: none;">Số tiền hiện tại phải là số</div> <!-- Thông báo lỗi không phải là số -->
+                                        <div id="amount-goal-error" class="text-danger" style="display: none;">Số tiền hiện tại phải ít hơn số tiền mục tiêu</div>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label  class="form-label">Start Date</label>
-                                        <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Enter Start Date" required/>
+                                        <label  class="form-label">Ngày bắt đầu</label>
+                                        <input type="date" th:field="*{startDate}"  class="form-control" placeholder="Nhập ngày bắt đầu" required/>
                                     </div>
                                     <div class="col-5 mb-6">
-                                        <label  class="form-label">End Date</label>
-                                        <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Enter End Date" required/>
-                                        <div id="date-error" class="text-danger" style="display: none;">Start Date must be earlier than End Date.</div>
+                                        <label  class="form-label">Ngày kết thúc</label>
+                                        <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Nhập ngày kết thúc" required/>
+                                        <div id="date-error" class="text-danger" style="display: none;">Ngày bắt đầu phải sớm hơn ngày kết thúc </div>
                                     </div>
                                     <div class="col mb-6">
-                                        <label  class="form-label">Project Description</label>
-                                        <input type="text" th:field="*{description}"  class="form-control" placeholder="Enter Project Description" required/>
+                                        <label  class="form-label">Mô tả chiến dịch</label>
+                                        <input type="text" th:field="*{description}"  class="form-control" placeholder="Nhập mô tả chiến dịch" required/>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button  type="submit" class="btn btn-primary mx-2" >Save</button>
+                                <button  type="submit" class="btn btn-primary mx-2" >Lưu</button>
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                                    Close
+                                    Thoát
                                 </button>
 
                             </div>
@@ -108,51 +109,130 @@
 
 
             <!-- Table -->
+<!--            <div class="container-xxl flex-grow-1 container-p-y">-->
+<!--                <div class="card">-->
+<!--                    <div  class="row align-items-center">-->
+<!--                        <div class = "col-3">-->
+<!--                            <h5 class="card-header">Chiến dịch từ thiện</h5>-->
+<!--                        </div>-->
+<!--                        <div class = "col-8 ">-->
+<!--                            <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">-->
+<!--                                <button-->
+<!--                                        type="button"-->
+<!--                                        class="btn btn-secondary add-new btn-primary"-->
+<!--                                        data-bs-toggle="modal"-->
+<!--                                        data-bs-target="#basicModal">-->
+<!--                                    <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>-->
+<!--                                    <span class="d-none d-sm-inline-block">Chiến dịch từ thiện</span>-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="table-responsive text-nowrap">-->
+<!--                        <table class="table">-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>ID - Chiến dịch</th>-->
+<!--                                <th>Tên chiến dịch</th>-->
+<!--                                <th>Mô tả</th>-->
+<!--                                <th>Số tiền mục tiêu</th>-->
+<!--                                <th>Số tiền hiện tại</th>-->
+<!--                                <th>Ngày bắt đầu</th>-->
+<!--                                <th>Ngày kết thúc</th>-->
+<!--                                <th>Phụ trách</th>-->
+<!--                                <th>Hành động</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody class="table-border-bottom-0 align-items-center">-->
+<!--                            <tr th:each="project : ${listProjects}">-->
+<!--                                <td th:text="${project.projectId}"></td>-->
+<!--                                <td th:text="${project.projectName}"></td>-->
+<!--                                <td th:text="${project.description}"></td>-->
+<!--                                <td th:text="${project.goalAmount}"></td>-->
+<!--                                <td th:text="${project.currentAmount}"></td>-->
+<!--                                <td th:text="${project.startDate}"></td>-->
+<!--                                <td th:text="${project.endDate}"></td>-->
+<!--                                <td th:text="${project.projectManager.fullName}"></td>-->
+<!--                                <td>-->
+<!--                                    <div class="dropdown">-->
+<!--                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">-->
+<!--                                            <i class="bx bx-dots-vertical-rounded"></i>-->
+<!--                                        </button>-->
+<!--                                        <div class="dropdown-menu">-->
+<!--                                            <button class="dropdown-item" type="button"-->
+<!--                                                    data-bs-toggle="modal"-->
+<!--                                                    data-bs-target="#basicModal"-->
+<!--                                                    th:data-project-id="${project.projectId}"-->
+<!--                                                    th:data-project-manager="${project.projectManager.userId}"-->
+<!--                                                    th:data-project-name="${project.projectName}"-->
+<!--                                                    th:data-goal-amount="${project.goalAmount}"-->
+<!--                                                    th:data-current-amount="${project.currentAmount}"-->
+<!--                                                    th:data-start-date="${project.startDate}"-->
+<!--                                                    th:data-end-date="${project.endDate}"-->
+<!--                                                    th:data-description="${project.description}"-->
+<!--                                            ><i class="bx bx-edit-alt me-1"></i> Chỉnh sửa</button-->
+<!--                                            >-->
+<!--                                            <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">-->
+<!--                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này không?');">-->
+<!--                                                    <i class="bx bx-trash me-1"></i> Xóa-->
+<!--                                                </button>-->
+<!--                                            </form>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="container-xxl flex-grow-1 container-p-y">
                 <div class="card">
-                    <div  class="row align-items-center">
-                        <div class = "col-3">
-                            <h5 class="card-header">Donation Projects</h5>
+                    <div class="row align-items-center">
+                        <div class="col-3">
+                            <h5 class="card-header">Chiến dịch từ thiện</h5>
                         </div>
-                        <div class = "col-8 ">
-                            <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">
+                        <div class="col-8">
+                            <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4">
                                 <button
                                         type="button"
                                         class="btn btn-secondary add-new btn-primary"
                                         data-bs-toggle="modal"
                                         data-bs-target="#basicModal">
                                     <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>
-                                    <span class="d-none d-sm-inline-block">Donation Project</span>
+                                    <span class="d-none d-sm-inline-block">Thêm chiến dịch</span>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive text-nowrap">
-                        <table class="table">
+
+                    <!-- Điều chỉnh style trực tiếp để tránh cuộn ngang -->
+                    <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
+                        <table class="table table-striped" style="table-layout: auto; width: 100%;">
                             <thead>
                             <tr>
-                                <th>Project-ID</th>
-                                <th>Project Name</th>
-                                <th>Description</th>
-                                <th>Goal Amount</th>
-                                <th>Current Amount</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Project Manager</th>
-                                <th>Action</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">ID</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Tên chiến dịch</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Mô tả</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Số tiền mục tiêu</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Số tiền hiện tại</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Ngày bắt đầu</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Ngày kết thúc</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Phụ trách</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Hành động</th>
                             </tr>
                             </thead>
-                            <tbody class="table-border-bottom-0 align-items-center">
+                            <tbody class="table-border-bottom-0">
                             <tr th:each="project : ${listProjects}">
-                                <td th:text="${project.projectId}"></td>
-                                <td th:text="${project.projectName}"></td>
-                                <td th:text="${project.description}"></td>
-                                <td th:text="${project.goalAmount}"></td>
-                                <td th:text="${project.currentAmount}"></td>
-                                <td th:text="${project.startDate}"></td>
-                                <td th:text="${project.endDate}"></td>
-                                <td th:text="${project.projectManager.fullName}"></td>
-                                <td>
+                                <td th:text="${project.projectId}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.projectName}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.description}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.goalAmount}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.currentAmount}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.startDate}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.endDate}" style="padding: 0.5rem;"></td>
+                                <td th:text="${project.projectManager.fullName}" style="padding: 0.5rem;"></td>
+                                <td style="padding: 0.5rem;">
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                             <i class="bx bx-dots-vertical-rounded"></i>
@@ -168,12 +248,12 @@
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-start-date="${project.startDate}"
                                                     th:data-end-date="${project.endDate}"
-                                                    th:data-description="${project.description}"
-                                            ><i class="bx bx-edit-alt me-1"></i> Edit</button
-                                            >
+                                                    th:data-description="${project.description}">
+                                                <i class="bx bx-edit-alt me-1"></i> Chỉnh sửa
+                                            </button>
                                             <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
-                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
-                                                    <i class="bx bx-trash me-1"></i> Delete
+                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này không?');">
+                                                    <i class="bx bx-trash me-1"></i> Xóa
                                                 </button>
                                             </form>
                                         </div>
@@ -185,6 +265,21 @@
                     </div>
                 </div>
             </div>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    <li class="page-item"  th:if="${currentPage > 1}">
+                        <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPage )}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{'?page='+${i}}" th:text="${i}"></a>
+                    </li>
+
+                    <li class="page-item" th:if="${currentPage < totalPage}">
+                        <a class="page-link" th:href="@{'?page='+${currentPage + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
             <!-- /Table -->
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme" th:replace="~{Fragment/Footer :: footer}">
