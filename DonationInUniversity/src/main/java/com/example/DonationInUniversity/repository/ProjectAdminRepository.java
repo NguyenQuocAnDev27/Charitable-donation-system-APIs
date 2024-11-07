@@ -27,7 +27,7 @@ public interface ProjectAdminRepository extends JpaRepository<DonationProject, I
             "WHERE p.isDeleted = 1")
     List<Object[]> findAllProjectTags();
 
-    @Query("SELECT p.projectId, p.projectName, t.tagId, t.tagName FROM DonationProject p " +
+    @Query("SELECT p.projectId, p.projectName, t.tagId, t.tagName, pt.projectTagId FROM DonationProject p " +
             "JOIN ProjectTag pt ON p.projectId = pt.donationProject.projectId " +
             "JOIN Tag t ON pt.tag.tagId = t.tagId " +
             "WHERE p.projectManager.userId = ?1 AND p.isDeleted = 1")

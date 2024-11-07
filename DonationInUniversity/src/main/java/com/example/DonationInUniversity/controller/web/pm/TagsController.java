@@ -78,8 +78,14 @@ public class TagsController {
         return (CustomUserDetails) authentication.getPrincipal();
     }
 
+    @Value("${server.url}")
+    private String SERVER_URL;
+
     @GetMapping("/TagsManagement")
-    public String tagsManagementPage(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+    public String tagsManagementPage(
+            Model model,
+            @RequestParam(name = "page", defaultValue = "1") int pageNo
+    ) {
         try {
             if (getAuth() == null) {
                 return "redirect:/admin/login";
@@ -87,11 +93,11 @@ public class TagsController {
 
             CustomUserDetails userDetails = getAuth();
 
-            // Fetch tags with associated projects for the current manager
-            List<ProjectTagDisplayTable> projectTagDisplayTableList = projectServiceAdmin.getAllProjectTagsByManager(userDetails.getUserModel().getUserId());
+            List<ProjectTagDisplayTable> projectTagDisplayTableList = projectServiceAdmin
+                    .getAllProjectTagsByManager(userDetails.getUserModel().getUserId());
 
-            // Fetch all available projects for the dropdown
-            List<DonationProject> projects = projectServiceAdmin.getAllProjectsForManager(userDetails.getUserModel().getUserId());
+            List<DonationProject> projects = projectServiceAdmin
+                    .getAllProjectsForManager(userDetails.getUserModel().getUserId());
 
             model.addAttribute("role", "project_manager");
             model.addAttribute("currentUrl", "TagsManagement");
@@ -103,7 +109,7 @@ public class TagsController {
             model.addAttribute("serverUrl", serverUrl);
 
         } catch (Exception e) {
-            System.err.println("Error fetching tags: " + e.getMessage());
+            logger.error("Error fetching tags: {}", e.getMessage());
             model.addAttribute("role", "project_manager");
             model.addAttribute("projectTagDisplayTableList", List.of());  // Return an empty list
             model.addAttribute("totalPage", 0);
@@ -121,41 +127,40 @@ public class TagsController {
     public String addOrUpdateTag(
             @ModelAttribute("tag") Tag tag,
             @RequestParam("projectId") Integer projectId) {
+        try {
+            DonationProject project = projectService.getProjectById(projectId);
 
-        // Fetch the selected project by ID
-        DonationProject project = projectService.getProjectById(projectId);
+            if (project == null) return "redirect: /manager/404";
 
-        if (project == null) {
-            // Handle case where project is not found, e.g., log an error or redirect with a message
-            return "redirect:/manager/TagsManagement?error=ProjectNotFound";
+            tagService.saveTagWithProjectTag(tag, project.getProjectId());
+
+            return "redirect:/manager/TagsManagement";
+        } catch (Exception e) {
+            logger.error("Error fetching tags: {}", e.getMessage());
+            return "redirect: /manager/404";
         }
-
-        // Save the tag and associate it with the project
-        tagService.saveTagWithProjectTag(tag, project.getProjectId());
-
-        return "redirect:/manager/TagsManagement";
     }
 
     // Delete Tag
     @PostMapping("/deleteTag/{id}")
-    public String deleteTag(@PathVariable int id) {
-        tagService.deleteTag(id);
-        return "redirect:/manager/TagsManagement";
+    public String deleteTag(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            tagService.deleteTag(id);
+            redirectAttributes.addFlashAttribute("message", "Xóa tag thành công");
+            return "redirect:/manager/TagsManagement";
+        } catch (Exception e) {
+            logger.error("Error fetching tags: {}", e.getMessage());
+            return "redirect: /manager/404";
+        }
     }
 
     // Auto Create Tags Handler
     @PostMapping("/autoCreateTags")
     public String autoCreateTags(RedirectAttributes redirectAttributes) {
         try {
-            // Call service layer to auto-create tags
-//            tagService.autoCreateTags();
-
-            // Set a success message (optional)
             redirectAttributes.addFlashAttribute("successMessage", "Tags created successfully!");
-
         } catch (Exception e) {
-            // Handle any exceptions and log the error
-            System.err.println("Error during auto-creation of tags: " + e.getMessage());
+            logger.error("Error during auto-creation of tags: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Error creating tags.");
         }
 

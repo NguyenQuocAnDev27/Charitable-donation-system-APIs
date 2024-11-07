@@ -1,8 +1,11 @@
 package com.example.DonationInUniversity.service.admin;
 
+import com.example.DonationInUniversity.controller.web.pm.ProjectManagerController;
 import com.example.DonationInUniversity.model.ProjectTagDisplayTable;
 import com.example.DonationInUniversity.repository.ProjectAdminRepository;
 import com.example.DonationInUniversity.model.DonationProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +18,7 @@ import java.util.Optional;
 
 @Service
 public class ProjectServiceAdmin {
+    private static final Logger logger = LoggerFactory.getLogger(ProjectServiceAdmin.class);
     @Autowired
     private ProjectAdminRepository projectRepository;
     public List<DonationProject> getAllProjects() {
@@ -69,8 +73,9 @@ public class ProjectServiceAdmin {
             String projectName = (String) result[1];
             Integer tagId = (Integer) result[2];
             String tagName = (String) result[3];
+            Integer projectTagId = (Integer) result[4];
 
-            ProjectTagDisplayTable displayTable = new ProjectTagDisplayTable(projectId, projectName, tagId, tagName);
+            ProjectTagDisplayTable displayTable = new ProjectTagDisplayTable(projectId, projectName, tagId, tagName, projectTagId);
 
             projectTagDisplayTableList.add(displayTable);
         }

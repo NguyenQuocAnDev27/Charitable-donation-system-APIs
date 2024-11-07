@@ -98,17 +98,62 @@
             </div>
 
             <!-- Modal Form for Adding/Editing Tag -->
+<!--            <div aria-hidden="true" class="modal fade" id="basicModal" tabindex="-1">-->
+<!--                <div class="modal-dialog" role="document">-->
+<!--                    <div class="modal-content">-->
+<!--                        <form method="post" th:action="@{/manager/saveOrUpdateTag}">-->
+<!--                            <div class="modal-header">-->
+<!--                                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"-->
+<!--                                        type="button"></button>-->
+<!--                            </div>-->
+<!--                            <div class="modal-body">-->
+<!--                                <div class="row">-->
+<!--                                    <input class="form-control" name="tagId" th:value="${tag.tagId}" type="hidden"/>-->
+
+<!--                                    &lt;!&ndash; Project Dropdown &ndash;&gt;-->
+<!--                                    <div class="col-12 mb-3">-->
+<!--                                        <label class="form-label">Chiến dịch</label>-->
+<!--                                        <label>-->
+<!--                                            <select class="form-control" name="projectId" required>-->
+<!--                                                <option disabled selected value="">Chọn chiến dịch</option>-->
+<!--                                                <option th:each="project : ${projects}" th:text="${project.projectName}"-->
+<!--                                                        th:value="${project.projectId}"></option>-->
+<!--                                            </select>-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+
+<!--                                    &lt;!&ndash; Tag Name Input &ndash;&gt;-->
+<!--                                    <div class="col-12 mb-3">-->
+<!--                                        <label class="form-label">Tag</label>-->
+<!--                                        <input class="form-control" name="tagName" placeholder="Nhập tag vào" required-->
+<!--                                               th:value="${tag.tagName}" type="text"/>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="modal-footer">-->
+<!--                                <button class="btn btn-primary" style="margin-right: 10px!important;" type="submit">-->
+<!--                                    Lưu-->
+<!--                                </button>-->
+<!--                                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Đóng-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <!-- Modal Form for Adding/Editing Tag -->
             <div aria-hidden="true" class="modal fade" id="basicModal" tabindex="-1">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <form method="post" th:action="@{/manager/saveOrUpdateTag}">
                             <div class="modal-header">
-                                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
-                                        type="button"></button>
+                                <h5 class="modal-title" id="basicModalLabel">Edit Tag</h5> <!-- Title will change dynamically -->
+                                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="row">
-                                    <input class="form-control" name="tagId" th:value="${tag.tagId}" type="hidden"/>
+                                    <input class="form-control" name="tagId" type="hidden" /> <!-- Hidden field for tag ID -->
 
                                     <!-- Project Dropdown -->
                                     <div class="col-12 mb-3">
@@ -123,22 +168,19 @@
                                     <!-- Tag Name Input -->
                                     <div class="col-12 mb-3">
                                         <label class="form-label">Tag</label>
-                                        <input class="form-control" name="tagName" placeholder="Nhập tag vào" required
-                                               th:value="${tag.tagName}" type="text"/>
+                                        <input class="form-control" name="tagName" placeholder="Nhập tag vào" required type="text"/>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-primary" style="margin-right: 10px!important;" type="submit">
-                                    Lưu
-                                </button>
-                                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Đóng
-                                </button>
+                                <button class="btn btn-primary" style="margin-right: 10px!important;" type="submit">Lưu</button>
+                                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Đóng</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+
 
             <!-- Table and Buttons for Tags Management -->
             <div class="container-xxl flex-grow-1 container-p-y">
@@ -192,6 +234,7 @@
                                             <button class="dropdown-item" data-bs-target="#basicModal"
                                                     data-bs-toggle="modal"
                                                     th:data-project-name="${tag.projectName}"
+                                                    th:data-project-tag-id="${tag.getProjectTagId()}"
                                                     th:data-tag-id="${tag.tagId}"
                                                     th:data-tag-name="${tag.tagName}"
                                                     type="button">
@@ -216,6 +259,8 @@
             </div>
             <!-- / Container -->
 
+            <p id="config" style="display: none" th:data="${serverUrl}"></p>
+
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme" th:replace="~{components/footer::footer}">
             </footer>
@@ -239,7 +284,44 @@
 <script th:src="@{/assets/js/main.js}"></script>
 
 <!-- JavaScript to handle project selection and loading content -->
-<script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const basicModal = document.getElementById('basicModal');
+        const tagIdInput = basicModal.querySelector('input[name="tagId"]');
+        const tagNameInput = basicModal.querySelector('input[name="tagName"]');
+        const modalTitle = basicModal.querySelector('.modal-title'); // Selects the title element
+
+        // Listen for the `show.bs.modal` event on the modal element
+        basicModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const tagId = button.getAttribute('data-tag-id'); // Get tag ID if editing
+            const tagName = button.getAttribute('data-tag-name'); // Get tag name if editing
+
+            if (tagId && tagName) {
+                // Editing an existing tag
+                tagIdInput.value = tagId;
+                tagNameInput.value = tagName;
+                modalTitle.textContent = "Edit Tag";
+            } else {
+                // Adding a new tag
+                tagIdInput.value = ""; // Clear tag ID
+                tagNameInput.value = ""; // Clear tag name
+                modalTitle.textContent = "Add New Tag";
+            }
+        });
+
+        // Clear the modal fields when it is closed
+        basicModal.addEventListener('hidden.bs.modal', function () {
+            tagIdInput.value = "";
+            tagNameInput.value = "";
+            modalTitle.textContent = ""; // Reset the title
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
     let DetailText = "";
 
     document.getElementById('projectSelect').addEventListener('change', function () {
@@ -310,8 +392,6 @@
 
     let selectedTags = []; // To store selected tags
 
-    // Populate the table with tags
-    // Populate the table with tags
     function populateTable(tags) {
         const tbody = document.getElementById('tagsTableBody');
         tbody.innerHTML = ''; // Clear existing rows
@@ -419,8 +499,8 @@
 
     // Function to fetch and populate tags
     function createTags() {
-        const serverUrl = "http://192.168.1.148:8080"; // Replace this with the actual server URL
-        const content = DetailText; // Assuming DetailText contains the content
+        const serverUrl = document.getElementById('config').getAttribute('data-server-url');
+        const content = DetailText;
         console.log(content);
         // Check if the content exists
         if (!content) {
