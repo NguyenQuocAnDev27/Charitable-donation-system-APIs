@@ -306,4 +306,20 @@ public class TagsController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/deleteProjectTag")
+    public String deleteProjectTag(
+            @RequestParam("projectId") Integer projectId,
+            @RequestParam("tagId") Integer tagId,
+            RedirectAttributes redirectAttributes) {
+        try {
+            projectTagService.deleteProjectTagByProjectIdAndTagId(projectId, tagId);
+            redirectAttributes.addFlashAttribute("message", "Project tag deleted successfully.");
+        } catch (Exception e) {
+            logger.error("Error deleting project tag: {}", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Failed to delete project tag.");
+        }
+
+        return "redirect:/manager/TagsManagement";
+    }
 }

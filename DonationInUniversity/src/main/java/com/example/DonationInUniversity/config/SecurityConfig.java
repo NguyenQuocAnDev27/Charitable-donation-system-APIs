@@ -161,7 +161,6 @@ public class SecurityConfig {
                 "http://localhost:8000",
                 "http://localhost:9000",
                 "http://localhost:3000",
-                "http://192.168.1.171:3000",
                 "http://localhost:11434"
         )); // Allowed origins
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods

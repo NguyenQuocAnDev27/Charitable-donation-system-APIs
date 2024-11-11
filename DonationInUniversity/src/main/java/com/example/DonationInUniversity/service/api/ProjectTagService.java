@@ -76,4 +76,9 @@ public class ProjectTagService {
             System.out.println("No tags provided to associate with project: " + donationProject.getProjectName());
         }
     }
+
+    @Transactional
+    public void deleteProjectTagByProjectIdAndTagId(Integer projectId, Integer tagId) {
+        projectTagRepository.deleteByDonationProject_ProjectIdAndTag_TagId(projectId, tagId);
+    }
 }
