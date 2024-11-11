@@ -1,12 +1,13 @@
 package com.example.DonationInUniversity.model;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "transfer_applications")
+@Table(name = "transfer_application")
 public class TransferApplication {
 
     @Id
@@ -32,9 +33,11 @@ public class TransferApplication {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
-
+    @Transient
+    private String projectName;
     // Constructors, getters, and setters
-
+    @Transient
+    private MultipartFile documentFile;
     public TransferApplication() {
     }
 
@@ -103,6 +106,21 @@ public class TransferApplication {
 
     public void setUserId(User userId) {
         this.userId = userId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public MultipartFile getDocumentFile() {
+        return documentFile;
+    }
+    public void setDocumentFile(MultipartFile documentFile) {
+        this.documentFile = documentFile;
     }
 }
 

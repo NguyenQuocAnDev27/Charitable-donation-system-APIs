@@ -44,13 +44,13 @@
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Mức tiền hiện tại</label>
-                            <input type="text" id="currentAmount" th:field="*{currentAmount}" class="form-control" placeholder="Enter Current Amount" required/>
+                            <input type="text" id="currentAmount" th:field="*{currentAmount}" class="form-control" placeholder="Enter Current Amount" required readonly/>
                             <div id="amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div>
                             <div id="amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Ngày bắt đầu</label>
-                            <input type="date" id="startDate" th:field="*{startDate}" class="form-control" placeholder="Enter Start Date" required/>
+                            <input type="date" id="startDate" name="startDate" class="form-control" placeholder="Enter Start Date" th:value="${today}" required/>
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Ngày kết thúc</label>
