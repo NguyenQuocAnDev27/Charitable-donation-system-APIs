@@ -19,7 +19,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <input type="hidden" th:field="*{projectId}" class="form-control" required/>
+                        <input type="hidden" th:field="*{project}" class="form-control" required />
                         <div class="col-5 mb-6">
                             <label class="form-label">Tên chiến dich</label>
                             <input type="text" th:field="*{projectName}" class="form-control" required readonly/>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Thêm file PDF:</label>
-                            <input type="file" name="documentFile" accept="application/pdf" />
+                            <input type="file" th:field="*{documentFile}" accept="application/pdf" />
                         </div>
                     </div>
                 </div>

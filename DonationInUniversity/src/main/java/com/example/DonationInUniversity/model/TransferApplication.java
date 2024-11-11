@@ -38,6 +38,8 @@ public class TransferApplication {
     // Constructors, getters, and setters
     @Transient
     private MultipartFile documentFile;
+    @Transient
+    private int project;
     public TransferApplication() {
     }
 
@@ -121,6 +123,14 @@ public class TransferApplication {
     }
     public void setDocumentFile(MultipartFile documentFile) {
         this.documentFile = documentFile;
+    }
+
+    public int getProject() {
+        return project;
+    }
+
+    public void setProject(int project) {
+        this.project = project;
     }
 }
 
