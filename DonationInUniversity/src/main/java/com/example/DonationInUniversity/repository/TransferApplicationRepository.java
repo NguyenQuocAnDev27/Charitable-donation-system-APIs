@@ -2,6 +2,7 @@ package com.example.DonationInUniversity.repository;
 
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.TransferApplication;
+import com.example.DonationInUniversity.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,8 @@ public interface TransferApplicationRepository extends JpaRepository<TransferApp
     int countTransferRequestsInCurrentWeek(int userId, LocalDate startOfWeek, LocalDate endOfWeek);
     @Query(value = "SELECT * FROM transfer_application WHERE user_id = ?1", nativeQuery = true)
     Page<TransferApplication> findAllByManagerId(int id, Pageable pageable);
+    @Query(value = "SELECT * FROM transfer_application WHERE project_id = ?1", nativeQuery = true)
+    TransferApplication findByProjectId(int id);
+
+    boolean existsByUserIdAndProjectId(User userId, DonationProject projectId);
 }

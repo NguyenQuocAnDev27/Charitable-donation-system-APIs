@@ -1,7 +1,9 @@
 package com.example.DonationInUniversity.service.admin;
 
 
+import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.TransferApplication;
+import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.repository.TransferApplicationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,5 +43,11 @@ public class TransferApplicationService {
     public Page<TransferApplication> getAllTransferApplicationByManager(int id, int pageNo) {
         Pageable pageable= PageRequest.of(pageNo-1, 5);
         return this.transferApplicationRepository.findAllByManagerId(id,pageable);
+    }
+    public TransferApplication getTransferApplication(int id) {
+        return transferApplicationRepository.findByProjectId(id);
+    }
+    public boolean existsByUserIdAndProjectId(User userId, DonationProject projectId) {
+        return transferApplicationRepository.existsByUserIdAndProjectId(userId, projectId);
     }
 }

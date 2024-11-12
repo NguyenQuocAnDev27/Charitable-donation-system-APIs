@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -76,6 +79,14 @@ public class ProjectManagerController {
                     .countTransferRequestsInCurrentWeek(userDetails.getUserModel().getUserId());
             boolean isRequestDisabled = transferRequestCount >= 5;
             model.addAttribute("isRequestDisabled", isRequestDisabled);
+            List<DonationProject> listProjects = projectServiceAdmin.getAllProjectsForManager(userDetails.getUserModel().getUserId()); // Lấy tất cả dự án
+            Map<Integer, Boolean> projectTransferStatus = new HashMap<>();
+
+            for (DonationProject project : listProjects) {
+                boolean hasTransfer = transferApplicationService.existsByUserIdAndProjectId(userDetails.getUserModel(), project);
+                projectTransferStatus.put(project.getProjectId(), hasTransfer);
+            }
+            model.addAttribute("projectTransferStatus", projectTransferStatus);
             Page<DonationProject> pageDonation = projectServiceAdmin
                     .getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
             model.addAttribute("role", "project_manager");
