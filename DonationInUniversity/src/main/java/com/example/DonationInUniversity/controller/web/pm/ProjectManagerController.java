@@ -3,6 +3,7 @@ package com.example.DonationInUniversity.controller.web.pm;
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.ProjectDetailTextRepository;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
+import com.example.DonationInUniversity.service.admin.TransferApplicationService;
 import com.example.DonationInUniversity.service.api.TagService;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
 import com.example.DonationInUniversity.service.api.ProjectService;
@@ -12,21 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 @Controller
 @RequestMapping("/manager")
@@ -54,6 +50,8 @@ public class ProjectManagerController {
 
     @Value("${server.url}")
     private String serverUrl;
+    @Autowired
+    private TransferApplicationService transferApplicationService;
 
     @RequestMapping("/**")
     public String fallback() {
@@ -74,6 +72,10 @@ public class ProjectManagerController {
 
         try {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            int transferRequestCount = transferApplicationService
+                    .countTransferRequestsInCurrentWeek(userDetails.getUserModel().getUserId());
+            boolean isRequestDisabled = transferRequestCount >= 5;
+            model.addAttribute("isRequestDisabled", isRequestDisabled);
             Page<DonationProject> pageDonation = projectServiceAdmin
                     .getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
             model.addAttribute("role", "project_manager");
