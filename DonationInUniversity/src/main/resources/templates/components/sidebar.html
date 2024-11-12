@@ -19,6 +19,12 @@
             <span class="text-truncate" >Quản lý chiến dịch</span>
         </a>
     </li>
+    <li class="menu-item"  th:classappend="${currentUrl == 'TransferApplication'} ? ' active'">
+
+        <a th:href="@{/admin/TransferApplication}" class="menu-link">
+            <span class="text-truncate" >Giao dịch</span>
+        </a>
+    </li>
 <!--    <li class="menu-item">-->
 <!--        <a-->
 <!--                href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"-->
