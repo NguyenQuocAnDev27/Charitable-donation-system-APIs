@@ -51,10 +51,13 @@ public class TransferApplicationService {
     }
 
     public boolean existsByUserIdAndProjectId(User userId, DonationProject projectId) {
-        return transferApplicationRepository.existsByUserIdAndProjectId(userId, projectId);
+        return transferApplicationRepository.existsByUserIdAndProjectIdAndStatus(userId, projectId, "waiting");
     }
 
     public Optional<TransferApplication> getTransferById(int id) {
         return transferApplicationRepository.findById(id);
+    }
+    public void deleteTransferApplication(int id) {
+        transferApplicationRepository.deleteById(id);
     }
 }
