@@ -13,10 +13,12 @@ import java.time.LocalDate;
 
 @Repository
 public interface TransferApplicationRepository extends JpaRepository<TransferApplication, Integer> {
-    @Query(value="SELECT COUNT(*) FROM transfer_application  WHERE user_id = ?1 AND DATE(created_at) = CURDATE()  ", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM transfer_application  WHERE user_id = ?1 AND DATE(created_at) = CURDATE()  ", nativeQuery = true)
     int countTransferRequestsInCurrentWeek(int userId);
+
     @Query(value = "SELECT * FROM transfer_application WHERE user_id = ?1", nativeQuery = true)
     Page<TransferApplication> findAllByManagerId(int id, Pageable pageable);
+
     @Query(value = "SELECT * FROM transfer_application WHERE project_id = ?1", nativeQuery = true)
     TransferApplication findByProjectId(int id);
 

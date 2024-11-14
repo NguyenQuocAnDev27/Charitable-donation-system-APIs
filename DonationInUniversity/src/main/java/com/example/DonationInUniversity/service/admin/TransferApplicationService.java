@@ -1,6 +1,5 @@
 package com.example.DonationInUniversity.service.admin;
 
-
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.TransferApplication;
 import com.example.DonationInUniversity.model.User;
@@ -22,26 +21,38 @@ public class TransferApplicationService {
     private static final Logger logger = LoggerFactory.getLogger(TransferApplicationService.class);
     @Autowired
     TransferApplicationRepository transferApplicationRepository;
+
+    public List<TransferApplication> getAllTransfer() {
+        return transferApplicationRepository.findAll();
+    }
+
     public TransferApplication save(TransferApplication transferApplication) {
         try {
             return transferApplicationRepository.save(transferApplication);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }
     }
+
     public int countTransferRequestsInCurrentWeek(int userId) {
         return transferApplicationRepository.countTransferRequestsInCurrentWeek(userId);
     }
+
     public Page<TransferApplication> getAllTransferApplicationByManager(int id, int pageNo) {
-        Pageable pageable= PageRequest.of(pageNo-1, 5);
-        return this.transferApplicationRepository.findAllByManagerId(id,pageable);
+        Pageable pageable = PageRequest.of(pageNo - 1, 5);
+        return this.transferApplicationRepository.findAllByManagerId(id, pageable);
     }
+
     public TransferApplication getTransferApplication(int id) {
         return transferApplicationRepository.findByProjectId(id);
     }
+
     public boolean existsByUserIdAndProjectId(User userId, DonationProject projectId) {
         return transferApplicationRepository.existsByUserIdAndProjectId(userId, projectId);
+    }
+
+    public Optional<TransferApplication> getTransferById(int id) {
+        return transferApplicationRepository.findById(id);
     }
 }

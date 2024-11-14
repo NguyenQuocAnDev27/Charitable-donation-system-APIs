@@ -11,7 +11,7 @@
     <div class="layout-container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;">
 
         <!-- Navbar Component -->
-        <div th:replace="components/navbar :: navbar"></div>
+        <div th:replace="~{components/navbar :: navbar}"></div>
 
         <div class="container-xxl d-flex flex-column align-items-center justify-content-center text-center" style="flex-grow: 1;">
             <h1 class="display-1 text-primary">404</h1>
@@ -23,7 +23,7 @@
         </div>
 
         <!-- Footer Component -->
-        <div th:replace="components/footer :: footer"></div>
+        <div th:replace="~{components/footer :: footer}"></div>
     </div>
 </div>
 

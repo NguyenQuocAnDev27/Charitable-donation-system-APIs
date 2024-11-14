@@ -4,21 +4,21 @@ import com.example.DonationInUniversity.model.CustomUserDetails;
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.TransferApplication;
 import com.example.DonationInUniversity.model.User;
+import com.example.DonationInUniversity.service.admin.ProjectDetailTextServiceAdmin;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.TransferApplicationService;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,12 +33,14 @@ public class TransferApplicationController {
     private UserAdminService userAdminService;
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
+
     @PostMapping("/saveTransferApplication")
     public String saveTransferApplication(
             @ModelAttribute("transfer") TransferApplication transferApplication,
             RedirectAttributes redirectAttributes) {
         try {
-            DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(transferApplication.getProject());
+            DonationProject donationProject = this.projectServiceAdmin
+                    .getDonationProjectById(transferApplication.getProject());
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
             User user = userAdminService.adminGetUserByUsername(username);
@@ -49,7 +51,7 @@ public class TransferApplicationController {
             MultipartFile documentFile = transferApplication.getDocumentFile();
             // Lưu các file PDF vào thư mục "images/transferapplication"
             String fileExtension = getFileExtension(documentFile.getOriginalFilename());
-            String tempFileName = donationProject.getProjectId() +"."+ fileExtension;
+            String tempFileName = donationProject.getProjectId() + "." + fileExtension;
             // Lấy đường dẫn tới thư mục gốc của project
             String projectRootPath = System.getProperty("user.dir");
             String uploadDir = projectRootPath + "/images/transfer_application/";
@@ -77,6 +79,7 @@ public class TransferApplicationController {
             return "pages/errorPage/404";
         }
     }
+
     public String getFileExtension(String fileName) {
         if (fileName == null) {
             return "";
@@ -88,12 +91,14 @@ public class TransferApplicationController {
             return "";
         }
     }
+
     public String replaceNewLinesWithBr(String content) {
         if (content != null) {
             return content.replace("\n", "<br>");
         }
         return content;
     }
+
     @GetMapping("/TransferApplication")
     public String transferApplication(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
         try {
@@ -104,14 +109,14 @@ public class TransferApplicationController {
                 return "redirect:/admin/login";
             }
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-            Page<TransferApplication> listTransfer=transferApplicationService.getAllTransferApplicationByManager(userDetails.getUserModel().getUserId(),pageNo);
+            Page<TransferApplication> listTransfer = transferApplicationService
+                    .getAllTransferApplicationByManager(userDetails.getUserModel().getUserId(), pageNo);
             model.addAttribute("role", "project_manager");
             model.addAttribute("listTransferApplications", listTransfer);
             model.addAttribute("currentPage", pageNo);
             model.addAttribute("totalPage", listTransfer.getTotalPages());
             return "pages/projectsManagementPage/transfer_application";
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             model.addAttribute("role", "project_manager");
             model.addAttribute("listProjects", Page.empty()); // Return an empty page

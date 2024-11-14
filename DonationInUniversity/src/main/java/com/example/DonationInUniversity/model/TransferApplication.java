@@ -3,7 +3,6 @@ package com.example.DonationInUniversity.model;
 import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.math.BigDecimal;
 
 @Entity
@@ -37,13 +36,17 @@ public class TransferApplication {
     private String projectName;
     // Constructors, getters, and setters
     @Transient
+    private MultipartFile billFile;
+    @Transient
     private MultipartFile documentFile;
     @Transient
     private int project;
+
     public TransferApplication() {
     }
 
-    public TransferApplication(DonationProject projectId, String documentPath, String billPath, BigDecimal amount, String status, User userId) {
+    public TransferApplication(DonationProject projectId, String documentPath, String billPath, BigDecimal amount,
+            String status, User userId) {
         this.projectId = projectId;
         this.documentPath = documentPath;
         this.billPath = billPath;
@@ -121,6 +124,7 @@ public class TransferApplication {
     public MultipartFile getDocumentFile() {
         return documentFile;
     }
+
     public void setDocumentFile(MultipartFile documentFile) {
         this.documentFile = documentFile;
     }
@@ -132,5 +136,12 @@ public class TransferApplication {
     public void setProject(int project) {
         this.project = project;
     }
-}
 
+    public MultipartFile getBillFile() {
+        return billFile;
+    }
+
+    public void setBillFile(MultipartFile billFile) {
+        this.billFile = billFile;
+    }
+}

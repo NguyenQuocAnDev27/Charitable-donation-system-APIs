@@ -41,6 +41,10 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    public boolean tagExists(int tagId) {
+        return tagRepository.existsById(tagId);
+    }
+
     // Delete a tag
     public void deleteTag(int tagId) {
         tagRepository.deleteById(tagId);

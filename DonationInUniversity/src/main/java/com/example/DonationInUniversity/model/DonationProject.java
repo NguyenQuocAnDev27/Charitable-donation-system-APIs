@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "Donation_Projects")
+@Table(name = "donation_projects")
 public class DonationProject {
 
     @Id

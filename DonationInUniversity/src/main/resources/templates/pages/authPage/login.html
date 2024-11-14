@@ -109,6 +109,7 @@
         document.getElementById("formAuthentication").addEventListener("submit", async function(event) {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+
             const response = await fetch('/api/authenticate', {
                 method: 'POST',
                 headers: {
@@ -116,12 +117,20 @@
                 },
                 body: JSON.stringify({ email: email, password: password })
             });
+
             const data = await response.json();
             if (response.ok) {
-
                 console.log("Response data:", data);
-                localStorage.setItem("accessToken", data.data.accessToken);
-                localStorage.setItem("refreshToken", data.data.refreshToken);
+
+                // Lưu token vào sessionStorage
+                sessionStorage.setItem("accessToken", data.data.accessToken);
+                sessionStorage.setItem("refreshToken", data.data.refreshToken);
+
+
+                // Xóa các token cũ trong localStorage nếu có
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
+
             } else {
                 console.log("Response data:", data);
                 alert("Invalid username or password!");

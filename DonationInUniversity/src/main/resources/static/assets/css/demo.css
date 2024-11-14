@@ -121,3 +121,11 @@
   text-align: center;
   margin-top: 1rem;
 }
+
+.selected-option {
+  display: inline-block;
+  max-width: 85%; /* Adjust based on your layout needs */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -58,7 +58,9 @@
                         <div class="row">
                             <div class="col mb-3">
                                 <label for="accountNumber" class="form-label">Số tài khoản ngân hàng</label>
-                                <input type="text" id="accountNumber"  name="account_no" class="form-control" placeholder="Nhập số tài khoản ngân hàng" />
+                                <input type="text" id="accountNumber" name="account_no" class="form-control"
+                                       placeholder="Nhập số tài khoản ngân hàng"
+                                       th:value="${account_no != null ? account_no : ''}" />
                             </div>
                         </div>
 

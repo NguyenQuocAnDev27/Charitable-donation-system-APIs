@@ -108,7 +108,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                        .sessionFixation().migrateSession()
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/login","/admin/403").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("admin")
@@ -161,7 +162,6 @@ public class SecurityConfig {
                 "http://localhost:8000",
                 "http://localhost:9000",
                 "http://localhost:3000",
-                "http://192.168.1.171:3000",
                 "http://localhost:11434"
         )); // Allowed origins
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods

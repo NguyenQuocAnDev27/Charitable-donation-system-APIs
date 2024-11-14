@@ -24,5 +24,5 @@ public interface ProjectTagRepository extends JpaRepository<ProjectTag, Integer>
             "WHERE dp.projectId = :projectId AND t.tagName = :tagName")
     boolean existsByProjectIdAndTagName(@Param("projectId") Integer projectId, @Param("tagName") String tagName);
 
-
+    void deleteByDonationProject_ProjectIdAndTag_TagId(Integer projectId, Integer tagId);
 }
