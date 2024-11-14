@@ -67,9 +67,10 @@
                                     <div class="col-5 mb-6">
                                         <label class="form-label">Hóa đơn</label>
                                         <input type="file" th:field="*{billFile}" class="form-control" />
-                                        <div class="mt-2" th:if="${transfer.billPath != null}">
+                                        <div class="mt-1" th:if="${transfer.billPath != null}">
                                             <a th:href="@{${transfer.billPath}}" target="_blank">Xem hóa đơn hiện tại</a>
                                         </div>
+
                                     </div>
                                     <div class="col mb-6">
                                         <label class="form-label">Trạng thái</label>
@@ -117,16 +118,19 @@
                                         </tr>
                                         </thead>
                                         <tbody class="table-border-bottom-0 align-items-center">
-                                        <tr th:each="tranfer : ${listTransfer}">
-                                            <td th:text="${tranfer.id}"></td>
-                                            <td th:text="${tranfer.projectId.projectName}"></td>
-                                            <td th:text="${tranfer.amount}"></td>
-                                            <td th:text="${tranfer.userId.fullName}"></td>
-                                            <td th:text="${tranfer.documentPath}"></td>
+                                        <tr th:each="transfer : ${listTransfer}">
+                                            <td th:text="${transfer.id}"></td>
+                                            <td th:text="${transfer.projectId.projectName}"></td>
+                                            <td th:text="${transfer.amount}"></td>
+                                            <td th:text="${transfer.userId.fullName}"></td>
                                             <td>
-                                                <a th:href="@{${tranfer.billPath}}" th:text="${#strings.substring(tranfer.billPath, tranfer.billPath.lastIndexOf('/') + 1)}" target="_blank"></a>
+                                            <a th:if="${transfer.documentPath != null}" th:href="@{${transfer.documentPath}}" th:text="'Xem tài liệu'" target="_blank"></a>
+
                                             </td>
-                                            <td th:text="${tranfer.status}"></td>
+                                            <td>
+                                                <a th:if="${transfer.billPath != null}"  th:href="@{${transfer.billPath}}" th:text="'Xem hóa đơn'" target="_blank"></a>
+                                            </td>
+                                            <td th:text="${transfer.status}"></td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -136,13 +140,13 @@
                                                         <button class="dropdown-item" type="button"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#basicModal"
-                                                                th:data-transfer-id="${tranfer.id}"
-                                                                th:data-project-name="${tranfer.projectId.projectName}"
-                                                                th:data-amount="${tranfer.amount}"
-                                                                th:data-full-name="${tranfer.userId.fullName}"
-                                                                th:data-document-path="${tranfer.documentPath}"
-                                                                th:data-bill-path="${tranfer.billPath}"
-                                                                th:data-status="${tranfer.status}">
+                                                                th:data-transfer-id="${transfer.id}"
+                                                                th:data-project-name="${transfer.projectId.projectName}"
+                                                                th:data-amount="${transfer.amount}"
+                                                                th:data-full-name="${transfer.userId.fullName}"
+                                                                th:data-document-path="${transfer.documentPath}"
+                                                                th:data-bill-path="${transfer.billPath}"
+                                                                th:data-status="${transfer.status}">
                                                             <i class="bx bx-edit-alt me-1"></i>Xác nhận
                                                         </button>
 <!--                                                        <form th:action="" method="post" style="display:inline;">-->
@@ -231,14 +235,15 @@
         document.querySelector('input[name="userId.fullName"]').value = fullName;
         document.querySelector('input[name="documentPath"]').value = documentPath;
 
-        // Nếu có hóa đơn thì hiển thị link đến hóa đơn hiện tại
-        if (billPath) {
-            const billLinkElement = document.createElement("div");
-            billLinkElement.classList.add("mt-2");
-            billLinkElement.innerHTML = `<a href="${billPath}" target="_blank">Xem hóa đơn hiện tại</a>`;
-            document.querySelector('input[name="billFile"]').parentNode.appendChild(billLinkElement);
-        }
+        const billInput = document.querySelector('input[name="billFile"]');
+        const existingBillLink = billInput.parentNode.querySelector('.existing-bill-link');
 
+        if (billPath && !existingBillLink) {
+            const billLinkElement = document.createElement("div");
+            billLinkElement.classList.add("mt-2", "existing-bill-link");
+            billLinkElement.innerHTML = `<a href="${billPath}" target="_blank">Xem hóa đơn hiện tại</a>`;
+            billInput.parentNode.appendChild(billLinkElement);
+        }
         // Cập nhật trạng thái
         document.querySelector('select[name="status"]').value = status;
     });
