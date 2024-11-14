@@ -50,5 +50,10 @@
             <span class="text-truncate">Quản lý Tags</span>
         </a>
     </li>
+    <li class="menu-item" th:classappend="${currentUrl == 'TransferApplication'} ? ' active'">
+        <a th:href="@{/manager/TransferApplication}" class="menu-link">
+            <span class="text-truncate">Danh sách yêu cầu</span>
+        </a>
+    </li>
 </ul>
 </html>

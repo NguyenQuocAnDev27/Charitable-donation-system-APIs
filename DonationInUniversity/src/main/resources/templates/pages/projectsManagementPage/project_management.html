@@ -31,7 +31,9 @@
                     th:replace="~{components/navbar :: navbar}"
             >
             </nav>
-
+            <div th:if="${successTransfer}" class="alert alert-success" role="alert">
+                <span th:text="${successTransfer}"></span>
+            </div>
             <!-- / Navbar -->
             <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_edit :: project_form_edit(role=${role})}"></div>
             <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_create :: project_form_create(role=${role})}"></div>
@@ -129,6 +131,8 @@
                                                     th:data-project-name="${project.projectName}"
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-status="${project.status}"
+                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId]}"
+                                                    th:title="${isRequestDisabled ? 'Bạn đã gửi yêu cầu tối đa trong tuần này' : (projectTransferStatus[project.projectId] ? 'Yêu cầu đã tồn tại cho dự án này' : 'Yêu cầu')}"
                                             ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
                                             <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
@@ -251,6 +255,18 @@
 
             // Nếu bạn chỉ muốn xóa thông báo lỗi mà không cần xóa nội dung, chỉ cần bỏ qua dòng `input.value = '';`
         });
+</script>
+<script>
+    // Tự động ẩn thông báo sau 10 giây
+    setTimeout(function() {
+        var successMessage = document.getElementById("successTransfer");
+        if (successMessage) {
+            successMessage.style.opacity = '0'; // Dùng hiệu ứng mờ dần
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 1000); // Ẩn hoàn toàn sau 1 giây hiệu ứng mờ dần
+        }
+    }, 10000); // 10 giây
 </script>
 
 <!-- Place this tag before closing body tag for github widget button. -->

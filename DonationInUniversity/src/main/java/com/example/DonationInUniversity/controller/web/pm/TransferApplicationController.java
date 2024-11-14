@@ -33,11 +33,14 @@ public class TransferApplicationController {
     private UserAdminService userAdminService;
     @Autowired
     private ProjectServiceAdmin projectServiceAdmin;
+
     @PostMapping("/saveTransferApplication")
     public String saveTransferApplication(
-            @ModelAttribute("transfer") TransferApplication transferApplication) {
+            @ModelAttribute("transfer") TransferApplication transferApplication,
+            RedirectAttributes redirectAttributes) {
         try {
-            DonationProject donationProject = this.projectServiceAdmin.getDonationProjectById(transferApplication.getProject());
+            DonationProject donationProject = this.projectServiceAdmin
+                    .getDonationProjectById(transferApplication.getProject());
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
             User user = userAdminService.adminGetUserByUsername(username);
@@ -48,7 +51,7 @@ public class TransferApplicationController {
             MultipartFile documentFile = transferApplication.getDocumentFile();
             // Lưu các file PDF vào thư mục "images/transferapplication"
             String fileExtension = getFileExtension(documentFile.getOriginalFilename());
-            String tempFileName = donationProject.getProjectId() +"."+ fileExtension;
+            String tempFileName = donationProject.getProjectId() + "." + fileExtension;
             // Lấy đường dẫn tới thư mục gốc của project
             String projectRootPath = System.getProperty("user.dir");
             String uploadDir = projectRootPath + "/images/transfer_application/";
@@ -69,12 +72,14 @@ public class TransferApplicationController {
             transferApplication.setUserId(userDetails.getUserModel());
             // Lưu transferApplication vào cơ sở dữ liệu
             transferApplicationService.save(transferApplication);
+            redirectAttributes.addFlashAttribute("successTransfer", "Gửi yêu cầu thành công!");
             return "redirect:/manager";
         } catch (Exception e) {
             logger.error(e.getMessage());
             return "pages/errorPage/404";
         }
     }
+
     public String getFileExtension(String fileName) {
         if (fileName == null) {
             return "";
@@ -86,10 +91,38 @@ public class TransferApplicationController {
             return "";
         }
     }
+
     public String replaceNewLinesWithBr(String content) {
         if (content != null) {
             return content.replace("\n", "<br>");
         }
         return content;
+    }
+
+    @GetMapping("/TransferApplication")
+    public String transferApplication(Model model, @RequestParam(name = "page", defaultValue = "1") int pageNo) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            User user = userAdminService.adminGetUserByUsername(username);
+            if (user == null) {
+                return "redirect:/admin/login";
+            }
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            Page<TransferApplication> listTransfer = transferApplicationService
+                    .getAllTransferApplicationByManager(userDetails.getUserModel().getUserId(), pageNo);
+            model.addAttribute("role", "project_manager");
+            model.addAttribute("listTransferApplications", listTransfer);
+            model.addAttribute("currentPage", pageNo);
+            model.addAttribute("totalPage", listTransfer.getTotalPages());
+            return "pages/projectsManagementPage/transfer_application";
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            model.addAttribute("role", "project_manager");
+            model.addAttribute("listProjects", Page.empty()); // Return an empty page
+            model.addAttribute("totalPage", 0);
+            model.addAttribute("currentPage", 0);
+            return "pages/errorPage/404";
+        }
     }
 }
