@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +66,8 @@ public class ProjectManagerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userAdminService.adminGetUserByUsername(username);
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today);
         if (user == null) {
             return "redirect:/admin/login";
         }
@@ -103,6 +107,7 @@ public class ProjectManagerController {
             project.setIsDeleted(1);
             project.setProjectManager(user);
             if (project.getProjectId() == null) {
+                project.setCurrentAmount(new BigDecimal(0));
                 projectServiceAdmin.addProject(project);
             } else {
                 projectServiceAdmin.updateProject(project);
@@ -121,7 +126,7 @@ public class ProjectManagerController {
             projectServiceAdmin.deleteProject(id);
             return "redirect:/manager";
         } catch (Exception e) {
-            System.err.println("Error deleting project: " + e.getMessage());
+            logger.error(e.getMessage());
             return "pages/errorPage/404";
         }
     }

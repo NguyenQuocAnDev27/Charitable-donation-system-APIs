@@ -1,10 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vn">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" th:fragment="project_form_edit(role)">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form th:object="${project}" th:action="@{${role == 'admin' ? '/admin/saveOrUpdateProject' : '/manager/saveOrUpdateProject'}}" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Chỉnh sửa chiến dịch</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            style="background-color: red"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" th:field="*{projectId}" class="form-control" required/>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Tên chiến dich</label>
+                            <input type="text" th:field="*{projectName}" class="form-control" placeholder="Nhập tên chiến dịch" required/>
+                        </div>
+
+                        <!-- Conditionally Render Fields Based on Role -->
+                        <div class="col-5 mb-6" th:if="${role == 'admin'}">
+                            <label class="form-label">Quản lý chiến dịch</label>
+                            <select class="form-select" th:field="*{projectManager}" required>
+                                <option value="" disabled selected>-- Choose Project Manager --</option>
+                                <option th:each="manager : ${projectManagers}" th:value="${manager.userId}" th:text="${manager.fullName}"></option>
+                            </select>
+                        </div>
+
+
+                        <!-- Common Fields -->
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Mức tiền mục tiêu</label>
+                            <input type="text" id="goalAmount" th:field="*{goalAmount}" class="form-control" placeholder="Nhập mức tiền mục tiêu" required/>
+                            <div id="goal-error" class="text-danger" style="display: none;">Mức tiền mục tiêu phải là số</div>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Mức tiền hiện tại</label>
+                            <input type="text" id="currentAmount" th:field="*{currentAmount}" class="form-control" placeholder="Enter Current Amount" required/>
+                            <div id="amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div>
+                            <div id="amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Ngày bắt đầu</label>
+                            <input type="date" id="startDate" th:field="*{startDate}" class="form-control" placeholder="Enter Start Date" required/>
+                        </div>
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Ngày kết thúc</label>
+                            <input type="date" id="endDate" th:field="*{endDate}" class="form-control" placeholder="Enter End Date" required/>
+                            <div id="date-error" class="text-danger" style="display: none;">Ngày bắt đầu phải sớm hơn ngày kết thúc</div>
+                        </div>
+                        <div class="col mb-6">
+                            <label class="form-label">Mô tả chiến dịch</label>
+                            <input type="text" th:field="*{description}" class="form-control" placeholder="Nhập mô tả chiến dịch" required/>
+                        </div>
+                    </div>
+                    <div class="col-5 mb-6" th:if="${role == 'project_manager'}">
+                        <label class="form-label">Trạng thái chiến dịch</label>
+                        <select class="form-select" th:field="*{status}">
+                            <option value="pending" selected>Đang tiến hành</option>
+                            <option value="completed">Hoàn thành</option>
+                            <option value="stopped">Dừng</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary mx-2">Lưu</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
