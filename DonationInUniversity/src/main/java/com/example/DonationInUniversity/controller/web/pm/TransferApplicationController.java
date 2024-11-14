@@ -65,7 +65,7 @@ public class TransferApplicationController {
             documentFile.transferTo(tempFile);
 
             // Cập nhật đường dẫn tạm thời vào projectDetailImage
-            transferApplication.setDocumentPath("images/project_detail/" + tempFileName);
+            transferApplication.setDocumentPath("/images/transfer_application/" + tempFileName);
             transferApplication.setProjectId(donationProject);
             // Thiết lập đường dẫn file trong đối tượng transferApplication
             transferApplication.setStatus("waiting");
