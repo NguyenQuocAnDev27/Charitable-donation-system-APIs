@@ -67,18 +67,13 @@
                                     <div class="col-5 mb-6">
                                         <label class="form-label">Hóa đơn</label>
                                         <input type="file" th:field="*{billFile}" class="form-control" />
-                                        <div class="mt-1" th:if="${transfer.billPath != null}">
-                                            <a th:href="@{${transfer.billPath}}" target="_blank">Xem hóa đơn hiện tại</a>
-                                        </div>
-
                                     </div>
                                     <div class="col mb-6">
                                         <label class="form-label">Trạng thái</label>
                                         <select th:field="*{status}" class="form-select">
                                             <option value="" disabled selected>-- Chọn trạng thái --</option>
-                                            <option value="waiting" th:selected="${transfer.status == 'waiting'}">Waiting</option>
-                                            <option value="accept" th:selected="${transfer.status == 'accept'}">Accept</option>
-                                            <option value="decline" th:selected="${transfer.status == 'decline'}">Decline</option>
+                                            <option value="accept" th:selected="${transfer.status == 'accept'}">Chấp nhận</option>
+                                            <option value="decline" th:selected="${transfer.status == 'decline'}">Từ chối</option>
                                         </select>
                                     </div>
                                 </div>
@@ -130,13 +125,20 @@
                                             <td>
                                                 <a th:if="${transfer.billPath != null}"  th:href="@{${transfer.billPath}}" th:text="'Xem hóa đơn'" target="_blank"></a>
                                             </td>
-                                            <td th:text="${transfer.status}"></td>
+                                            <td>
+                                            <span th:if="${transfer.status == 'decline'}"
+                                                  th:text="'Từ chối'"
+                                                  class="text-danger"></span>
+                                            <span th:if="${transfer.status == 'accept'}"
+                                                  th:text="'Chấp nhận'"
+                                                  style="color: purple"></span>
+                                            </td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
                                                     </button>
-                                                    <div class="dropdown-menu">
+                                                    <div class="dropdown-menu" >
                                                         <button class="dropdown-item" type="button"
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#basicModal"
@@ -146,15 +148,12 @@
                                                                 th:data-full-name="${transfer.userId.fullName}"
                                                                 th:data-document-path="${transfer.documentPath}"
                                                                 th:data-bill-path="${transfer.billPath}"
-                                                                th:data-status="${transfer.status}">
-                                                            <i class="bx bx-edit-alt me-1"></i>Xác nhận
+                                                                th:data-status="${transfer.status}"
+                                                                th:disabled="${transfer.status == 'accept'}"
+
+                                                        >
+                                                            <i class="bx bx-edit-alt me-1" ></i>Xác nhận
                                                         </button>
-<!--                                                        <form th:action="" method="post" style="display:inline;">-->
-<!--                                                       -->
-<!--                                                        </form>-->
-<!--                                                        <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">-->
-<!--                                                            <i class="bx bx-trash me-1"></i> Xóa-->
-<!--                                                        </button>-->
                                                     </div>
                                                 </div>
                                             </td>
