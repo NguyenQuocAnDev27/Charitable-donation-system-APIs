@@ -32,13 +32,7 @@ public class TransferApplicationService {
         }
     }
     public int countTransferRequestsInCurrentWeek(int userId) {
-        // Lấy ngày bắt đầu và kết thúc của tuần hiện tại
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
-        // Gọi repository để đếm số lượng yêu cầu
-        return transferApplicationRepository.countTransferRequestsInCurrentWeek(userId, startOfWeek, endOfWeek);
+        return transferApplicationRepository.countTransferRequestsInCurrentWeek(userId);
     }
     public Page<TransferApplication> getAllTransferApplicationByManager(int id, int pageNo) {
         Pageable pageable= PageRequest.of(pageNo-1, 5);

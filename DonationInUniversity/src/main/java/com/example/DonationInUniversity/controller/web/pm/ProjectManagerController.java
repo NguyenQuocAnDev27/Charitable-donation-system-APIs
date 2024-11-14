@@ -77,7 +77,7 @@ public class ProjectManagerController {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             int transferRequestCount = transferApplicationService
                     .countTransferRequestsInCurrentWeek(userDetails.getUserModel().getUserId());
-            boolean isRequestDisabled = transferRequestCount >= 5;
+            boolean isRequestDisabled = transferRequestCount >= 3;
             model.addAttribute("isRequestDisabled", isRequestDisabled);
             List<DonationProject> listProjects = projectServiceAdmin.getAllProjectsForManager(userDetails.getUserModel().getUserId()); // Lấy tất cả dự án
             Map<Integer, Boolean> projectTransferStatus = new HashMap<>();
