@@ -33,7 +33,7 @@ public class DonationProject {
     private LocalDate endDate;
 
     @Column(nullable = false)
-    private String status ="pending";
+    private String status = "pending";
 
     @ManyToOne
     @JoinColumn(name = "project_manager_id", referencedColumnName = "userId")

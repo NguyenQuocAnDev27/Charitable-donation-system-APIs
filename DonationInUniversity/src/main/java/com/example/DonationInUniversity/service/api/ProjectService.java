@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.example.DonationInUniversity.model.ProjectDetailImage;
 import com.example.DonationInUniversity.model.ProjectDetailText;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,19 +69,24 @@ public class ProjectService {
         Page<DonationProject> donationProjectPage;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            // If a search query is provided, find matching projects by name
             donationProjectPage = projectRepository.findByProjectNameContainingIgnoreCase(searchQuery, pageable);
         } else {
-            // Otherwise, return all projects for the given page
             donationProjectPage = projectRepository.findAll(pageable);
         }
 
         // Extract data from the Page object
         List<DonationProject> projects = donationProjectPage.getContent();
+        List<DonationProject> pendingProjects = new ArrayList<>();
+        for (DonationProject project : projects) {
+            if ("pending".equals(project.getStatus())) {
+                pendingProjects.add(project);
+            }
+        }
+
         int totalPages = donationProjectPage.getTotalPages();
         int currentPage = donationProjectPage.getNumber();
 
         // Create and return the paginated response
-        return new PaginatedDonationProjectsResponse<>(totalPages, currentPage, projects);
+        return new PaginatedDonationProjectsResponse<>(totalPages, currentPage, pendingProjects);
     }
 }
