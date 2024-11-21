@@ -9,7 +9,7 @@
 <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" th:fragment="project_form_create(role)">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form th:object="${project}" th:action="@{${role == 'admin' ? '/admin/saveOrUpdateProject' : '/manager/saveOrUpdateProject'}}" method="post">
+            <form th:object="${project}" th:action="@{${role == 'admin' ? '/admin/saveOrUpdateProject' : '/manager/saveOrUpdateProject'}}" method="post" id="createProject">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Chiến dịch ủng hộ</h5>
                     <button type="button"
@@ -39,23 +39,23 @@
                         <!-- Common Fields -->
                         <div class="col-5 mb-6">
                             <label class="form-label">Mức tiền mục tiêu</label>
-                            <input type="text" id="goalAmount" th:field="*{goalAmount}" class="form-control" placeholder="Nhập mức tiền mục tiêu" required/>
-                            <div id="goal-error" class="text-danger" style="display: none;">Mức tiền mục tiêu phải là số</div>
+                            <input type="number" id="createGoalAmount" th:field="*{goalAmount}" class="form-control" placeholder="Nhập mức tiền mục tiêu" required/>
+                            <div id="create-goal-error" class="text-danger" style="display: none;">Mức tiền mục tiêu phải là số</div>
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Mức tiền hiện tại</label>
-                            <input type="text" id="currentAmount" th:field="*{currentAmount}" class="form-control" placeholder="Enter Current Amount" required readonly/>
-                            <div id="amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div>
-                            <div id="amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
+                            <input type="number" id="createCurrentAmount" th:field="*{currentAmount}" class="form-control" placeholder="Enter Current Amount" required readonly/>
+                            <div id="create-amount-number-error" class="text-danger" style="display: none;">Current Amount must be a valid number.</div>
+                            <div id="create-amount-goal-error" class="text-danger" style="display: none;">Current Amount must be less than Goal Amount.</div>
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Ngày bắt đầu</label>
-                            <input type="date" id="startDate" name="startDate" class="form-control" placeholder="Enter Start Date" th:value="${today}" required/>
+                            <input type="date" id="createStartDate" name="startDate" class="form-control" placeholder="Enter Start Date" th:value="${today}" required/>
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Ngày kết thúc</label>
-                            <input type="date" id="endDate" th:field="*{endDate}" class="form-control" placeholder="Enter End Date" required/>
-                            <div id="date-error" class="text-danger" style="display: none;">Ngày bắt đầu phải sớm hơn ngày kết thúc</div>
+                            <input type="date" id="createEndDate" th:field="*{endDate}" class="form-control" placeholder="Enter End Date" required/>
+                            <div id="create-date-error" class="text-danger" style="display: none;">Ngày bắt đầu phải sớm hơn ngày kết thúc</div>
                         </div>
                         <div class="col mb-6">
                             <label class="form-label">Mô tả chiến dịch</label>

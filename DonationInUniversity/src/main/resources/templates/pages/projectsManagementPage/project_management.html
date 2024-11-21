@@ -122,6 +122,7 @@
                                                     th:data-end-date="${project.endDate}"
                                                     th:data-description="${project.description}"
                                                     th:data-status="${project.status}"
+                                                    th:attr="disabled=${project.status != 'pending'}"
                                             ><i class="bx bx-edit-alt me-1"></i>Chỉnh sửa</button
                                             >
                                             <button class="dropdown-item" type="button"
@@ -131,7 +132,7 @@
                                                     th:data-project-name="${project.projectName}"
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-status="${project.status}"
-                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId]}"
+                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId] or project.status == 'stopped'}"
                                                     th:title="${isRequestDisabled ? 'Bạn đã gửi yêu cầu tối đa trong tuần này' : (projectTransferStatus[project.projectId] ? 'Yêu cầu đã tồn tại cho dự án này' : 'Yêu cầu')}"
                                             ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
