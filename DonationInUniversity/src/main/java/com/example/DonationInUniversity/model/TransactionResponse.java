@@ -7,17 +7,19 @@ public class TransactionResponse {
     private String date;
     private String donorName;  // This stores the donor's account number (mã account)
     private String projectName;
+    private String projectId;
 
     public TransactionResponse() {
     }
 
-    public TransactionResponse(String id, String description, String value, String date, String donorName, String projectName) {
+    public TransactionResponse(String id, String description, String value, String date, String donorName, String projectName, String projectId) {
         this.id = id;
         this.description = description;
         this.value = value;
         this.date = date;
         this.donorName = donorName;
         this.projectName = projectName;
+        this.projectId = projectId;
     }
 
     public String getId() {
@@ -66,5 +68,13 @@ public class TransactionResponse {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 }

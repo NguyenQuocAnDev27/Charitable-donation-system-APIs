@@ -79,7 +79,9 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/api/projects/page", // for guest
                                 "/api/project_detail/image/**", // for images
-                                "/api/offline_open_chat/create_tags"
+                                "/api/offline_open_chat/create_tags",
+                                "/api/transaction/create",
+                                "/api/transaction/search"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -131,17 +132,38 @@ public class TransactionController {
         }
     }
 
+//    @GetMapping("/search")
+//    public MyCustomResponse<Page<TransactionResponse>> searchTransactions(
+//            @RequestParam(required = false) Long transactionId,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size) {
+//
+//        // Pageable logic to paginate the response
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<TransactionResponse> transactionResponses = transactionRepository
+//                .findAllByOrderByDateDesc(pageable)
+//                .map(this::mapToTransactionResponse);
+//
+//        return new MyCustomResponse<>(HttpStatus.OK.value(), "Transactions fetched successfully", transactionResponses);
+//    }
+
     @GetMapping("/search")
     public MyCustomResponse<Page<TransactionResponse>> searchTransactions(
             @RequestParam(required = false) Long transactionId,
+            @RequestParam(required = false) Integer projectId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) String endDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        // Pageable logic to paginate the response
         Pageable pageable = PageRequest.of(page, size);
-        Page<TransactionResponse> transactionResponses = transactionRepository
-                .findAllByOrderByDateDesc(pageable)
-                .map(this::mapToTransactionResponse);
+
+        // Fetch transactions with combined criteria
+        Page<Transaction> transactions = transactionRepository.searchTransactions(
+                transactionId, projectId, startDate, endDate, pageable);
+
+        // Map transactions to responses
+        Page<TransactionResponse> transactionResponses = transactions.map(this::mapToTransactionResponse);
 
         return new MyCustomResponse<>(HttpStatus.OK.value(), "Transactions fetched successfully", transactionResponses);
     }
@@ -155,6 +177,7 @@ public class TransactionController {
         String donorName = userOpt.map(VerifiedUser::getFullName).orElse("Unknown Donor");
         DonationProject project = projectService.getProjectById(transaction.getProjectId());
         String projectName = project.getProjectName();
+        String projectId = project.getProjectId() + "";
 
         return new TransactionResponse(
                 transaction.getId(),
@@ -162,7 +185,8 @@ public class TransactionController {
                 transaction.getValue(),
                 transaction.getDate(),
                 donorName,
-                projectName
+                projectName,
+                projectId
         );
     }
 }

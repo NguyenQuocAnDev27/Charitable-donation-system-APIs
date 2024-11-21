@@ -26,4 +26,6 @@ public interface ProjectRepository extends JpaRepository<DonationProject,Integer
             "WHERE p.projectManager.userId = :managerId " +
             "AND p.isDeleted = 0")
     List<Object[]> findAllProjectTagsByManager(int managerId);
+
+
 }
