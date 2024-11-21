@@ -109,83 +109,6 @@
 
 
             <!-- Table -->
-<!--            <div class="container-xxl flex-grow-1 container-p-y">-->
-<!--                <div class="card">-->
-<!--                    <div  class="row align-items-center">-->
-<!--                        <div class = "col-3">-->
-<!--                            <h5 class="card-header">Chiến dịch từ thiện</h5>-->
-<!--                        </div>-->
-<!--                        <div class = "col-8 ">-->
-<!--                            <div class="dt-action-buttons text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-6 mb-md-0 mt-n6 mt-md-0 gap-md-4 p">-->
-<!--                                <button-->
-<!--                                        type="button"-->
-<!--                                        class="btn btn-secondary add-new btn-primary"-->
-<!--                                        data-bs-toggle="modal"-->
-<!--                                        data-bs-target="#basicModal">-->
-<!--                                    <i class="bx bx-plus bx-sm me-0 me-sm-2"></i>-->
-<!--                                    <span class="d-none d-sm-inline-block">Chiến dịch từ thiện</span>-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="table-responsive text-nowrap">-->
-<!--                        <table class="table">-->
-<!--                            <thead>-->
-<!--                            <tr>-->
-<!--                                <th>ID - Chiến dịch</th>-->
-<!--                                <th>Tên chiến dịch</th>-->
-<!--                                <th>Mô tả</th>-->
-<!--                                <th>Số tiền mục tiêu</th>-->
-<!--                                <th>Số tiền hiện tại</th>-->
-<!--                                <th>Ngày bắt đầu</th>-->
-<!--                                <th>Ngày kết thúc</th>-->
-<!--                                <th>Phụ trách</th>-->
-<!--                                <th>Hành động</th>-->
-<!--                            </tr>-->
-<!--                            </thead>-->
-<!--                            <tbody class="table-border-bottom-0 align-items-center">-->
-<!--                            <tr th:each="project : ${listProjects}">-->
-<!--                                <td th:text="${project.projectId}"></td>-->
-<!--                                <td th:text="${project.projectName}"></td>-->
-<!--                                <td th:text="${project.description}"></td>-->
-<!--                                <td th:text="${project.goalAmount}"></td>-->
-<!--                                <td th:text="${project.currentAmount}"></td>-->
-<!--                                <td th:text="${project.startDate}"></td>-->
-<!--                                <td th:text="${project.endDate}"></td>-->
-<!--                                <td th:text="${project.projectManager.fullName}"></td>-->
-<!--                                <td>-->
-<!--                                    <div class="dropdown">-->
-<!--                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">-->
-<!--                                            <i class="bx bx-dots-vertical-rounded"></i>-->
-<!--                                        </button>-->
-<!--                                        <div class="dropdown-menu">-->
-<!--                                            <button class="dropdown-item" type="button"-->
-<!--                                                    data-bs-toggle="modal"-->
-<!--                                                    data-bs-target="#basicModal"-->
-<!--                                                    th:data-project-id="${project.projectId}"-->
-<!--                                                    th:data-project-manager="${project.projectManager.userId}"-->
-<!--                                                    th:data-project-name="${project.projectName}"-->
-<!--                                                    th:data-goal-amount="${project.goalAmount}"-->
-<!--                                                    th:data-current-amount="${project.currentAmount}"-->
-<!--                                                    th:data-start-date="${project.startDate}"-->
-<!--                                                    th:data-end-date="${project.endDate}"-->
-<!--                                                    th:data-description="${project.description}"-->
-<!--                                            ><i class="bx bx-edit-alt me-1"></i> Chỉnh sửa</button-->
-<!--                                            >-->
-<!--                                            <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">-->
-<!--                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa dự án này không?');">-->
-<!--                                                    <i class="bx bx-trash me-1"></i> Xóa-->
-<!--                                                </button>-->
-<!--                                            </form>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                            </tbody>-->
-<!--                        </table>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
             <div class="container-xxl flex-grow-1 container-p-y">
                 <div class="card">
                     <div class="row align-items-center">
@@ -208,7 +131,7 @@
 
                     <!-- Điều chỉnh style trực tiếp để tránh cuộn ngang -->
                     <div class="table-responsive" style="overflow-x: auto; max-width: 100%;">
-                        <table class="table table-striped" style="table-layout: auto; width: 100%;">
+                        <table class="table" style="table-layout: auto; width: 100%;">
                             <thead>
                             <tr>
                                 <th style="white-space: nowrap; padding: 0.5rem;">ID</th>
@@ -225,10 +148,22 @@
                             <tbody class="table-border-bottom-0">
                             <tr th:each="project : ${listProjects}">
                                 <td th:text="${project.projectId}" style="padding: 0.5rem;"></td>
-                                <td th:text="${project.projectName}" style="padding: 0.5rem;"></td>
+                                <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
+                          <span th:if="${project.status == 'stopped'}"
+                                th:text="${project.projectName}"
+                                class="text-danger text-decoration-line-through"></span>
+                                    <span th:if="${project.status == 'completed'}"
+                                          th:text="${project.projectName}"
+                                          class="text-success"></span>
+                                    <span th:if="${project.status == 'pending'}"
+                                          th:text="${project.projectName}"
+                                          class="text-warning"></span>
+                                    <span th:if="${project.status != 'stopped' && project.status != 'completed' && project.status != 'pending'}"
+                                          th:text="${project.projectName}"></span>
+                                </td>
                                 <td th:text="${project.description}" style="padding: 0.5rem;"></td>
-                                <td th:text="${project.goalAmount}" style="padding: 0.5rem;"></td>
-                                <td th:text="${project.currentAmount}" style="padding: 0.5rem;"></td>
+                                <td th:text="${#numbers.formatDecimal(project.goalAmount, 0, 0)}" style="padding: 0.5rem;"></td>
+                                <td th:text="${#numbers.formatDecimal(project.goalAmount, 0, 0)}" style="padding: 0.5rem;"></td>
                                 <td th:text="${project.startDate}" style="padding: 0.5rem;"></td>
                                 <td th:text="${project.endDate}" style="padding: 0.5rem;"></td>
                                 <td th:text="${project.projectManager.fullName}" style="padding: 0.5rem;"></td>
@@ -248,7 +183,8 @@
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-start-date="${project.startDate}"
                                                     th:data-end-date="${project.endDate}"
-                                                    th:data-description="${project.description}">
+                                                    th:data-description="${project.description}"
+                                                   >
                                                 <i class="bx bx-edit-alt me-1"></i> Chỉnh sửa
                                             </button>
                                             <form th:action="@{/admin/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">

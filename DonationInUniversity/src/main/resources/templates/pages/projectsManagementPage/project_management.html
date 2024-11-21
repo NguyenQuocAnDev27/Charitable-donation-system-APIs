@@ -31,9 +31,11 @@
                     th:replace="~{components/navbar :: navbar}"
             >
             </nav>
-
+            <div th:if="${successTransfer}" class="alert alert-success" role="alert">
+                <span th:text="${successTransfer}"></span>
+            </div>
             <!-- / Navbar -->
-
+            <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_edit :: project_form_edit(role=${role})}"></div>
             <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_create :: project_form_create(role=${role})}"></div>
             <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true" th:replace="~{components/transfer_application_form ::transfer_application_form}"></div>
 
@@ -78,10 +80,10 @@
                                 class="text-danger text-decoration-line-through"></span>
                                     <span th:if="${project.status == 'completed'}"
                                           th:text="${project.projectName}"
-                                          class="text-success"></span>
+                                          style="color: purple;"></span>
                                     <span th:if="${project.status == 'pending'}"
                                           th:text="${project.projectName}"
-                                          class="text-warning"></span>
+                                          class="text-success"></span>
                                     <span th:if="${project.status != 'stopped' && project.status != 'completed' && project.status != 'pending'}"
                                           th:text="${project.projectName}"></span>
                                 </td>
@@ -111,7 +113,7 @@
                                             </a>
                                             <button class="dropdown-item" type="button"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#basicModal"
+                                                    data-bs-target="#editModal"
                                                     th:data-project-id="${project.projectId}"
                                                     th:data-project-name="${project.projectName}"
                                                     th:data-goal-amount="${project.goalAmount}"
@@ -129,6 +131,8 @@
                                                     th:data-project-name="${project.projectName}"
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-status="${project.status}"
+                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId]}"
+                                                    th:title="${isRequestDisabled ? 'Bạn đã gửi yêu cầu tối đa trong tuần này' : (projectTransferStatus[project.projectId] ? 'Yêu cầu đã tồn tại cho dự án này' : 'Yêu cầu')}"
                                             ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
                                             <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
@@ -147,7 +151,7 @@
                 </div>
             </div>
             <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mt-3">
+                <ul class="pagination justify-content-center mt-3" th:if="${totalPage > 0}">
                     <li class="page-item"  th:if="${currentPage > 1}">
                         <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
                     </li>
@@ -198,10 +202,9 @@
 <!-- Page JS -->
 <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
 <script>
-    const editProjectModal = document.getElementById('basicModal');
+    const editProjectModal = document.getElementById('editModal');
     editProjectModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget; // Nút đã nhấn để mở modal
-        const projectManager = button.getAttribute('data-project-manager');
         const projectName = button.getAttribute('data-project-name');
         const goalAmount = button.getAttribute('data-goal-amount');
         const currentAmount = button.getAttribute('data-current-amount');
@@ -211,16 +214,16 @@
         const projectId = button.getAttribute('data-project-id');
         const status = button.getAttribute('data-status'); // Lấy giá trị status
 
+        const editModel = document.getElementById('editModal');
         // Set các giá trị cho form
-        document.querySelector('input[name="projectName"]').value = projectName;
-        document.querySelector('input[name="goalAmount"]').value = goalAmount;
-        document.querySelector('input[name="currentAmount"]').value = currentAmount;
-        document.querySelector('input[name="startDate"]').value = startDate;
-        document.querySelector('input[name="endDate"]').value = endDate;
-        document.querySelector('input[name="description"]').value = projectDescription;
-        document.querySelector('input[name="projectId"]').value = projectId;
-        document.querySelector('select[name="status"]').value = status; // Gán giá trị cho select status
-        document.querySelector('select[name="projectManager"]').value = projectManager;
+        editModel.querySelector('input[name="projectName"]').value = projectName;
+        editModel.querySelector('input[name="goalAmount"]').value = goalAmount;
+        editModel.querySelector('input[name="currentAmount"]').value = currentAmount;
+        editModel.querySelector('input[name="startDate"]').value = startDate;
+        editModel.querySelector('input[name="endDate"]').value = endDate;
+        editModel.querySelector('input[name="description"]').value = projectDescription;
+        editModel.querySelector('input[name="projectId"]').value = projectId;
+        editModel.querySelector('select[name="status"]').value = status; // Gán giá trị cho select status
     });
 
     const transferProjectModal = document.getElementById('transferModal');
@@ -228,10 +231,10 @@
         const button = event.relatedTarget; // Nút đã nhấn để mở modal
         const projectName = button.getAttribute('data-project-name');
         const projectId = button.getAttribute('data-project-id');
-
+        const transferModel = document.getElementById('transferModal');
         // Set các giá trị cho form
-        document.querySelector('input[name="projectName"]').value = projectName;
-        document.querySelector('input[name="projectId"]').value = projectId;
+        transferModel.querySelector('input[name="projectName"]').value = projectName;
+        transferModel.querySelector('input[name="project"]').value = projectId;
     });
 
     const myModal = document.getElementById('basicModal');
@@ -252,6 +255,18 @@
 
             // Nếu bạn chỉ muốn xóa thông báo lỗi mà không cần xóa nội dung, chỉ cần bỏ qua dòng `input.value = '';`
         });
+</script>
+<script>
+    // Tự động ẩn thông báo sau 10 giây
+    setTimeout(function() {
+        var successMessage = document.getElementById("successTransfer");
+        if (successMessage) {
+            successMessage.style.opacity = '0'; // Dùng hiệu ứng mờ dần
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 1000); // Ẩn hoàn toàn sau 1 giây hiệu ứng mờ dần
+        }
+    }, 10000); // 10 giây
 </script>
 
 <!-- Place this tag before closing body tag for github widget button. -->

@@ -3,6 +3,7 @@ package com.example.DonationInUniversity.controller.web.pm;
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.ProjectDetailTextRepository;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
+import com.example.DonationInUniversity.service.admin.TransferApplicationService;
 import com.example.DonationInUniversity.service.api.TagService;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
 import com.example.DonationInUniversity.service.api.ProjectService;
@@ -12,19 +13,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @Controller
 @RequestMapping("/manager")
@@ -52,6 +53,8 @@ public class ProjectManagerController {
 
     @Value("${server.url}")
     private String serverUrl;
+    @Autowired
+    private TransferApplicationService transferApplicationService;
 
     @RequestMapping("/**")
     public String fallback() {
@@ -64,12 +67,26 @@ public class ProjectManagerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userAdminService.adminGetUserByUsername(username);
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today);
         if (user == null) {
             return "redirect:/admin/login";
         }
 
         try {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            int transferRequestCount = transferApplicationService
+                    .countTransferRequestsInCurrentWeek(userDetails.getUserModel().getUserId());
+            boolean isRequestDisabled = transferRequestCount >= 3;
+            model.addAttribute("isRequestDisabled", isRequestDisabled);
+            List<DonationProject> listProjects = projectServiceAdmin.getAllProjectsForManager(userDetails.getUserModel().getUserId()); // Lấy tất cả dự án
+            Map<Integer, Boolean> projectTransferStatus = new HashMap<>();
+
+            for (DonationProject project : listProjects) {
+                boolean hasTransfer = transferApplicationService.existsByUserIdAndProjectId(userDetails.getUserModel(), project);
+                projectTransferStatus.put(project.getProjectId(), hasTransfer);
+            }
+            model.addAttribute("projectTransferStatus", projectTransferStatus);
             Page<DonationProject> pageDonation = projectServiceAdmin
                     .getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
             model.addAttribute("role", "project_manager");
@@ -103,6 +120,7 @@ public class ProjectManagerController {
             project.setIsDeleted(1);
             project.setProjectManager(user);
             if (project.getProjectId() == null) {
+                project.setCurrentAmount(new BigDecimal(0));
                 projectServiceAdmin.addProject(project);
             } else {
                 projectServiceAdmin.updateProject(project);
@@ -121,7 +139,7 @@ public class ProjectManagerController {
             projectServiceAdmin.deleteProject(id);
             return "redirect:/manager";
         } catch (Exception e) {
-            System.err.println("Error deleting project: " + e.getMessage());
+            logger.error(e.getMessage());
             return "pages/errorPage/404";
         }
     }

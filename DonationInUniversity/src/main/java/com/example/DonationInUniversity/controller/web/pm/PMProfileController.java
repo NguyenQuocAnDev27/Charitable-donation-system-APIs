@@ -22,15 +22,11 @@ public class PMProfileController {
     @Autowired
     private UserAdminService userService;
 
-
-//    @GetMapping("/profile")
-//    public String profile(Model model) {
-//        return "ProjectManager/Profile";
-//    }
     @GetMapping("/profile")
     public String profile(Model model) {
         // Lấy thông tin người dùng đăng nhập
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         String username = null;
 
         if (authentication != null && authentication.isAuthenticated()) {
@@ -52,6 +48,7 @@ public class PMProfileController {
         if (existingProfile != null) {
             model.addAttribute("profile", existingProfile);
             model.addAttribute("bank_id", existingProfile.getBank_id());
+            model.addAttribute("account_no",existingProfile.getAccount_no());
         } else {
             model.addAttribute("profile", new UserBankInfo()); // Nếu không có, tạo mới đối tượng rỗng
         }
