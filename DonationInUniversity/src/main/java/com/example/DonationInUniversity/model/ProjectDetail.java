@@ -13,12 +13,13 @@ public class ProjectDetail {
     private LocalDate startDate;
     private LocalDate endDate;
     private String status;
+    private String projectManagerName;
     private List<ProjectDetailItem> projectContent;
 
     public ProjectDetail() {
     }
 
-    public ProjectDetail(Integer projectId, String projectName, String description, BigDecimal goalAmount, BigDecimal currentAmount, LocalDate startDate, LocalDate endDate, String status, List<ProjectDetailItem> projectContent) {
+    public ProjectDetail(Integer projectId, String projectName, String description, BigDecimal goalAmount, BigDecimal currentAmount, LocalDate startDate, LocalDate endDate, String status, String projectManagerName, List<ProjectDetailItem> projectContent) {
         this.projectId = projectId;
         this.projectName = projectName;
         this.description = description;
@@ -27,6 +28,7 @@ public class ProjectDetail {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.projectManagerName = projectManagerName;
         this.projectContent = projectContent;
     }
 
@@ -100,6 +102,14 @@ public class ProjectDetail {
 
     public void setProjectContent(List<ProjectDetailItem> projectContent) {
         this.projectContent = projectContent;
+    }
+
+    public String getProjectManagerName() {
+        return projectManagerName;
+    }
+
+    public void setProjectManagerName(String projectManagerName) {
+        this.projectManagerName = projectManagerName;
     }
 }
 

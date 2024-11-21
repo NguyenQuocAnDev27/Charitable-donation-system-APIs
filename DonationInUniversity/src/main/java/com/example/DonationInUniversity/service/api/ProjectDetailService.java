@@ -58,6 +58,7 @@ public class ProjectDetailService {
                 donationProject.getStartDate(),
                 donationProject.getEndDate(),
                 donationProject.getStatus(),
+                donationProject.getProjectManager().getFullName(),
                 orderedProjectContent
         );
     }
