@@ -77,7 +77,9 @@
                 </div>
             </div>
             <!-- / Modal -->
-
+            <div th:if="${success}" class="alert alert-success" role="alert">
+                <span th:text="${success}"></span>
+            </div>
             <!-- Table -->
             <div class="container-xxl flex-grow-1 container-p-y">
                 <div class="card">

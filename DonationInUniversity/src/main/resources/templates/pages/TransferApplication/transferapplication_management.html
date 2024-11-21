@@ -149,7 +149,7 @@
                                                                 th:data-document-path="${transfer.documentPath}"
                                                                 th:data-bill-path="${transfer.billPath}"
                                                                 th:data-status="${transfer.status}"
-                                                                th:disabled="${transfer.status == 'accept'}"
+                                                                th:disabled="${transfer.status == 'accept'||transfer.status == 'decline'}"
 
                                                         >
                                                             <i class="bx bx-edit-alt me-1" ></i>Xác nhận

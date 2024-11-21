@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public class AccountAdminController {
         return "pages/userManagementPage/user_management";
     }
     @PostMapping("saveOrUpdateAccount")
-    public String saveOrUpdateAccount(@ModelAttribute("users") User users) {
+    public String saveOrUpdateAccount(@ModelAttribute("users") User users,RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
 
@@ -74,6 +75,7 @@ public class AccountAdminController {
             users.setPasswordHash(encodedPassword);
             users.setIsDeleted(1);
             userAdminService.addUser(users);
+            redirectAttributes.addFlashAttribute("success","Lưu tài khoản thành công");
         } else {
             // Nếu mật khẩu không được cung cấp, giữ mật khẩu cũ
             Optional<User> existingUser = userAdminService.getUserById(users.getUserId());
@@ -85,6 +87,7 @@ public class AccountAdminController {
             }
             users.setIsDeleted(1);
             userAdminService.updateUser(users);
+            redirectAttributes.addFlashAttribute("success","Cập nhật tài khoản thành công");
         }
 
         return "redirect:/admin/AccountManagement";
@@ -104,9 +107,10 @@ public class AccountAdminController {
         }
     }
     @PostMapping("deleteUser/{id}")
-    public String deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         try {
             this.userAdminService.deleteUser(id);
+            redirectAttributes.addFlashAttribute("success","Xóa tài khoản thành công");
             return "redirect:/admin/AccountManagement";
         } catch (Exception e) {
             logger.error(e.getMessage());
