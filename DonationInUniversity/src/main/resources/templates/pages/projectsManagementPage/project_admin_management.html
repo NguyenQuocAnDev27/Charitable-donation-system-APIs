@@ -34,8 +34,9 @@
             </nav>
 
             <!-- / Navbar -->
-
-
+            <div th:if="${success}" class="alert alert-success" role="alert">
+                <span th:text="${success}"></span>
+            </div>
             <!--  Modal -->
             <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -68,14 +69,13 @@
                                     </div>
                                     <div class="col-5 mb-6">
                                         <label  class="form-label">Số tiền mục tiêu </label>
-                                        <input type="text" id="goalAmount" th:field="*{goalAmount}"     class="form-control" placeholder="Nhâp số tiền mục tiêu" required/>
-                                        <div id="goal-error" class="text-danger" style="display: none;">Số tiền mục tiêu phải là số</div> <!-- Thông báo lỗi không phải là số -->
+                                        <input type="number" id="goalAmount" th:field="*{goalAmount}"     class="form-control" placeholder="Nhâp số tiền mục tiêu" required/>
+
 
                                     </div>
                                     <div class="col-5 mb-6">
                                         <label  class="form-label">Số tiền hiện tại</label>
-                                        <input type="text" id="currentAmount" th:field="*{currentAmount}"  class="form-control" placeholder="Nhập số tiền hiện tại" required/>
-                                        <div id="amount-number-error" class="text-danger" style="display: none;">Số tiền hiện tại phải là số</div> <!-- Thông báo lỗi không phải là số -->
+                                        <input type="number" id="currentAmount" th:field="*{currentAmount}"  class="form-control" placeholder="Nhập số tiền hiện tại" required/>
                                         <div id="amount-goal-error" class="text-danger" style="display: none;">Số tiền hiện tại phải ít hơn số tiền mục tiêu</div>
                                     </div>
                                     <div class="col-5 mb-6">
@@ -278,25 +278,6 @@
 
     });
 
-    // Hàm kiểm tra xem một giá trị có phải là số hợp lệ không
-    function isNumber(value) {
-        return !isNaN(value) && value.trim() !== ''; // Kiểm tra không phải NaN và không phải chuỗi rỗng
-    }
-
-    // Kiểm tra khi người dùng nhập liệu vào trường goalAmount
-    document.getElementById('goalAmount').addEventListener('input', function () {
-        const goalAmountInput = this;
-        const goalAmount = goalAmountInput.value;
-
-        // Kiểm tra nếu Goal Amount không phải là số hợp lệ
-        if (!isNumber(goalAmount)) {
-            goalAmountInput.classList.add('is-invalid');
-            document.getElementById('goal-error').style.display = 'block'; // Hiển thị lỗi nếu Goal Amount không phải số
-        } else {
-            goalAmountInput.classList.remove('is-invalid');
-            document.getElementById('goal-error').style.display = 'none'; // Ẩn thông báo lỗi nếu hợp lệ
-        }
-    });
 
     // Kiểm tra khi người dùng nhập liệu vào trường currentAmount
     document.getElementById('currentAmount').addEventListener('input', function () {
@@ -304,37 +285,14 @@
         const currentAmountInput = this;
         const goalAmount = goalAmountInput.value;
         const currentAmount = currentAmountInput.value;
-
-        // Kiểm tra cả hai trường đều là số hợp lệ
-        const isGoalAmountValid = isNumber(goalAmount);
-        const isCurrentAmountValid = isNumber(currentAmount);
-
-        // Lỗi số không hợp lệ cho "Current Amount"
-        if (!isCurrentAmountValid) {
-            currentAmountInput.classList.add('is-invalid');
-            document.getElementById('amount-number-error').style.display = 'block'; // Hiển thị lỗi nếu Current Amount không phải là số
-        } else {
-            currentAmountInput.classList.remove('is-invalid');
-            document.getElementById('amount-number-error').style.display = 'none'; // Ẩn thông báo lỗi số không hợp lệ nếu hợp lệ
-        }
-
-        // Kiểm tra nếu cả hai đều là số và Current Amount lớn hơn Goal Amount
-        if (isGoalAmountValid && isCurrentAmountValid) {
-            const goalAmountValue = parseFloat(goalAmount);
-            const currentAmountValue = parseFloat(currentAmount);
-
             // Lỗi nếu Current Amount lớn hơn Goal Amount
-            if (currentAmountValue > goalAmountValue) {
+            if (currentAmount > goalAmount) {
                 currentAmountInput.classList.add('is-invalid');
                 document.getElementById('amount-goal-error').style.display = 'block'; // Hiển thị lỗi lớn hơn Goal Amount
             } else {
                 currentAmountInput.classList.remove('is-invalid');
                 document.getElementById('amount-goal-error').style.display = 'none'; // Ẩn thông báo lỗi nếu hợp lệ
             }
-        } else {
-            // Ẩn lỗi "greater than Goal Amount" nếu số không hợp lệ
-            document.getElementById('amount-goal-error').style.display = 'none';
-        }
     });
 
     // Kiểm tra lại trước khi form được submit

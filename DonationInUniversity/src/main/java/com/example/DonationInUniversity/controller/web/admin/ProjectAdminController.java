@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,20 +41,23 @@ public class ProjectAdminController {
         return "pages/projectsManagementPage/project_management";
     }
     @PostMapping("saveOrUpdateProject")
-    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {
+    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project, RedirectAttributes redirectAttributes) {
         if(project.getProjectId() == null){
             project.setIsDeleted(1);
             projectServiceAdmin.addProject(project);
+            redirectAttributes.addFlashAttribute("success","Lưu chiến dịch thành công");
         }
         else {
             project.setIsDeleted(1);
             projectServiceAdmin.updateProject(project);
+            redirectAttributes.addFlashAttribute("success","Cập nhật chiến dịch thành công");
         }
         return "redirect:/admin/DonationProject";
     }
     @PostMapping("deleteProject/{id}")
-    public String deleteProject(@PathVariable int id) {
+    public String deleteProject(@PathVariable int id,RedirectAttributes redirectAttributes) {
         this.projectServiceAdmin.deleteProject(id);
+        redirectAttributes.addFlashAttribute("success","Xóa chiến dịch thành công");
         return "redirect:/admin/DonationProject";
     }
 }
