@@ -4,7 +4,6 @@ import com.example.DonationInUniversity.model.CustomUserDetails;
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.TransferApplication;
 import com.example.DonationInUniversity.model.User;
-import com.example.DonationInUniversity.service.admin.ProjectDetailTextServiceAdmin;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.TransferApplicationService;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
@@ -115,6 +114,7 @@ public class TransferApplicationController {
             model.addAttribute("listTransferApplications", listTransfer);
             model.addAttribute("currentPage", pageNo);
             model.addAttribute("totalPage", listTransfer.getTotalPages());
+            model.addAttribute("currentUrl", "TransferApplication");
             return "pages/projectsManagementPage/transfer_application";
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -122,14 +122,16 @@ public class TransferApplicationController {
             model.addAttribute("listProjects", Page.empty()); // Return an empty page
             model.addAttribute("totalPage", 0);
             model.addAttribute("currentPage", 0);
+            model.addAttribute("currentUrl", "TransferApplication");
             return "pages/errorPage/404";
         }
     }
 
     @PostMapping("/deleteTransfer/{id}")
-    public String deleteTransfer(@PathVariable int id) {
+    public String deleteTransfer(@PathVariable int id,RedirectAttributes redirectAttributes) {
         try{
             transferApplicationService.deleteTransferApplication(id);
+            redirectAttributes.addFlashAttribute("successTransfer", "Xóa yêu cầu thành công!");
             return "redirect:/manager/TransferApplication";
         }
         catch (Exception e){

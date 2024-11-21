@@ -8,7 +8,7 @@
 <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true" th:fragment="transfer_application_form">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form th:object="${transfer}" th:action="@{/manager/saveTransferApplication}" method="post" enctype="multipart/form-data">
+            <form th:object="${transfer}" th:action="@{/manager/saveTransferApplication}" method="post" enctype="multipart/form-data" id="formTransfer">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel1">Yêu cầu chuyển tiền</h5>
                     <button type="button"
@@ -28,7 +28,8 @@
                         <!-- Common Fields -->
                         <div class="col-5 mb-6">
                             <label class="form-label">Mức tiền chuyển</label>
-                            <input type="text" id="goalAmount" th:field="*{amount}" class="form-control" placeholder="Nhập mức tiền mục tiêu" required/>
+                            <input type="number" id="transferAmount" th:field="*{amount}" class="form-control" placeholder="Nhập mức tiền mục tiêu" required/>
+                            <div id="transfer-amount-error" class="text-danger" style="display: none;">Mức tiền mục tiêu phải là số</div>
                         </div>
                         <div class="col-5 mb-6">
                             <label class="form-label">Thêm file PDF:</label>

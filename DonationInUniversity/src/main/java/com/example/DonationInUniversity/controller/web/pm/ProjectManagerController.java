@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -112,7 +113,7 @@ public class ProjectManagerController {
 
     // Save or Update Project
     @PostMapping("/saveOrUpdateProject")
-    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project) {
+    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project, RedirectAttributes redirectAttributes) {
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String username = authentication.getName();
@@ -122,8 +123,10 @@ public class ProjectManagerController {
             if (project.getProjectId() == null) {
                 project.setCurrentAmount(new BigDecimal(0));
                 projectServiceAdmin.addProject(project);
+                redirectAttributes.addFlashAttribute("successTransfer", "Thêm chiến dịch thành công!");
             } else {
                 projectServiceAdmin.updateProject(project);
+                redirectAttributes.addFlashAttribute("successTransfer", "Cập nhật chiến dịch thành công!");
             }
             return "redirect:/manager";
         }
@@ -134,9 +137,10 @@ public class ProjectManagerController {
     }
     // Delete Project
     @PostMapping("/deleteProject/{id}")
-    public String deleteProject(@PathVariable int id) {
+    public String deleteProject(@PathVariable int id,RedirectAttributes redirectAttributes) {
         try {
             projectServiceAdmin.deleteProject(id);
+            redirectAttributes.addFlashAttribute("successTransfer", "Xóa chiến dịch thành công!");
             return "redirect:/manager";
         } catch (Exception e) {
             logger.error(e.getMessage());
