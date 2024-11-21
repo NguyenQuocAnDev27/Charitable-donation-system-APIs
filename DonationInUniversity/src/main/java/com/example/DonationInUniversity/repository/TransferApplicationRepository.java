@@ -22,5 +22,5 @@ public interface TransferApplicationRepository extends JpaRepository<TransferApp
     @Query(value = "SELECT * FROM transfer_application WHERE project_id = ?1", nativeQuery = true)
     TransferApplication findByProjectId(int id);
 
-    boolean existsByUserIdAndProjectId(User userId, DonationProject projectId);
+    boolean existsByUserIdAndProjectIdAndStatus(User userId, DonationProject projectId, String status);
 }

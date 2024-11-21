@@ -125,4 +125,16 @@ public class TransferApplicationController {
             return "pages/errorPage/404";
         }
     }
+
+    @PostMapping("/deleteTransfer/{id}")
+    public String deleteTransfer(@PathVariable int id) {
+        try{
+            transferApplicationService.deleteTransferApplication(id);
+            return "redirect:/manager/TransferApplication";
+        }
+        catch (Exception e){
+            logger.error(e.getMessage());
+            return "pages/errorPage/404";
+        }
+    }
 }

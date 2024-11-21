@@ -48,6 +48,7 @@
                                 <th>ID</th>
                                 <th>Tên chiến dịch</th>
                                 <th>Tiền yêu cầu</th>
+                                <th>Hóa đơn</th>
                                 <th>Tình trạng</th>
                                 <th>Hành động</th>
                             </tr>
@@ -60,28 +61,27 @@
                                 </td>
                                 <td th:text="${transferApplication.amount}"></td>
                                 <td>
-                                     <span th:if="${transferApplication.status == 'decline'}"
-                                           th:text="${transferApplication.status}"
+                                    <a th:if="${transferApplication.billPath != null}"  th:href="@{${transferApplication.billPath}}" th:text="'Xem hóa đơn'" target="_blank"></a>
+                                </td>
+                                <td>
+                                     <span th:if="${transferApplication.status == 'decline'}" th:text="'Từ chối'"
                                            class="text-danger"></span>
-                                    <span th:if="${transferApplication.status == 'accept'}"
-                                          th:text="${transferApplication.status}"
+                                    <span th:if="${transferApplication.status == 'accept'}" th:text="'Chấp nhận'"
+                                          style="color: purple;"></span>
+                                    <span th:if="${transferApplication.status == 'waiting'}" th:text="'Đang xử lý'"
                                           class="text-success"></span>
-                                    <span th:if="${transferApplication.status == 'waiting'}"
-                                          th:text="${transferApplication.status}"
-                                          class="text-warning"></span>
                                 </td>
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="right"
-                                               title="Xem chi tiết">
-                                                <i class="bx bx-show-alt me-1"></i>Chi tiết
-                                            </a>
+                                        <div class="dropdown-menu" th:if="${transferApplication.status == 'waiting'}">
+                                            <form th:action="@{deleteTransfer/{id}(id=${transferApplication.id})}" method="post" style="display:inline;">
+                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa yêu cầu này không?');">
+                                                    <i class="bx bx-trash me-1"></i>Xóa
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>
@@ -92,8 +92,8 @@
                     </div>
                 </div>
             </div>
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mt-3">
+            <nav aria-label="Page navigation" >
+                <ul class="pagination justify-content-center mt-3" th:if="${totalPage > 0}">
                     <li class="page-item"  th:if="${currentPage > 1}">
                         <a class="page-link" th:href="@{'?page='+${currentPage - 1}}" tabindex="-1">Previous</a>
                     </li>
