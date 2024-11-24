@@ -1,5 +1,12 @@
 USE sgu_charity;
 
+INSERT INTO `Users` 
+(`user_id`, `full_name`, `email`, `password_hash`, `phone_number`, `role_id`, `is_deleted`, `created_at`, `updated_at`)
+VALUES
+(1, 'Nguyễn Quốc An', 'user@example.com', '$2a$10$zl/sSCEQiTezqJ11772ltOxnOAMTOzOwarvk8JAZq4dHRPnfyJ8JS', '0838829707', 3, 1, '2024-11-24 13:11:42', '2024-11-24 13:11:42'),
+(2, 'Nguyễn Quốc An', 'pm@example.com', '$2a$10$B6GGDy86A1PWR3ucRRop6OSyGe15i.wITaFUnU40LQDBY8.7Xm1Nu', '0838829707', 2, 1, '2024-11-24 13:11:46', '2024-11-24 13:12:05'),
+(3, 'Nguyễn Quốc An', 'admin@example.com', '$2a$10$6KBzZVftcEnOFZFhBvc4Mu.XgsA7vsR2SqV3yHlO6AHs2wZbubt6q', '0838829707', 1, 1, '2024-11-24 13:11:51', '2024-11-24 13:12:05');
+
 -- Insert into Donation_Projects
 INSERT INTO `Donation_Projects` 
 (`project_name`,
