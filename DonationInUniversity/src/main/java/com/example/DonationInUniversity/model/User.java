@@ -28,7 +28,7 @@ public class User implements  Serializable {
     @JoinColumn(name = "role_id")
     private Role role;
     // add column for soft delete
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false, updatable = false)
     private int isDeleted;
     @Column(updatable = false)
     private LocalDateTime createdAt;

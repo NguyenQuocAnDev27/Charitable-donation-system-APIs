@@ -38,7 +38,7 @@ public class DonationProject {
     @ManyToOne
     @JoinColumn(name = "project_manager_id", referencedColumnName = "userId")
     private User projectManager;
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false, updatable = false)
     private int isDeleted;
 
     @OneToMany(mappedBy = "project")

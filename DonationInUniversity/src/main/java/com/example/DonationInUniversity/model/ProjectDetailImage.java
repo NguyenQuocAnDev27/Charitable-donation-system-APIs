@@ -19,7 +19,7 @@ public class ProjectDetailImage {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "is_delete", nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     private Integer isDelete;
 
     @Column(name = "display_order", nullable = false)
