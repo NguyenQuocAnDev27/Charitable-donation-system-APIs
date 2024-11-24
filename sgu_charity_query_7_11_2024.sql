@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS sgu_charity;
 USE sgu_charity;
 
 -- Table: Roles (for role management)
@@ -24,7 +25,7 @@ CREATE TABLE `Users` (
 	`password_hash` VARCHAR(255) NOT NULL,
 	`phone_number` VARCHAR(15),
 	`role_id` INT,
-    `is_delete` BOOLEAN DEFAULT FALSE,
+    `is_deleted` BOOLEAN DEFAULT FALSE,
 	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`user_id`),
@@ -43,7 +44,7 @@ CREATE TABLE `Donation_Projects` (
 	`end_date` DATE NOT NULL,
 	`status` VARCHAR(50) CHECK (`status` IN ('stopped', 'completed', 'pending')),
 	`project_manager_id` INT,
-    `is_delete` BOOLEAN DEFAULT FALSE,
+    `is_deleted` BOOLEAN DEFAULT FALSE,
 	`created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`project_id`),
@@ -153,7 +154,7 @@ CREATE TABLE `Refresh_Tokens` (
     `token` VARCHAR(255) NOT NULL,
     `expires_at` DATETIME NOT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `isEnable` BOOLEAN NOT NULL DEFAULT TRUE,  -- New column added
+    `is_enabled` BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (`token_id`),
     UNIQUE (`token`),
     FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
@@ -164,8 +165,8 @@ CREATE TABLE `Project_Detail_Text` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `project_id` INT NOT NULL,
     `content` TEXT NOT NULL,
-    `IsDelete` BOOLEAN DEFAULT FALSE,
-     `display_order` INT DEFAULT 0,
+    `is_deleted` BOOLEAN DEFAULT FALSE,
+    `display_order` INT DEFAULT 0,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
@@ -175,12 +176,31 @@ CREATE TABLE `Project_Detail_Text` (
 CREATE TABLE `Project_Detail_Image` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `project_id` INT NOT NULL,
-    `path_Image` VARCHAR(255) NOT NULL,
-    `IsDelete` BOOLEAN DEFAULT FALSE,
-     `display_order` INT DEFAULT 0,
+    `path_image` VARCHAR(255) NOT NULL,
+    `is_deleted` BOOLEAN DEFAULT FALSE,
+    `display_order` INT DEFAULT 0,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`project_id`) REFERENCES `Donation_Projects`(`project_id`) ON DELETE CASCADE
+);
+
+-- Table: Transaction
+CREATE TABLE `Transaction` (
+    `id` INT NOT NULL,
+    `account_no` VARCHAR(50) NOT NULL,
+    `balance` DECIMAL(15, 2) NOT NULL,
+    `contra_account_name` VARCHAR(255) NOT NULL,
+    `contra_account_no` VARCHAR(50) NOT NULL,
+    `contra_bank_bin` VARCHAR(50),
+    `contra_bank_name` VARCHAR(255),
+    `date` DATETIME NOT NULL,
+    `description` TEXT,
+    `payment_channel` VARCHAR(100),
+    `project_id` INT,
+    `ref_code` VARCHAR(100) NOT NULL,
+    `value` DECIMAL(15, 2) NOT NULL,
+    `virtual_account_name` VARCHAR(255),
+    `virtual_account_no` VARCHAR(50)
 );
 
 -- Table: User_Bank_Info
@@ -189,12 +209,14 @@ CREATE TABLE `User_Bank_Info` (
     `bank_id` INT NOT NULL,
     `account_no` VARCHAR(50) NOT NULL,
     `user_id` INT NOT NULL,
-    `is_delete` BOOLEAN DEFAULT FALSE,
+    `is_deleted` BOOLEAN DEFAULT FALSE,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE
 );
+
+-- Table: Transfer_Application
 CREATE TABLE `Transfer_Application` (
     `id` INT AUTO_INCREMENT NOT NULL,
     `project_id` INT NOT NULL,
