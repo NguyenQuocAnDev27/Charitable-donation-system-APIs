@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UserAdminRepository extends JpaRepository<User,Integer> {
-    @Query(value = "SELECT * FROM users   where  is_deleted =?1",nativeQuery = true)
+    @Query(value = "SELECT * FROM users   where  isDeleted =?1",nativeQuery = true)
     Page<User> findUsersByIsDeleted(int isDeleted, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.email = ?1")
