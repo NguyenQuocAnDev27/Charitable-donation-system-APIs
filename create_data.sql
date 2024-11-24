@@ -1,7 +1,7 @@
 USE sgu_charity;
 
 -- Insert into Donation_Projects
-INSERT INTO `Donation_Projects`
+INSERT INTO `Donation_Projects` 
 (`project_name`,
  `description`,
  `goal_amount`,
@@ -10,76 +10,62 @@ INSERT INTO `Donation_Projects`
  `end_date`,
  `status`,
  `project_manager_id`,
- `is_deleted`,
- `created_at`,
- `updated_at`)
+ `is_deleted`)
 VALUES
 ('Chuyến xe ước mơ',
  'Tặng quà trẻ em có hoàn cảnh khó khăn năm học 2024 – 2025 tại miền Tây Nam Bộ.',
  123000000,
  0, 
- '2024-07-24',
- DATE_ADD('2024-07-24', INTERVAL 4 MONTH), -- 4 months duration
+ '2024-11-24',
+ '2025-02-24', -- 4 months duration
  'pending',
  2, 
- TRUE,
- CURRENT_TIMESTAMP,
- CURRENT_TIMESTAMP),
+ 1),
 ('Cơm có thịt',
  'Cải thiện dinh dưỡng và khuyến học cho trẻ em vùng cao thông qua chương trình “Một triệu bữa cơm có thịt”.',
  100000000,
  0, 
- '2023-09-01',
- DATE_ADD('2023-09-01', INTERVAL 4 MONTH), -- 4 months duration
+ '2024-11-24',
+ '2025-02-24', -- 4 months duration
  'pending',
  2, 
- TRUE,
- CURRENT_TIMESTAMP,
- CURRENT_TIMESTAMP),
+ 1),
 ('Đông Ấm Cho Em',
  'Cung cấp áo ấm, nhu yếu phẩm, và hỗ trợ mùa đông cho trẻ em vùng cao.',
  50000000,
  0, 
- '2024-01-01',
- DATE_ADD('2024-01-01', INTERVAL 4 MONTH), -- 4 months duration
+ '2024-11-24',
+ '2025-06-24', -- 7 months duration
  'pending',
  2, 
- TRUE,
- CURRENT_TIMESTAMP,
- CURRENT_TIMESTAMP),
+ 1),
 ('Cánh Diều Hy Vọng',
  'Gây quỹ y tế hỗ trợ trẻ em mắc dị tật bẩm sinh và gặp tai nạn.',
  80000000,
  0, 
- '2024-06-01',
- DATE_ADD('2024-06-01', INTERVAL 4 MONTH), -- 4 months duration
+ '2024-11-24',
+ '2025-11-24', -- 12 months duration
  'pending',
  2, 
- TRUE,
- CURRENT_TIMESTAMP,
- CURRENT_TIMESTAMP),
+ 1),
 ('Ghép đôi Trăng tròn',
  'Lan tỏa thông điệp yêu thương và sẻ chia nhân dịp Tết Trung Thu.',
  30000000,
  0, 
  '2024-08-15',
- DATE_ADD('2024-08-15', INTERVAL 4 MONTH), -- 4 months duration
+ '2024-12-15', -- 4 months duration
  'pending',
  2, 
- TRUE,
- CURRENT_TIMESTAMP,
- CURRENT_TIMESTAMP),
+ 1),
 ('Quỹ Hy vọng cùng đồng bào vượt bão',
  'Hỗ trợ các khu vực chịu thiệt hại nặng nề sau bão Yagi bằng các chương trình cứu trợ khẩn cấp.',
  150000000,
  0, 
  '2024-09-10',
- DATE_ADD('2024-09-10', INTERVAL 4 MONTH), -- 4 months duration
+ '2025-01-10', -- 4 months duration
  'pending',
  2, 
- TRUE,
- CURRENT_TIMESTAMP,
- CURRENT_TIMESTAMP);
+ 1);
 
 INSERT INTO `Project_Detail_Text` 
 (`project_id`, `content`, `is_deleted`, `display_order`)
