@@ -136,7 +136,7 @@
                                                     th:title="${isRequestDisabled ? 'Bạn đã gửi yêu cầu tối đa trong tuần này' : (projectTransferStatus[project.projectId] ? 'Yêu cầu đã tồn tại cho dự án này' : 'Yêu cầu')}"
                                             ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
-                                            <form th:action="@{manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
+                                            <form th:action="@{/manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
                                                 <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
                                                     <i class="bx bx-trash me-1"></i>Xóa
                                                 </button>
