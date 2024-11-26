@@ -87,7 +87,7 @@
                                     <span th:if="${project.status != 'stopped' && project.status != 'completed' && project.status != 'pending'}"
                                           th:text="${project.projectName}"></span>
                                 </td>
-                                <td th:text="${project.currentAmount}"></td>
+                                <td th:text="${#numbers.formatDecimal(project.currentAmount, 3,'POINT', 2,'COMMA')+ ' đ'}"></td>
                                 <td>
                                     <div style="display: flex; align-items: center; justify-content: space-between;">
                                         <div style="width: 150px; background-color: #e0e0e0; border-radius: 5px; margin: 0 10px;">

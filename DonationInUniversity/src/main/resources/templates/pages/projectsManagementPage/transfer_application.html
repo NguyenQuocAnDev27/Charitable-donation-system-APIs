@@ -61,7 +61,7 @@
                                 <td style="max-width: 200px; word-wrap: break-word; white-space: normal;"
                                     th:text="${transferApplication.projectId.getProjectName()}">
                                 </td>
-                                <td th:text="${transferApplication.amount}"></td>
+                                <td th:text="${#numbers.formatDecimal(transferApplication.amount,3,'POINT',2,'COMMA')+' đ'}"></td>
                                 <td>
                                     <a th:if="${transferApplication.billPath != null}"  th:href="@{${transferApplication.billPath}}" th:text="'Xem hóa đơn'" target="_blank"></a>
                                 </td>
