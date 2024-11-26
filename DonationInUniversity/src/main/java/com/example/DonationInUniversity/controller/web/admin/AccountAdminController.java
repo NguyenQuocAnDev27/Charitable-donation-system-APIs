@@ -52,6 +52,7 @@ public class AccountAdminController {
             model.addAttribute("listProjects", Page.empty()); // Return an empty page
             model.addAttribute("totalPage", 0);
             model.addAttribute("currentPage", 0);
+            return "pages/errorPage/404";
         }
         return "pages/userManagementPage/user_management";
     }
