@@ -164,7 +164,10 @@ public class SecurityConfig {
                 "http://localhost:8000",
                 "http://localhost:9000",
                 "http://localhost:3000",
-                "http://localhost:11434"
+                "http://localhost:11434",
+                "http://searchlaw.name.vn:3000",
+                "http://searchlaw.name.vn:8080",
+                "http://searchlaw.name.vn:9000"
         )); // Allowed origins
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Allowed headers

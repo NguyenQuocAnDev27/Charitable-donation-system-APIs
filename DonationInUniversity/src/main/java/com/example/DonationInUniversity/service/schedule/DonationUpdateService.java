@@ -13,7 +13,6 @@ public class DonationUpdateService {
     @Autowired
     private EntityManager entityManager;
 
-    // Scheduled to run every 5 minutes
     @Scheduled(fixedRate = 300000) // 300000ms = 5 minutes
     @Transactional
     public void updateDonationAmounts() {

@@ -186,19 +186,19 @@ CREATE TABLE `Project_Detail_Image` (
 
 -- Table: Transaction
 CREATE TABLE `Transaction` (
-    `id` INT NOT NULL,
-    `account_no` VARCHAR(50) NOT NULL,
-    `balance` DECIMAL(15, 2) NOT NULL,
-    `contra_account_name` VARCHAR(255) NOT NULL,
-    `contra_account_no` VARCHAR(50) NOT NULL,
+    `id` INT,
+    `account_no` VARCHAR(50),
+    `balance` DECIMAL(15, 2),
+    `contra_account_name` VARCHAR(255),
+    `contra_account_no` VARCHAR(50),
     `contra_bank_bin` VARCHAR(50),
     `contra_bank_name` VARCHAR(255),
-    `date` DATETIME NOT NULL,
+    `date` DATETIME,
     `description` TEXT,
     `payment_channel` VARCHAR(100),
     `project_id` INT,
-    `ref_code` VARCHAR(100) NOT NULL,
-    `value` DECIMAL(15, 2) NOT NULL,
+    `ref_code` VARCHAR(100),
+    `value` DECIMAL(15, 2),
     `virtual_account_name` VARCHAR(255),
     `virtual_account_no` VARCHAR(50)
 );
