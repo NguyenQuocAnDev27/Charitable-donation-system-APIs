@@ -48,6 +48,10 @@ public class UserAdminService {
     public List<Role> getAllRole () {
         return roleRepository.findAll();
     }
+    public long countByRole(String roleName) {
+        Role role = roleRepository.findByRoleName(roleName).orElseThrow(() -> new RuntimeException("Role not found"));
+        return userAdminRepository.findByRole(role).size();
+    }
     public User adminGetUserByUsername(String username) {
         return userAdminRepository.findByEmail(username);
     }

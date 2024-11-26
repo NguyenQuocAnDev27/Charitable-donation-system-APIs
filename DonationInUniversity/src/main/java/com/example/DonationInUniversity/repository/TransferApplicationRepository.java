@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface TransferApplicationRepository extends JpaRepository<TransferApplication, Integer> {
@@ -21,6 +22,7 @@ public interface TransferApplicationRepository extends JpaRepository<TransferApp
 
     @Query(value = "SELECT * FROM transfer_application WHERE project_id = ?1", nativeQuery = true)
     TransferApplication findByProjectId(int id);
-
+    @Query(value = "SELECT * FROM transfer_application WHERE status = ?1", nativeQuery = true)
+    List<TransferApplication> findByStatus(String status);
     boolean existsByUserIdAndProjectIdAndStatus(User userId, DonationProject projectId, String status);
 }

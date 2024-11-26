@@ -60,4 +60,7 @@ public class TransferApplicationService {
     public void deleteTransferApplication(int id) {
         transferApplicationRepository.deleteById(id);
     }
+    public int countByStatus(String status) {
+        return transferApplicationRepository.findByStatus(status).size();
+    }
 }

@@ -12,7 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,5 +89,14 @@ public class ProjectServiceAdmin {
     public List<DonationProject> getAllProjectsForManager(int managerId) {
         return projectRepository.findAllProjectsByManager(managerId);
     }
-
+    public int getProjectStatus(String status){
+        return projectRepository.findProjectStatus(status).size();
+    }
+    public int totalAmountByStatuses(String... statuses) {
+        return projectRepository.findAll().stream()
+                .filter(project -> Arrays.asList(statuses).contains(project.getStatus()))
+                .map(DonationProject::getCurrentAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .intValue();
+    }
 }

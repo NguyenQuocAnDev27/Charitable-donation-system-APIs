@@ -87,6 +87,14 @@
                                         <input type="date" th:field="*{endDate}"  class="form-control" placeholder="Nhập ngày kết thúc" required/>
                                         <div id="date-error" class="text-danger" style="display: none;">Ngày bắt đầu phải sớm hơn ngày kết thúc </div>
                                     </div>
+                                    <div class="col-5 mb-6">
+                                        <label class="form-label">Trạng thái chiến dịch</label>
+                                        <select class="form-select" th:field="*{status}">
+                                            <option value="pending" selected>Đang tiến hành</option>
+                                            <option value="completed">Hoàn thành</option>
+                                            <option value="stopped">Dừng</option>
+                                        </select>
+                                    </div>
                                     <div class="col mb-6">
                                         <label  class="form-label">Mô tả chiến dịch</label>
                                         <input type="text" th:field="*{description}"  class="form-control" placeholder="Nhập mô tả chiến dịch" required/>
@@ -184,6 +192,7 @@
                                                     th:data-start-date="${project.startDate}"
                                                     th:data-end-date="${project.endDate}"
                                                     th:data-description="${project.description}"
+                                                    th:data-status="${project.status}"
                                                    >
                                                 <i class="bx bx-edit-alt me-1"></i> Chỉnh sửa
                                             </button>
@@ -257,6 +266,23 @@
     const editProjectModal = document.getElementById('basicModal');
     editProjectModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget; // Nút đã nhấn để mở modal
+
+        // Kiểm tra nếu nút nhấn là chỉnh sửa
+        const isEdit = button.getAttribute('data-project-id') !== null;
+
+        // Trường Trạng thái chiến dịch
+        const statusField = document.getElementById('status');
+
+        // Nếu là chỉnh sửa, hiển thị trường trạng thái, ngược lại ẩn đi
+        if (isEdit) {
+            statusField.style.display = 'block';  // Hiển thị
+            statusField.removeAttribute('disabled'); // Bỏ disable để người dùng có thể chỉnh sửa
+        } else {
+            statusField.style.display = 'block';   // Ẩn đi
+            statusField.setAttribute('disabled', true); // Disable trường trạng thái khi thêm mới
+        }
+
+        // Các phần tử khác trong modal như đã có từ trước
         const projectManager = button.getAttribute('data-project-manager');
         const projectName = button.getAttribute('data-project-name');
         const goalAmount = button.getAttribute('data-goal-amount');
@@ -265,7 +291,7 @@
         const endDate = button.getAttribute('data-end-date');
         const projectDescription = button.getAttribute('data-description');
         const projectId = button.getAttribute('data-project-id');
-
+        const status = button.getAttribute('data-status')
 
         document.querySelector('input[name="projectName"]').value = projectName;
         document.querySelector('input[name="goalAmount"]').value = goalAmount;
@@ -274,10 +300,10 @@
         document.querySelector('input[name="endDate"]').value = endDate;
         document.querySelector('input[name="description"]').value = projectDescription;
         document.querySelector('input[name="projectId"]').value = projectId;
-        document.querySelector('select[name="projectManager"]').value=projectManager;
+        document.querySelector('select[name="projectManager"]').value = projectManager;
+        document.querySelector('select[name="status"]').value = status;
 
     });
-
 
     // Kiểm tra khi người dùng nhập liệu vào trường currentAmount
     document.getElementById('currentAmount').addEventListener('input', function () {
