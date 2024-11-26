@@ -75,7 +75,6 @@ public class ScheduledTransactionService {
             }
         } catch (IOException e) {
             logger.error("Error fetching data from Google Sheets: {}", e.getMessage());
-            e.printStackTrace();  // Handle exceptions properly in production
         }
     }
 }

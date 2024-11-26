@@ -12,7 +12,6 @@ public class DualPortConfig {
     @Bean
     public ServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-        // Add the second port (8000) for admin dashboard
         tomcat.addAdditionalTomcatConnectors(createAdminConnector());
         return tomcat;
     }
