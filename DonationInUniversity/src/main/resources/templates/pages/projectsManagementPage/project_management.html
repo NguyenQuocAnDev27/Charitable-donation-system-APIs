@@ -232,10 +232,13 @@
         const button = event.relatedTarget; // Nút đã nhấn để mở modal
         const projectName = button.getAttribute('data-project-name');
         const projectId = button.getAttribute('data-project-id');
+        const currentAmount = button.getAttribute('data-current-amount');
         const transferModel = document.getElementById('transferModal');
         // Set các giá trị cho form
         transferModel.querySelector('input[name="projectName"]').value = projectName;
         transferModel.querySelector('input[name="project"]').value = projectId;
+        transferModel.querySelector('input[name="amount"]').value = currentAmount;
+
     });
 
     const myModal = document.getElementById('basicModal');
