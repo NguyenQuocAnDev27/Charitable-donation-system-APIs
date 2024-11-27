@@ -18,5 +18,5 @@ public interface UserAdminRepository extends JpaRepository<User,Integer> {
     User findByEmail(String email);
 
     List<User> findByRole(Role role);
-
+    int countByIsDeleted(int isDeleted);
 }

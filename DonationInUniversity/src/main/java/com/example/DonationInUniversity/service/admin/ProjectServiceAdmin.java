@@ -99,4 +99,7 @@ public class ProjectServiceAdmin {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .intValue();
     }
+    public int countByIsDelete(){
+        return projectRepository.countByIsDeleted(1);
+    }
 }

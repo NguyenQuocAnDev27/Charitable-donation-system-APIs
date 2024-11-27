@@ -55,4 +55,7 @@ public class UserAdminService {
     public User adminGetUserByUsername(String username) {
         return userAdminRepository.findByEmail(username);
     }
+    public int countByIsDeleted() {
+        return  userAdminRepository.countByIsDeleted(1);
+    }
 }

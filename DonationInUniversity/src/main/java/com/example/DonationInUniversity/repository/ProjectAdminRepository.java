@@ -40,4 +40,5 @@ public interface ProjectAdminRepository extends JpaRepository<DonationProject, I
     Page<DonationProject> findAllByManagerId(int id, Pageable pageable);
     @Query("SELECT p FROM DonationProject p WHERE p.status= ?1 AND p.isDeleted = 1")
     List<DonationProject> findProjectStatus(String status);
+    int countByIsDeleted(int isDeleted);
 }
