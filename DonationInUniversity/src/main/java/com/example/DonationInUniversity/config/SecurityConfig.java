@@ -74,6 +74,7 @@ public class SecurityConfig {
                                 "/api/register/admin",
                                 "/api/register",
                                 "/api/authenticate",
+                                "/api/authenticate/google",
                                 "/api/token/refresh",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
