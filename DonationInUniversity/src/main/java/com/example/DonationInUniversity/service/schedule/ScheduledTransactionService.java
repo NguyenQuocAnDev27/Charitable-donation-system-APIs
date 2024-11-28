@@ -77,4 +77,13 @@ public class ScheduledTransactionService {
             logger.error("Error fetching data from Google Sheets: {}", e.getMessage());
         }
     }
+    public List<Transaction> getTransactionsByProjectId(Integer projectId) {
+        try{
+            return transactionRepository.findTransactionsByProjectId(projectId);
+        }
+        catch (Exception e){
+            logger.error("Error load data: {}", e.getMessage());
+            return null;
+        }
+    }
 }

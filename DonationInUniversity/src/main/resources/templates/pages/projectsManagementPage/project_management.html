@@ -34,6 +34,9 @@
             <div th:if="${successTransfer}" class="alert alert-success" role="alert">
                 <span th:text="${successTransfer}"></span>
             </div>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
             <!-- / Navbar -->
             <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_edit :: project_form_edit(role=${role})}"></div>
             <div class="modal fade" id="basicModal" tabindex="-1" aria-hidden="true" th:replace="~{components/project_form_create :: project_form_create(role=${role})}"></div>
@@ -132,13 +135,18 @@
                                                     th:data-project-name="${project.projectName}"
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-status="${project.status}"
-                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId] or project.status == 'stopped'}"
+                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId] or project.status != 'completed'}"
                                                     th:title="${isRequestDisabled ? 'Bạn đã gửi yêu cầu tối đa trong tuần này' : (projectTransferStatus[project.projectId] ? 'Yêu cầu đã tồn tại cho dự án này' : 'Yêu cầu')}"
                                             ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
                                             <form th:action="@{/manager/deleteProject/{id}(id=${project.projectId})}" method="post" style="display:inline;">
                                                 <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa mềm dự án này không?');">
                                                     <i class="bx bx-trash me-1"></i>Xóa
+                                                </button>
+                                            </form>
+                                            <form th:action="@{/manager/send-email/{projectId}(projectId=${project.projectId})}" method="post" style="display:inline;" th:if="${project.hasAcceptTransfer}">
+                                                <button class="dropdown-item" type="submit" onclick="return confirm('Bạn có chắc chắn gửi thông báo không?');">
+                                                    <i class="bx bx-notification me-1"></i>Gửi thông báo
                                                 </button>
                                             </form>
                                         </div>

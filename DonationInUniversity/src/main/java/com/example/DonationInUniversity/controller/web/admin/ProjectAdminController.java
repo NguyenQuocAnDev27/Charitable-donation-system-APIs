@@ -2,8 +2,11 @@ package com.example.DonationInUniversity.controller.web.admin;
 
 import com.example.DonationInUniversity.model.DonationProject;
 import com.example.DonationInUniversity.model.User;
+import com.example.DonationInUniversity.service.admin.EmailService;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.UserAdminService;
+import com.example.DonationInUniversity.service.api.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -21,6 +25,8 @@ public class ProjectAdminController {
     private ProjectServiceAdmin projectServiceAdmin;
     @Autowired
     private UserAdminService userAdminService;
+    @Autowired
+    private EmailService emailService;
     @GetMapping("DonationProject")
     public String projectHomePage(Model model,@RequestParam(name = "page", defaultValue = "1") int pageNo) {
         List<User> projectManagers = userAdminService.getProjectManager();
@@ -41,7 +47,7 @@ public class ProjectAdminController {
         return "pages/projectsManagementPage/project_management";
     }
     @PostMapping("saveOrUpdateProject")
-    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project, RedirectAttributes redirectAttributes) {
+    public String addOrUpdateProject(@ModelAttribute("project") DonationProject project, RedirectAttributes redirectAttributes) throws MessagingException {
         if(project.getProjectId() == null){
             project.setIsDeleted(1);
             projectServiceAdmin.addProject(project);

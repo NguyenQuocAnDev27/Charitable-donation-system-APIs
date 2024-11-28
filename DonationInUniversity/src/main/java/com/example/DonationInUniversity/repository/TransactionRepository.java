@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
@@ -23,5 +24,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
             @Param("startDate") String startDate,
             @Param("endDate") String endDate,
             Pageable pageable);
+
+    @Query(value = "SELECT * from transaction where project_id=?1", nativeQuery = true)
+    List<Transaction> findTransactionsByProjectId(Integer projectId);
 }
 
