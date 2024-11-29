@@ -13,10 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class ProjectServiceAdmin {
@@ -101,5 +99,18 @@ public class ProjectServiceAdmin {
     }
     public int countByIsDelete(){
         return projectRepository.countByIsDeleted(1);
+    }
+    public Map<String, Long> countProjectsByStatusAndMonth(int month) {
+        Map<String, Long> result = new HashMap<>();
+
+
+        result.put("completed", projectRepository.countCompletedProjectsByMonth(month));
+        result.put("stopped", projectRepository.countStoppedProjectsByMonth(month));
+        result.put("pending", projectRepository.countPendingProjectsByMonth(month));
+
+        return result;
+    }
+    public List<Object[]> countTotalCurrentAmountByMonth() {
+        return projectRepository.countTotalCurrentAmountByMonth();
     }
 }

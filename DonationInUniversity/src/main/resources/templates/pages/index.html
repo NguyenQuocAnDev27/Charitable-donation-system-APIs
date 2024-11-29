@@ -100,52 +100,51 @@
                         <!-- Total Revenue -->
                         <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6">
                             <div class="card">
-                                <div class="col-md-12">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <div id="projectChart"
-                                                 th:data-stopped="${stoppedProject}"
-                                                 th:data-pending="${pendingProject}"
-                                                 th:data-completed="${completedProject}"
-                                            ></div>
-                                        </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Biểu đồ tròn -->
+                                        <div id="projectChart"
+                                             th:data-stopped="${stoppedProject}"
+                                            th:data-pending="${pendingProject}"
+                                                th:data-completed="${completedProject}"
+                                             style="width: 75%;">
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/ Total Revenue -->
-                        <div class="col-12 col-md-8 col-lg-12 col-xxl-4 order-3 order-md-2">
-                            <div class="row">
-                                <div class="col-6 mb-6">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                                <div class="avatar flex-shrink-0">
-                                                    <img th:src="@{/assets/img/icons/unicons/paypal.png}" alt="paypal" class="rounded" />
-                                                </div>
-                                            </div>
-                                            <p class="mb-1">Tổng giao dịch</p>
-                                            <h4 class="card-title mb-3" th:text="${totalTransfer}"></h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 mb-6">
-                                    <div class="card h-100">
-                                        <div class="card-body">
-                                            <div class="card-title d-flex align-items-start justify-content-between mb-4">
-                                                <div class="avatar flex-shrink-0">
-                                                    <img th:src="@{/assets/img/icons/unicons/cc-primary.png}" alt="Credit Card" class="rounded" />
-                                                </div>
-                                            </div>
-                                            <p class="mb-1">Tổng tiền quyên góp</p>
-                                            <h4 class="card-title mb-3" th:text="${totalDonatedAmount}+'đ'"></h4>
-                                        </div>
+
+                                    <!-- Chọn tháng -->
+                                    <div style="margin-left: 20px; flex-shrink: 0;">
+                                        <label for="monthSelect">Chọn tháng:</label>
+                                        <select id="monthSelect">
+                                            <option value="1">Tháng 1</option>
+                                            <option value="2">Tháng 2</option>
+                                            <option value="3">Tháng 3</option>
+                                            <option value="4">Tháng 4</option>
+                                            <option value="5">Tháng 5</option>
+                                            <option value="6">Tháng 6</option>
+                                            <option value="7">Tháng 7</option>
+                                            <option value="8">Tháng 8</option>
+                                            <option value="9">Tháng 9</option>
+                                            <option value="10">Tháng 10</option>
+                                            <option value="11">Tháng 11</option>
+                                            <option value="12">Tháng 12</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                        <div class="col-12 col-xxl-8 order-2 order-md-3 order-xxl-2 mb-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div id="totalChart" style="height: 100%; width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
                 <!-- / Content -->
 
                 <!-- Footer -->
@@ -182,7 +181,239 @@
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
-<script th:src="@{/assets/js/chart.js}"></script>
+<!--<script th:src="@{/assets/js/chart.js}"></script>-->
+<script th:inline="javascript">
+    'use strict';
+
+    (function () {
+        let cardColor, headingColor, legendColor, labelColor, shadeColor, borderColor;
+
+        cardColor = config.colors.cardColor;
+        headingColor = config.colors.headingColor;
+        legendColor = config.colors.bodyColor;
+        labelColor = config.colors.textMuted;
+        borderColor = config.colors.borderColor;
+        // Kiểm tra nếu mã JS đang chạy
+        console.log("JavaScript is running");
+
+        const chartOrderStatistics = document.querySelector('#projectChart');
+        const monthSelect = document.querySelector('#monthSelect');
+
+        if (monthSelect) {
+            console.log("Select box found");
+        }
+
+        // Dữ liệu mặc định cho biểu đồ
+        let stoppedProject = chartOrderStatistics.dataset.stopped;
+        let pendingProject = chartOrderStatistics.dataset.pending;
+        let completedProject = chartOrderStatistics.dataset.completed;
+
+        // Cấu hình biểu đồ tròn
+        const orderChartConfig = {
+            chart: {
+                height: 400,
+                width: '100%',
+                type: 'pie',
+                fontFamily: 'Public Sans',
+            },
+            labels: ['Chiến dịch đã hủy', 'Chiến dịch đang tiến hành', 'Chiến dịch đã hoàn thành'],
+            series: [
+                parseInt(stoppedProject),
+                parseInt(pendingProject),
+                parseInt(completedProject)
+            ],
+            colors: [config.colors.danger, config.colors.warning, config.colors.success],
+            stroke: {
+                width: 5,
+                colors: ['#fff']
+            },
+            legend: {
+                position: 'bottom',
+                labels: {
+                    useSeriesColors: true
+                }
+            },
+            title: {
+                text: 'Số lượng chiến dịch',
+                align: 'center',
+                style: {
+                    fontFamily: 'Public Sans',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                }
+            }
+        };
+
+        // Khởi tạo đối tượng ApexCharts
+        let statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
+        statisticsChart.render();
+
+        // Lắng nghe sự kiện thay đổi tháng từ selectbox
+        monthSelect.addEventListener('change', function () {
+            const selectedMonth = monthSelect.value;
+
+            // Kiểm tra xem sự kiện có kích hoạt không
+            console.log("Month selected:", selectedMonth);
+
+            // Gửi yêu cầu POST để lấy dữ liệu cho tháng đã chọn
+            fetch('/admin/count', {
+                method: 'POST',  // Sử dụng POST để gửi dữ liệu trong body
+                headers: {
+                    'Content-Type': 'application/json',  // Đảm bảo gửi dữ liệu dưới dạng JSON
+                },
+                body: JSON.stringify({ month: selectedMonth })  // Gửi dữ liệu tháng trong body
+            })
+                .then(response => {
+                    // Kiểm tra nếu response có vấn đề
+                    console.log("Response received:", response);
+                    return response.json();
+                })
+                .then(data => {
+                    // Kiểm tra dữ liệu nhận được
+                    console.log("Data received from backend: ", data);
+
+                    const { completed, stopped, pending } = data;
+
+                    console.log("Completed Projects: ", completed);
+                    console.log("Stopped Projects: ", stopped);
+                    console.log("Pending Projects: ", pending);
+
+                    // Cập nhật biểu đồ tròn với dữ liệu mới
+                    statisticsChart.updateOptions({
+                        series: [stopped, pending ,completed]
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+        const incomeChartEl1 = document.querySelector('#totalChart');
+        /*<![CDATA[*/
+        const statistics = /*[[${statistics}]]*/ [];
+        console.log("Statistics data from backend: ", statistics);
+        /*]]>*/
+
+        // Chuẩn bị dữ liệu cho biểu đồ
+        const months = [];
+        const currentAmounts = [];
+
+        // Duyệt qua dữ liệu và tách tháng và total_current_amount
+        statistics.forEach(stat => {
+            months.push(getMonthName(stat[0])); // Get month name from the month number
+            currentAmounts.push(stat[1]); // Total current amount
+        });
+
+        // Cấu hình biểu đồ
+        const incomeChartConfig1 = {
+            series: [
+                {
+                    data: currentAmounts  // Dữ liệu tổng current_amount theo tháng
+                }
+            ],
+            chart: {
+                height: 232,
+                parentHeightOffset: 0,
+                parentWidthOffset: 0,
+                width: '100%',
+                toolbar: {
+                    show: false
+                },
+                type: 'area'  // Biểu đồ diện tích (area chart)
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 3,
+                curve: 'smooth'
+            },
+            legend: {
+                show: false
+            },
+            markers: {
+                size: 6,
+                colors: 'transparent',
+                strokeColors: 'transparent',
+                strokeWidth: 4,
+                discrete: [
+                    {
+                        fillColor: config.colors.white,
+                        seriesIndex: 0,
+                        dataPointIndex: 11,  // Chỉ định điểm dữ liệu nào bạn muốn làm nổi bật
+                        strokeColor: config.colors.primary,
+                        strokeWidth: 2,
+                        size: 6,
+                        radius: 8
+                    }
+                ],
+                hover: {
+                    size: 7
+                }
+            },
+            colors: [config.colors.primary],
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: shadeColor,
+                    shadeIntensity: 0.6,
+                    opacityFrom: 0.5,
+                    opacityTo: 0.25,
+                    stops: [0, 95, 100]
+                }
+            },
+            grid: {
+                borderColor: borderColor,
+                strokeDashArray: 8,
+                padding: {
+                    top: -20,
+                    bottom: -8,
+                    left: 0,
+                    right: 8
+                }
+            },
+            xaxis: {
+                categories: months,  // Các tháng trong năm
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                labels: {
+                    show: true,
+                    style: {
+                        fontSize: '13px',
+                        colors: labelColor
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    show: true,  // Hiển thị các nhãn của trục y
+                    style: {
+                        colors: labelColor
+                    }
+                },
+                // Điều chỉnh phạm vi của trục y tự động dựa trên dữ liệu
+                min: 500 ,
+                max: 20000 ,
+                tickAmount: 5  // Số lượng vạch chia trên trục y
+            }
+        };
+
+
+
+        if (typeof incomeChartEl1 !== 'undefined' && incomeChartEl1 !== null) {
+            const incomeChart1 = new ApexCharts(incomeChartEl1, incomeChartConfig1);
+            incomeChart1.render();
+        }
+
+        // Hàm lấy tên tháng từ số tháng (1 -> 'Jan', 2 -> 'Feb', ...)
+        function getMonthName(monthNumber) {
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return months[monthNumber - 1];
+        }
+    })();
+
+</script>
 <!-- Page JS -->
 <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
 

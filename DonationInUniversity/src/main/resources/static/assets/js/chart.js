@@ -1,69 +1,96 @@
-
-
-/**
- * Dashboard Analytics
- */
-
 'use strict';
 
 (function () {
-    let cardColor, headingColor, legendColor, labelColor, shadeColor, borderColor;
+    // Kiểm tra nếu mã JS đang chạy
+    console.log("JavaScript is running");
 
-    cardColor = config.colors.cardColor;
-    headingColor = config.colors.headingColor;
-    legendColor = config.colors.bodyColor;
-    labelColor = config.colors.textMuted;
-    borderColor = config.colors.borderColor;
-    const chartOrderStatistics1 = document.querySelector('#projectChart');
+    const chartOrderStatistics = document.querySelector('#projectChart');
+    const monthSelect = document.querySelector('#monthSelect');
 
-// Lấy các giá trị từ data-* attributes
-    const stoppedProject = chartOrderStatistics1.dataset.stopped;
-    const pendingProject = chartOrderStatistics1.dataset.pending;
-    const completedProject = chartOrderStatistics1.dataset.completed;
-// Cấu hình biểu đồ tròn
-    const orderChartConfig1 = {
+    if (monthSelect) {
+        console.log("Select box found");
+    }
+
+    // Dữ liệu mặc định cho biểu đồ
+    let stoppedProject = chartOrderStatistics.dataset.stopped;
+    let pendingProject = chartOrderStatistics.dataset.pending;
+    let completedProject = chartOrderStatistics.dataset.completed;
+
+    // Cấu hình biểu đồ tròn
+    const orderChartConfig = {
         chart: {
-            height: 400,  // Tăng chiều cao của biểu đồ
+            height: 400,
             width: '100%',
-            type: 'pie' ,
-            fontFamily: 'Public Sans',// Biểu đồ tròn (pie chart)
+            type: 'pie',
+            fontFamily: 'Public Sans',
         },
-        labels: ['Chiến dịch đã hủy', 'Chiến dịch đang tiến hành', 'Chiến dịch đã hoàn thành'], // Nhãn cho từng phần của biểu đồ
+        labels: ['Chiến dịch đã hủy', 'Chiến dịch đang tiến hành', 'Chiến dịch đã hoàn thành'],
         series: [
-            parseInt(stoppedProject), // Dữ liệu cho phần "Chiến dịch đã hủy"
-            parseInt(pendingProject), // Dữ liệu cho phần "Chiến dịch đang tiến hành"
-            parseInt(completedProject) // Dữ liệu cho phần "Chiến dịch đã hoàn thành"
+            parseInt(stoppedProject),
+            parseInt(pendingProject),
+            parseInt(completedProject)
         ],
-        colors: [config.colors.danger, config.colors.warning, config.colors.success], // Màu sắc cho từng phần
+        colors: [config.colors.danger, config.colors.warning, config.colors.success],
         stroke: {
             width: 5,
-            colors: ['#fff'] // Màu sắc viền cho các phần của biểu đồ
+            colors: ['#fff']
         },
-
         legend: {
-            position: 'bottom', // Đặt vị trí legend dưới biểu đồ
+            position: 'bottom',
             labels: {
-                useSeriesColors: true // Sử dụng màu sắc tương ứng với từng phần của biểu đồ
+                useSeriesColors: true
             }
         },
         title: {
-            text: 'Số lượng chiến dịch', // Tiêu đề cho biểu đồ
+            text: 'Số lượng chiến dịch',
             align: 'center',
             style: {
-                fontFamily: 'Public Sans', // Thêm thuộc tính fontFamily cho title
+                fontFamily: 'Public Sans',
                 fontWeight: 'bold',
                 fontSize: '16px',
-
             }
         }
-
     };
 
-// Kiểm tra phần tử trước khi vẽ biểu đồ
-    if (chartOrderStatistics1) {
-        const statisticsChart1 = new ApexCharts(chartOrderStatistics1, orderChartConfig1);
-        statisticsChart1.render();
-    }
+    // Khởi tạo đối tượng ApexCharts
+    let statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
+    statisticsChart.render();
 
+    // Lắng nghe sự kiện thay đổi tháng từ selectbox
+    monthSelect.addEventListener('change', function () {
+        const selectedMonth = monthSelect.value;
+
+        // Kiểm tra xem sự kiện có kích hoạt không
+        console.log("Month selected:", selectedMonth);
+
+        // Gửi yêu cầu POST để lấy dữ liệu cho tháng đã chọn
+        fetch('/admin/count', {
+            method: 'POST',  // Sử dụng POST để gửi dữ liệu trong body
+            headers: {
+                'Content-Type': 'application/json',  // Đảm bảo gửi dữ liệu dưới dạng JSON
+            },
+            body: JSON.stringify({ month: selectedMonth })  // Gửi dữ liệu tháng trong body
+        })
+            .then(response => {
+                // Kiểm tra nếu response có vấn đề
+                console.log("Response received:", response);
+                return response.json();
+            })
+            .then(data => {
+                // Kiểm tra dữ liệu nhận được
+                console.log("Data received from backend: ", data);
+
+                const { completed, stopped, pending } = data;
+
+                console.log("Completed Projects: ", completed);
+                console.log("Stopped Projects: ", stopped);
+                console.log("Pending Projects: ", pending);
+
+                // Cập nhật biểu đồ tròn với dữ liệu mới
+                statisticsChart.updateOptions({
+                    series: [completed, stopped, pending]
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
 })();
-
