@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +42,7 @@ public class EmailService {
         Optional<DonationProject> donationProjectList = projectServiceAdmin.getProjectById(projectId);
         if(donationProjectList.isPresent()) {
             DonationProject donationProject = donationProjectList.get();
-
+            Set<Integer> emailedUserIds = new HashSet<>();
             List<Transaction> listTransaction = scheduledTransactionService.getTransactionsByProjectId(projectId);
             for(Transaction transaction : listTransaction) {
                 String des=transaction.getDescription();
@@ -59,7 +56,7 @@ public class EmailService {
                 int userId= Integer.parseInt(number);
                 if(userId != 0){
                     Optional<User> userList = userAdminService.getUserById(userId);
-                    if(userList.isPresent()) {
+                    if(userList.isPresent() && !emailedUserIds.contains(userId)) {
                         User user = userList.get();
                         Map<String, Object> emailModel = new HashMap<>();
                         emailModel.put("name",user.getFullName());
@@ -81,6 +78,7 @@ public class EmailService {
 
                         // Gửi email
                         mailSender.send(message);
+                        emailedUserIds.add(userId);
                     }
                 }
             }
