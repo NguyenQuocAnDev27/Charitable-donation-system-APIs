@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProjectAdminRepository extends JpaRepository<DonationProject, Integer> {
@@ -40,4 +42,34 @@ public interface ProjectAdminRepository extends JpaRepository<DonationProject, I
     Page<DonationProject> findAllByManagerId(int id, Pageable pageable);
     @Query("SELECT p FROM DonationProject p WHERE p.status= ?1 AND p.isDeleted = 1")
     List<DonationProject> findProjectStatus(String status);
+    int countByIsDeleted(int isDeleted);
+    @Query("SELECT COUNT(p) FROM DonationProject p WHERE " +
+            "EXTRACT(MONTH FROM p.startDate) <= :month AND " +
+            "EXTRACT(MONTH FROM p.endDate) >= :month AND " +
+            "p.status = 'completed' AND p.isDeleted = 1")
+    Long countCompletedProjectsByMonth(@Param("month") int month);
+
+    @Query("SELECT COUNT(p) FROM DonationProject p WHERE " +
+            "EXTRACT(MONTH FROM p.startDate) <= :month AND " +
+            "EXTRACT(MONTH FROM p.endDate) >= :month AND " +
+            "p.status = 'stopped' AND p.isDeleted = 1")
+    Long countStoppedProjectsByMonth(@Param("month") int month);
+
+    @Query("SELECT COUNT(p) FROM DonationProject p WHERE " +
+            "EXTRACT(MONTH FROM p.startDate) <= :month AND " +
+            "EXTRACT(MONTH FROM p.endDate) >= :month AND " +
+            "p.status = 'pending' AND p.isDeleted = 1")
+    Long countPendingProjectsByMonth(@Param("month") int month);
+    @Query(value = "SELECT month, IFNULL(SUM(p.current_amount), 0) AS total_current_amount " +
+            "FROM ( " +
+            "  SELECT 1 AS month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION " +
+            "  SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) AS months " +
+            "LEFT JOIN donation_projects p " +
+            "  ON EXTRACT(MONTH FROM p.start_date) <= months.month " +
+            "  AND (EXTRACT(MONTH FROM p.end_date) >= months.month OR p.end_date IS NULL) " +
+            "  AND p.status IN ('pending', 'completed') " +
+            "  AND p.is_deleted = 1 " +
+            "GROUP BY months.month " +
+            "ORDER BY months.month", nativeQuery = true)
+    List<Object[]> countTotalCurrentAmountByMonth();
 }

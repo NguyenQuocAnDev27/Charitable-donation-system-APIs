@@ -63,4 +63,7 @@ public class TransferApplicationService {
     public int countByStatus(String status) {
         return transferApplicationRepository.findByStatus(status).size();
     }
+    public int count() {
+        return transferApplicationRepository.findAll().size();
+    }
 }

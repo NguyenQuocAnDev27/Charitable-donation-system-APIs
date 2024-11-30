@@ -40,103 +40,120 @@
 
 
             <!-- Table -->
-            <div class="container-xxl flex-grow-1 container-p-y">
-                <div class="card">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            <h5 class="card-header">Chiến dịch từ thiện</h5>
-                        </div>
-                    </div>
-                    <div class="table-responsive text-nowrap">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Loại chiến dịch</th>
-                                <th>Số lượng</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-border-bottom-0">
-                            <tr>
-                                <td>Số chiến dịch đã hủy</td>
-                                <td><span th:text="${stoppedProject}"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Số chiến dịch đang tiến hành</td>
-                                <td><span th:text="${pendingProject}"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Số chiến dịch đã hoàn thành</td>
-                                <td><span th:text="${completedProject}"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Tổng sổ tiền đã quyên góp của các chiến dịch</td>
-                                <td><span th:text="${totalDonatedAmount}"></span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+<!--            <div class="container-xxl flex-grow-1 container-p-y">-->
+<!--                <div class="card">-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="col-3">-->
+<!--                            <h5 class="card-header">Chiến dịch từ thiện</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="table-responsive text-nowrap">-->
+<!--                        <table class="table">-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>Loại chiến dịch</th>-->
+<!--                                <th>Số lượng</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody class="table-border-bottom-0">-->
+<!--                            <tr>-->
+<!--                                <td>Số chiến dịch đã hủy</td>-->
+<!--                                <td><span th:text="${stoppedProject}"></span></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>Số chiến dịch đang tiến hành</td>-->
+<!--                                <td><span th:text="${pendingProject}"></span></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>Số chiến dịch đã hoàn thành</td>-->
+<!--                                <td><span th:text="${completedProject}"></span></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>Tổng sổ tiền đã quyên góp của các chiến dịch</td>-->
+<!--                                <td><span th:text="${totalDonatedAmount}"></span></td>-->
+<!--                            </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
 
-                </div>
-            </div>
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="container-xxl flex-grow-1 container-p-y">-->
+<!--                <div class="card">-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="col-3">-->
+<!--                            <h5 class="card-header">Tài khoản</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="table-responsive text-nowrap">-->
+<!--                        <table class="table">-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>Loại tài khoản</th>-->
+<!--                                <th>Số lượng</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody class="table-border-bottom-0">-->
+<!--                            <tr>-->
+<!--                                <td>Phụ trách chiến dịch</td>-->
+<!--                                <td><span th:text="${project_manager}"></span></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>Tài khoản thường</td>-->
+<!--                                <td><span th:text="${normal}"></span></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>Khách</td>-->
+<!--                                <td><span th:text="${guest}"></span></td>-->
+<!--                            </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="container-xxl flex-grow-1 container-p-y">-->
+<!--                <div class="card">-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="col-3">-->
+<!--                            <h5 class="card-header">Giao dịch</h5>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="table-responsive text-nowrap">-->
+<!--                        <table class="table">-->
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>Loại giao dịch</th>-->
+<!--                                <th>Số lượng</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody class="table-border-bottom-0">-->
+<!--                            <tr>-->
+<!--                                <td>Chấp nhận</td>-->
+<!--                                <td><span th:text="${accept}"></span></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>Từ chối</td>-->
+<!--                                <td><span th:text="${decline}"></span></td>-->
+<!--                            </tr>-->
+<!--                            </tbody>-->
+<!--                        </table>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
             <div class="container-xxl flex-grow-1 container-p-y">
-                <div class="card">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            <h5 class="card-header">Tài khoản</h5>
+                <div class="row">
+                    <!-- Thêm phần biểu đồ cột -->
+                    <div class="col-md-12">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div id="chart"
+                                     th:data-stopped="${stoppedProject}"
+                                     th:data-pending="${pendingProject}"
+                                     th:data-completed="${completedProject}"
+                                ></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="table-responsive text-nowrap">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Loại tài khoản</th>
-                                <th>Số lượng</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-border-bottom-0">
-                            <tr>
-                                <td>Phụ trách chiến dịch</td>
-                                <td><span th:text="${project_manager}"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Tài khoản thường</td>
-                                <td><span th:text="${normal}"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Khách</td>
-                                <td><span th:text="${guest}"></span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="container-xxl flex-grow-1 container-p-y">
-                <div class="card">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            <h5 class="card-header">Giao dịch</h5>
-                        </div>
-                    </div>
-                    <div class="table-responsive text-nowrap">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Loại giao dịch</th>
-                                <th>Số lượng</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-border-bottom-0">
-                            <tr>
-                                <td>Chấp nhận</td>
-                                <td><span th:text="${accept}"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Từ chối</td>
-                                <td><span th:text="${decline}"></span></td>
-                            </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -175,10 +192,9 @@
 
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
-
+<script th:src="@{/assets/js/chart.js}"></script>
 <!-- Page JS -->
 <script th:src="@{/assets/js/dashboards-analytics.js}"></script>
-
 <!-- Place this tag before closing body tag for github widget button. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
