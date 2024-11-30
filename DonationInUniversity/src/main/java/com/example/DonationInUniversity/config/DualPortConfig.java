@@ -1,6 +1,7 @@
 package com.example.DonationInUniversity.config;
 
 import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.net.SSLHostConfig;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ public class DualPortConfig {
     private Connector createAdminConnector() {
         Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
         connector.setPort(8000); // Set second port for admin
+
         return connector;
     }
 }

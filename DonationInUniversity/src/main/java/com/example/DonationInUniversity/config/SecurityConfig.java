@@ -74,6 +74,7 @@ public class SecurityConfig {
                                 "/api/register/admin",
                                 "/api/register",
                                 "/api/authenticate",
+                                "/api/authenticate/google",
                                 "/api/token/refresh",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
@@ -161,13 +162,19 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
                 "http://localhost:8000",
                 "http://localhost:9000",
                 "http://localhost:3000",
                 "http://localhost:11434",
                 "http://searchlaw.name.vn:3000",
                 "http://searchlaw.name.vn:8080",
-                "http://searchlaw.name.vn:9000"
+                "http://searchlaw.name.vn:9000",
+                "https://searchlaw.name.vn:3000",
+                "https://searchlaw.name.vn:8080",
+                "https://searchlaw.name.vn:8443",
+                "https://searchlaw.name.vn:9000",
+                "https://charitable-donation-system-client-web.vercel.app"
         )); // Allowed origins
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Allowed headers
