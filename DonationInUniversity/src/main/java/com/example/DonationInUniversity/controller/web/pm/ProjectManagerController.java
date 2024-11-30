@@ -2,6 +2,7 @@ package com.example.DonationInUniversity.controller.web.pm;
 
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.repository.ProjectDetailTextRepository;
+import com.example.DonationInUniversity.service.admin.EmailService;
 import com.example.DonationInUniversity.service.admin.ProjectServiceAdmin;
 import com.example.DonationInUniversity.service.admin.TransferApplicationService;
 import com.example.DonationInUniversity.service.api.TagService;
@@ -22,10 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -56,6 +55,8 @@ public class ProjectManagerController {
     private String serverUrl;
     @Autowired
     private TransferApplicationService transferApplicationService;
+    @Autowired
+    private EmailService emailService;
 
     @RequestMapping("/**")
     public String fallback() {
@@ -87,9 +88,21 @@ public class ProjectManagerController {
                 boolean hasTransfer = transferApplicationService.existsByUserIdAndProjectId(userDetails.getUserModel(), project);
                 projectTransferStatus.put(project.getProjectId(), hasTransfer);
             }
+            List<TransferApplication> transferApplications = transferApplicationService.getAllTransfer();
             model.addAttribute("projectTransferStatus", projectTransferStatus);
             Page<DonationProject> pageDonation = projectServiceAdmin
                     .getAllDonationProjectByManager(userDetails.getUserModel().getUserId(), pageNo);
+            for (DonationProject project : pageDonation) {
+                boolean hasAcceptedTransfer = transferApplications.stream()
+                        .anyMatch(transfer -> transfer.getProjectId().getProjectId().equals(project.getProjectId())
+                                && "accept".equals(transfer.getStatus()));
+                boolean isCheckTransfer = transferApplications.stream()
+                        .anyMatch(transfer -> transfer.getProjectId().getProjectId().equals(project.getProjectId())
+                                && project.getCurrentAmount().compareTo(transfer.getAmount()) <= 0);
+                project.setHasAcceptTransfer(hasAcceptedTransfer);
+                project.setCheckTransferRequest(isCheckTransfer);
+            }
+
             model.addAttribute("role", "project_manager");
             model.addAttribute("currentUrl", "DonationProject");
             model.addAttribute("totalPage", pageDonation.getTotalPages());

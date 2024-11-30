@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="modal fade" id="Modal" tabindex="-1" aria-hidden="true" th:fragment="email_form">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form th:action="@{/manager/sendEmail}" method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Gửi nội dung email</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            style="background-color: red"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" th:field="*{projectId}" class="form-control" required />
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Tiêu đề:</label>
+                            <input type="text" th:field="*{projectName}" class="form-control" required readonly/>
+                        </div>
+                        <!-- Common Fields -->
+                        <div class="col-5 mb-6">
+                            <label class="form-label">Nội dung:</label>
+                            <input type="number" id="transferAmount" th:field="*{amount}" class="form-control" placeholder="Nhập nội dung" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary mx-2">Gửi mail</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
