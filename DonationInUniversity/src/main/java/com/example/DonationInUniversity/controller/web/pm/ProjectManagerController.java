@@ -96,8 +96,13 @@ public class ProjectManagerController {
                 boolean hasAcceptedTransfer = transferApplications.stream()
                         .anyMatch(transfer -> transfer.getProjectId().getProjectId().equals(project.getProjectId())
                                 && "accept".equals(transfer.getStatus()));
+                boolean isCheckTransfer = transferApplications.stream()
+                        .anyMatch(transfer -> transfer.getProjectId().getProjectId().equals(project.getProjectId())
+                                && project.getCurrentAmount().compareTo(transfer.getAmount()) <= 0);
                 project.setHasAcceptTransfer(hasAcceptedTransfer);
+                project.setCheckTransferRequest(isCheckTransfer);
             }
+
             model.addAttribute("role", "project_manager");
             model.addAttribute("currentUrl", "DonationProject");
             model.addAttribute("totalPage", pageDonation.getTotalPages());

@@ -42,6 +42,8 @@ public class DonationProject {
     private int isDeleted;
     @Transient
     private boolean hasAcceptTransfer;
+    @Transient
+    private boolean checkTransferRequest;
     @OneToMany(mappedBy = "project")
     private List<ProjectDetailText> projectDetailTexts;
 
@@ -134,5 +136,12 @@ public class DonationProject {
     }
     public void setHasAcceptTransfer(boolean hasAcceptTransfer) {
         this.hasAcceptTransfer = hasAcceptTransfer;
+    }
+
+    public boolean isCheckTransferRequest() {
+        return checkTransferRequest;
+    }
+    public void setCheckTransferRequest(boolean checkTransferRequest) {
+        this.checkTransferRequest = checkTransferRequest;
     }
 }

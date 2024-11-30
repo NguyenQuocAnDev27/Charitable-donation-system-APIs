@@ -6,6 +6,7 @@ import com.example.DonationInUniversity.model.TransferApplication;
 import com.example.DonationInUniversity.model.User;
 import com.example.DonationInUniversity.service.schedule.ScheduledTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.SpringVersion;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,6 +25,8 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.MessagingException;
 @Service
 public class EmailService {
+    @Value("${server.url}")
+    private String SERVER_URL;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -71,8 +74,10 @@ public class EmailService {
 
                         helper.setTo(user.getEmail());
                         helper.setSubject(donationProject.getProjectName());
-                        helper.setText("Cảm ơn bạn đã ủng hộ quỹ từ thiện, chiến dịch "+donationProject.getProjectName()+" đã hoàn thành. \n" +
-                                "Nếu bạn kiểm tra thông tin và xem thêm các chiến dịch khác: "+transferApplication.getDocumentPath(), true);
+                        helper.setText("<p>Cảm ơn bạn đã ủng hộ quỹ từ thiện, chiến dịch <strong>"
+                                + donationProject.getProjectName() + "</strong> đã hoàn thành.</p>" +
+                                "<p>Nếu bạn muốn kiểm tra thông tin và xem thêm các chiến dịch khác, vui lòng truy cập: " +
+                                "<a href='" + SERVER_URL + transferApplication.getDocumentPath() + "'>tại đây</a>.</p>", true);
 
                         // Gửi email
                         mailSender.send(message);

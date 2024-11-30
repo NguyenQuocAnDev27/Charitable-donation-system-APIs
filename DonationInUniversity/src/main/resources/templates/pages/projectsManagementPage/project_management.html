@@ -135,7 +135,7 @@
                                                     th:data-project-name="${project.projectName}"
                                                     th:data-current-amount="${project.currentAmount}"
                                                     th:data-status="${project.status}"
-                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId] or project.status != 'completed'}"
+                                                    th:disabled="${isRequestDisabled or projectTransferStatus[project.projectId] or project.status != 'completed' or project.checkTransferRequest}"
                                                     th:title="${isRequestDisabled ? 'Bạn đã gửi yêu cầu tối đa trong tuần này' : (projectTransferStatus[project.projectId] ? 'Yêu cầu đã tồn tại cho dự án này' : 'Yêu cầu')}"
                                             ><i class="bx bx-edit-alt me-1"></i>Yêu cầu</button
                                             >
