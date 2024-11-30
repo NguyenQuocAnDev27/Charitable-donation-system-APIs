@@ -116,7 +116,7 @@
                                         <tr th:each="transfer : ${listTransfer}">
                                             <td th:text="${transfer.id}"></td>
                                             <td th:text="${transfer.projectId.projectName}"></td>
-                                            <td th:text="${transfer.amount}"></td>
+                                            <td th:text="${#numbers.formatDecimal(transfer.amount, 3,'POINT', 2,'COMMA')+ ' đ'}" style="padding: 0.5rem;"></td>
                                             <td th:text="${transfer.userId.fullName}"></td>
                                             <td>
                                             <a th:if="${transfer.documentPath != null}" th:href="@{${transfer.documentPath}}" th:text="'Xem tài liệu'" target="_blank"></a>
