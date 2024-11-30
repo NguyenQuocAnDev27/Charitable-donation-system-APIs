@@ -305,7 +305,8 @@
         const incomeChartConfig1 = {
             series: [
                 {
-                    data: currentAmounts  // Dữ liệu tổng current_amount theo tháng
+                    name: "Tổng cộng",
+                    data: currentAmounts
                 }
             ],
             chart: {
@@ -316,7 +317,7 @@
                 toolbar: {
                     show: false
                 },
-                type: 'area'  // Biểu đồ diện tích (area chart)
+                type: 'area'
             },
             dataLabels: {
                 enabled: false
@@ -337,7 +338,7 @@
                     {
                         fillColor: config.colors.white,
                         seriesIndex: 0,
-                        dataPointIndex: 11,  // Chỉ định điểm dữ liệu nào bạn muốn làm nổi bật
+                        dataPointIndex: 11,
                         strokeColor: config.colors.primary,
                         strokeWidth: 2,
                         size: 6,
@@ -370,7 +371,7 @@
                 }
             },
             xaxis: {
-                categories: months,  // Các tháng trong năm
+                categories: months,
                 axisBorder: {
                     show: false
                 },
@@ -387,15 +388,38 @@
             },
             yaxis: {
                 labels: {
-                    show: true,  // Hiển thị các nhãn của trục y
+                    show: true,
                     style: {
                         colors: labelColor
-                    }
+                    },
                 },
-                // Điều chỉnh phạm vi của trục y tự động dựa trên dữ liệu
+
                 min: 500 ,
                 max: 20000 ,
-                tickAmount: 5  // Số lượng vạch chia trên trục y
+                tickAmount: 5
+            },
+            tooltip: {
+                y: {
+                    formatter: function(value) {
+                        return value.toLocaleString() + ' đ'; // Thêm đơn vị tiền tệ vào tooltip
+                    }
+                },
+                x: {
+                    formatter: function(value) {
+                        // Nếu bạn muốn thay đổi "series" thành tên tháng, bạn có thể sử dụng giá trị từ trục x
+                        return getMonthName(value); // Hiển thị tên tháng
+                    }
+                }
+            },
+
+            title: {
+                text: 'Tổng tiền ủng hộ qua từng tháng ',
+                align: 'center',
+                style: {
+                    fontFamily: 'Public Sans',
+                    fontWeight: 'bold',
+                    fontSize: '16px',
+                }
             }
         };
 

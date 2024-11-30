@@ -70,13 +70,10 @@
                                     <div class="col-5 mb-6">
                                         <label  class="form-label">Số tiền mục tiêu </label>
                                         <input type="number" id="goalAmount" th:field="*{goalAmount}"     class="form-control" placeholder="Nhâp số tiền mục tiêu" required/>
-
-
                                     </div>
                                     <div class="col-5 mb-6">
                                         <label  class="form-label">Số tiền hiện tại</label>
                                         <input type="number" id="currentAmount" th:field="*{currentAmount}"  class="form-control" placeholder="Nhập số tiền hiện tại" required/>
-                                        <div id="amount-goal-error" class="text-danger" style="display: none;">Số tiền hiện tại phải ít hơn số tiền mục tiêu</div>
                                     </div>
                                     <div class="col-5 mb-6">
                                         <label  class="form-label">Ngày bắt đầu</label>
@@ -145,8 +142,8 @@
                                 <th style="white-space: nowrap; padding: 0.5rem;">ID</th>
                                 <th style="white-space: nowrap; padding: 0.5rem;">Tên chiến dịch</th>
                                 <th style="white-space: nowrap; padding: 0.5rem;">Mô tả</th>
-                                <th style="white-space: nowrap; padding: 0.5rem;">Số tiền mục tiêu</th>
-                                <th style="white-space: nowrap; padding: 0.5rem;">Số tiền hiện tại</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Mục tiêu</th>
+                                <th style="white-space: nowrap; padding: 0.5rem;">Hiện tại</th>
                                 <th style="white-space: nowrap; padding: 0.5rem;">Ngày bắt đầu</th>
                                 <th style="white-space: nowrap; padding: 0.5rem;">Ngày kết thúc</th>
                                 <th style="white-space: nowrap; padding: 0.5rem;">Phụ trách</th>
@@ -170,10 +167,10 @@
                                           th:text="${project.projectName}"></span>
                                 </td>
                                 <td th:text="${project.description}" style="padding: 0.5rem;"></td>
-                                <td th:text="${#numbers.formatDecimal(project.goalAmount, 0, 0)}" style="padding: 0.5rem;"></td>
-                                <td th:text="${#numbers.formatDecimal(project.goalAmount, 0, 0)}" style="padding: 0.5rem;"></td>
-                                <td th:text="${project.startDate}" style="padding: 0.5rem;"></td>
-                                <td th:text="${project.endDate}" style="padding: 0.5rem;"></td>
+                                <td th:text="${#numbers.formatDecimal(project.goalAmount, 3,'POINT', 2,'COMMA')+ ' đ'}" style="padding: 0.5rem;"></td>
+                                <td th:text="${#numbers.formatDecimal(project.currentAmount, 3,'POINT', 2,'COMMA')+ ' đ'}" style="padding: 0.5rem;"></td>
+                                <td th:text="${#temporals.format(project.startDate, 'dd-MM-yyyy')}" style="padding: 0.5rem;"></td>
+                                <td th:text="${#temporals.format(project.endDate, 'dd-MM-yyyy')}" style="padding: 0.5rem;"></td>
                                 <td th:text="${project.projectManager.fullName}" style="padding: 0.5rem;"></td>
                                 <td style="padding: 0.5rem;">
                                     <div class="dropdown">
@@ -304,23 +301,6 @@
         document.querySelector('select[name="status"]').value = status;
 
     });
-
-    // Kiểm tra khi người dùng nhập liệu vào trường currentAmount
-    document.getElementById('currentAmount').addEventListener('input', function () {
-        const goalAmountInput = document.getElementById('goalAmount');
-        const currentAmountInput = this;
-        const goalAmount = goalAmountInput.value;
-        const currentAmount = currentAmountInput.value;
-            // Lỗi nếu Current Amount lớn hơn Goal Amount
-            if (currentAmount > goalAmount) {
-                currentAmountInput.classList.add('is-invalid');
-                document.getElementById('amount-goal-error').style.display = 'block'; // Hiển thị lỗi lớn hơn Goal Amount
-            } else {
-                currentAmountInput.classList.remove('is-invalid');
-                document.getElementById('amount-goal-error').style.display = 'none'; // Ẩn thông báo lỗi nếu hợp lệ
-            }
-    });
-
     // Kiểm tra lại trước khi form được submit
     document.querySelector('form').addEventListener('submit', function (event) {
         const goalAmountInput = document.getElementById('goalAmount');
