@@ -51,18 +51,16 @@ public class ProjectController {
     }
 
     @GetMapping("/page")
-    public MyCustomResponse<PaginatedDonationProjectsResponse<DonationProject>> getProjectsByPage(
+    public MyCustomResponse<PaginatedDonationProjectsResponse<ProjectDisplayOverview>> getProjectsByPage(
             @RequestParam(name = "number", defaultValue = "0") int pageNumber,
-            @RequestParam(name = "query", required = false) String searchQuery) {
+            @RequestParam(name = "searchKey", required = false) String searchKey) {
 
-        // Ensure page number is zero-based and non-negative
         if (pageNumber < 0) {
             throw new IllegalArgumentException("Invalid page number");
         }
 
-        // Retrieve paginated and filtered donation projects based on the search query
-        PaginatedDonationProjectsResponse<DonationProject> data =
-                projectService.getDonationProjectsByPageAndQuery(pageNumber, searchQuery);
+        PaginatedDonationProjectsResponse<ProjectDisplayOverview> data =
+                projectService.getDonationProjectsByPageAndSearchKey(pageNumber, searchKey);
 
         return new MyCustomResponse<>(200, "Get list project success", data);
     }

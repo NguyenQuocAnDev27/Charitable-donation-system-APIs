@@ -51,6 +51,14 @@ public class DonationProject {
     private List<ProjectDetailImage> projectDetailImages;
     // Getters and setters
 
+    public List<ProjectDetailText> getProjectDetailTexts() {
+        return projectDetailTexts;
+    }
+
+    public List<ProjectDetailImage> getProjectDetailImages() {
+        return projectDetailImages;
+    }
+
     public Integer getProjectId() {
         return projectId;
     }
@@ -115,8 +123,17 @@ public class DonationProject {
         this.status = status;
     }
 
-    public User getProjectManager() {
-        return projectManager;
+    public UserProfile getProjectManager() {
+        return new UserProfile(
+                projectManager.getUserId(),
+                projectManager.getFullName(),
+                projectManager.getEmail(),
+                projectManager.getPhoneNumber(),
+                projectManager.getRole().getRoleName(),
+                projectManager.getCreatedAt(),
+                projectManager.getUpdatedAt(),
+                projectManager.getIsDeleted() == 1
+        );
     }
 
     public void setProjectManager(User projectManager) {
