@@ -46,9 +46,10 @@ DonationInUniversity is a Spring Boot project built with JPA and MySQL. The syst
 │   │   │               ├── validation     # Custom validation classes
 │   │   │               └── security       # Security configuration (authentication, authorization)
 │   │   └── resources
-│   │       └── application.properties     # Basic configuration file
-│   │       └── env.properties             # Local configuration file
-│   │       └── credentials.json           # Get credentials google to use API
-│   │       └── logback-spring.xml         # Logs file configuration
+│   │       ├── application.properties     # Basic configuration file
+│   │       ├── env.properties             # Local configuration file            (Note: Only Dev have this file)
+│   │       ├── credentials.json           # Get credentials google to use API   (Note: Only Dev have this file)
+│   │       ├── logback-spring.xml         # Logs file configuration
+│   └──     └── keystore.p12               # Self create SSL                     (Note: Only Dev have this file)
 ├── pom.xml                                # Maven configuration file (dependencies, plugins, etc.)
 └── README.md                              # Project documentation
