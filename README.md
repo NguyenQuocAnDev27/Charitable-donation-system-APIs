@@ -6,13 +6,13 @@ DonationInUniversity là một đồ án Spring Boot được xây dựng cùng 
 
 ## Technologies Used
 - **Spring Boot** (v3.x)
-- **JWT-Token** (for security, session management)
+- **Oauth 2.0** (for security, session management)
 - **JPA** (Java Persistence API)
 - **MySQL** (Database)
 - **Jakarta EE** (JPA, Validation, etc.)
 - **SpringDoc OpenAPI** (for API documentation)
 - **Maven** (Dependency Management)
-- **Google Cloud**
+- **Google Cloud** (Google Account Login, Google Sheet View)
 - **VietQR** (Payment)
 
 ## Folder Structure
