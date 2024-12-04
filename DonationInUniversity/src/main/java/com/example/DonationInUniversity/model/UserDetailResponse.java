@@ -6,12 +6,18 @@ public class UserDetailResponse {
     private String phoneNumber;
     private String role;
 
-    // Constructor to map fields from VerifiedUser
     public UserDetailResponse(VerifiedUser user) {
         this.fullName = user.getFullName();
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.role = user.getRole().getRoleName(); // Assuming Role has a getRoleName() method
+    }
+
+    public UserDetailResponse(String fullName, String email, String phoneNumber, String role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 
     // Getters and Setters
