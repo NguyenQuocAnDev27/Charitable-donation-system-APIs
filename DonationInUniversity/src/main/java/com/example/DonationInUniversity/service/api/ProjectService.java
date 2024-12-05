@@ -77,7 +77,7 @@ public class ProjectService {
         List<DonationProject> projects = donationProjectPage.getContent();
         List<ProjectDisplayOverview> pendingProjects = new ArrayList<>();
         for (DonationProject project : projects) {
-            if ("pending".equals(project.getStatus())) {
+            if ("pending".equals(project.getStatus()) || "completed".equals(project.getStatus())) {
                 List<ProjectDetailImage> image_list = projectDetailImageRepository.findByProjectId(project.getProjectId());
 
                 String image_link = null;
@@ -94,7 +94,7 @@ public class ProjectService {
                         project.getStartDate(),
                         project.getEndDate(),
                         project.getStatus(),
-                        project.getProjectManager(),
+                        project.getProjectManager2(),
                         image_link
                 ));
             }
