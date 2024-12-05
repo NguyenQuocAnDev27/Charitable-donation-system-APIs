@@ -123,7 +123,10 @@ public class DonationProject {
         this.status = status;
     }
 
-    public UserProfile getProjectManager() {
+    public User getProjectManager() {
+        return projectManager;
+    }
+    public UserProfile getProjectManager2() {
         return new UserProfile(
                 projectManager.getUserId(),
                 projectManager.getFullName(),
