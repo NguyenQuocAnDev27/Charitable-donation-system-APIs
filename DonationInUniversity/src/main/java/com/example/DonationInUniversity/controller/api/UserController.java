@@ -3,7 +3,6 @@ package com.example.DonationInUniversity.controller.api;
 import com.example.DonationInUniversity.model.*;
 import com.example.DonationInUniversity.service.api.UserService;
 import com.example.DonationInUniversity.utils.JwtUtil;
-//import com.example.DonationInUniversity.utils.Sha256PasswordEncoder;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -14,15 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.Collections;
 
 @RestController
