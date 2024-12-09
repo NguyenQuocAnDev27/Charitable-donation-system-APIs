@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-5 mb-6">
                                         <label class="form-label">Quyền</label>
-                                        <select class="form-select" th:field="*{role}">
+                                        <select class="form-select" th:field="*{role}" required>
                                             <option value="" disabled>-- Chọn quyền --</option>
                                             <option th:each="role : ${listRoles}"
                                                     th:value="${role.roleId}"
