@@ -7,11 +7,9 @@ DonationInUniversity is a Spring Boot project built with JPA and MySQL. The syst
 ## Technologies Used
 - **Spring Boot** (version 3.3.3)
 - **Oauth 2.0** (for security, session management)
-- **JPA** (Java Persistence API)
-- **MySQL** (Database)
+- **MySQL 8.0** (Database)
 - **Jakarta EE** (JPA, Validation, etc.)
 - **SpringDoc OpenAPI** (for API documentation)
-- **Maven** (Dependency Management)
 - **Google Cloud** (Google Account Login, Google Sheet View)
 - **VietQR** (Payment)
 - **Casso** (Transaction Monitor)
