@@ -4,6 +4,8 @@ The system is a donation platform for charitable contributions to higher educati
 ## Overview
 DonationInUniversity is a Spring Boot project built with JPA and MySQL. The system manages donation projects, user roles, and allows users to donate through multiple payment methods. The project also supports tagging projects, generating reports, and sending notifications to users.
 
+This server can handle web services, microservices, multithread, multi-processing, file (image, pdf,...) processing mechanism.
+
 ## Technologies Used
 - **Spring Boot** (version 3.3.3)
 - **Oauth 2.0** (for security, session management)
