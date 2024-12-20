@@ -52,3 +52,7 @@ DonationInUniversity is a Spring Boot project built with JPA and using MySQL for
 │   └──     └── keystore.p12               # Self create SSL                     (Note: Only Dev have this file)
 ├── pom.xml                                # Maven configuration file (dependencies, plugins, etc.)
 └── README.md                              # Project documentation
+```
+
+## Documents
+[Báo cáo dự án.pdf](https://github.com/user-attachments/files/18208829/Bao.cao.d.an.pdf)
